@@ -399,6 +399,15 @@ class AuditOrchestrator:
                 created_flags.append(flag_data)
                 logger.info(f"Created flag {flag_id} for txn {txn_id} (severity: {severity})")
 
+                # Write feedback to unification layer (best-effort)
+                from src.integrations.unification_client import try_write_feedback
+                try_write_feedback(
+                    transaction_id=txn_id,
+                    signal="flagged",
+                    source="autonomous",
+                    reason=explanation,
+                )
+
             except Exception as e:
                 logger.error(f"Escalation failed for txn {txn.get('txn_id', '?')}: {e}")
 
@@ -451,7 +460,11 @@ class AuditOrchestrator:
 
     def _merge_suspicious_results(self, parallel_results: dict, all_transactions) -> List[dict]:
         """
-        Merge results from parallel agents to identify suspicious transactions
+        Merge results from parallel agents to identify suspicious transactions.
+
+        Unmatched detection uses the UQI (unification layer) when available,
+        falling back to the parallel_results reconciliation data when the
+        unification store is absent or stale.
 
         Args:
             parallel_results: Results from Data Quality and Reconciliation (simplified pipeline)
@@ -462,13 +475,16 @@ class AuditOrchestrator:
         """
         suspicious_ids = set()
 
-        # Add unmatched transactions from Reconciliation
-        unmatched = parallel_results.get('reconciliation', {}).get('unmatched_transactions', [])
-        suspicious_ids.update([t['txn_id'] for t in unmatched])
-
-        # Anomaly detection removed (not in 4-agent scope)
-        # anomalies = parallel_results.get('anomaly', {}).get('flagged_transactions', [])
-        # suspicious_ids.update([a['txn_id'] for a in anomalies])
+        # --- Unmatched transactions: prefer UQI, fall back to parallel_results ---
+        uqi_unmatched = self._get_uqi_unmatched()
+        if uqi_unmatched is not None:
+            suspicious_ids.update(uqi_unmatched)
+            logger.info(f"UQI provided {len(uqi_unmatched)} unmatched transaction IDs")
+        else:
+            # Fallback: use reconciliation agent results
+            unmatched = parallel_results.get('reconciliation', {}).get('unmatched_transactions', [])
+            suspicious_ids.update([t['txn_id'] for t in unmatched])
+            logger.info(f"Fallback: using {len(suspicious_ids)} unmatched IDs from parallel_results")
 
         # Add incomplete/bad quality records
         incomplete = parallel_results.get('data_quality', {}).get('incomplete_records', [])
@@ -484,3 +500,48 @@ class AuditOrchestrator:
         suspicious_txns = all_transactions[all_transactions['txn_id'].isin(suspicious_ids)]
 
         return suspicious_txns.to_dict('records')
+
+    def _get_uqi_unmatched(self):
+        """Try to get unmatched transaction IDs from the unification layer.
+
+        Returns a set of txn_id strings on success, or None if the store is
+        unavailable, empty, or stale (last run > 24h ago).
+        """
+        try:
+            from src.integrations.unification_client import get_uqi
+            uqi = get_uqi()
+
+            # Guard: check if the unification pipeline has run recently
+            last_run = uqi.get_last_run_status()
+            if last_run is None:
+                logger.warning(
+                    "Unification store has no run_log — falling back to parallel_results"
+                )
+                return None
+
+            from datetime import datetime, timedelta, timezone
+            run_age = datetime.now(timezone.utc) - (
+                last_run.start_time.replace(tzinfo=timezone.utc)
+                if last_run.start_time.tzinfo is None
+                else last_run.start_time
+            )
+            if run_age > timedelta(hours=24):
+                logger.warning(
+                    "Unification store last run is >24h old — falling back to parallel_results",
+                    last_run_age_hours=run_age.total_seconds() / 3600,
+                )
+                return None
+
+            records = uqi.get_unlinked_entities("transaction")
+            if not records:
+                logger.info("UQI returned 0 unmatched transactions")
+                return set()
+
+            return {r.entity_id for r in records}
+
+        except Exception as exc:
+            logger.warning(
+                "Failed to query unification store — falling back to parallel_results",
+                error=str(exc),
+            )
+            return None

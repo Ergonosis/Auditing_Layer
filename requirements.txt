@@ -24,3 +24,6 @@ sentence-transformers>=2.3.1
 
 # Monitoring
 prometheus-client>=0.19.0
+
+# Unification layer (install with: pip install -e ../ergonosis_unification)
+ergonosis-unification

@@ -124,3 +124,55 @@ def clear_audit_trail():
     global AUDIT_TRAIL
     AUDIT_TRAIL = []
     logger.info("Audit trail cleared")
+
+
+# HumanDecision → FeedbackSignal mapping
+_DECISION_TO_SIGNAL = {
+    "approved": "confirmed",
+    "rejected": "rejected",
+    "false_positive": "rejected",
+    "needs_more_info": "flagged",
+}
+
+
+def record_human_decision(flag_id: str, transaction_id: str, human_decision: str) -> bool:
+    """Write a feedback signal to the unification layer when a human reviews a flag.
+
+    This is NOT a CrewAI tool — it is called by whatever review workflow
+    sets the human_decision field on a flag.
+
+    Args:
+        flag_id: The flag being reviewed.
+        transaction_id: The transaction the flag refers to.
+        human_decision: One of HumanDecision enum values
+                        (approved, rejected, false_positive, needs_more_info).
+
+    Returns:
+        True if feedback was written, False otherwise.
+    """
+    signal = _DECISION_TO_SIGNAL.get(human_decision)
+    if signal is None:
+        logger.warning(
+            "Unknown human_decision value — skipping feedback write",
+            flag_id=flag_id,
+            human_decision=human_decision,
+        )
+        return False
+
+    from src.integrations.unification_client import try_write_feedback
+    result = try_write_feedback(
+        transaction_id=transaction_id,
+        signal=signal,
+        source="human",
+        reason=f"flag={flag_id} decision={human_decision}",
+    )
+
+    logger.info(
+        "Human decision feedback recorded",
+        flag_id=flag_id,
+        transaction_id=transaction_id,
+        human_decision=human_decision,
+        signal=signal,
+        written=result,
+    )
+    return result

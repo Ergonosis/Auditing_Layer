@@ -348,6 +348,15 @@ def create_audit_flag(transaction_id: str, audit_run_id: str, severity: str, exp
             'explanation': explanation
         })
 
+    # Write feedback to unification layer (best-effort)
+    from src.integrations.unification_client import try_write_feedback
+    try_write_feedback(
+        transaction_id=transaction_id,
+        signal="flagged",
+        source="autonomous",
+        reason=explanation,
+    )
+
     return flag_id
 
 
