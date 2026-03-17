@@ -11,6 +11,37 @@ import re
 
 logger = get_logger(__name__)
 
+
+def sanitize_sql_value(value: str) -> str:
+    """Sanitize a string for safe interpolation into a SQL query.
+
+    Escapes single quotes (doubling them per SQL standard) and rejects strings
+    containing SQL metacharacters that cannot be safely escaped: semicolons,
+    inline comment sequences (-- and /*).
+
+    Raises:
+        ValueError: If the value contains rejected metacharacters.
+    """
+    s = str(value)
+    if re.search(r";|--|/\*", s):
+        raise ValueError(f"SQL value contains disallowed metacharacters: {s!r}")
+    return s.replace("'", "''")
+
+
+def validate_numeric(value) -> float:
+    """Validate that a value is numeric before SQL interpolation.
+
+    Raises:
+        ValueError: If the value cannot be converted to a float.
+    """
+    try:
+        return float(value)
+    except (ValueError, TypeError) as exc:
+        raise ValueError(
+            f"Expected a numeric value for SQL interpolation, got {value!r}"
+        ) from exc
+
+
 @tool("search_emails_batch")
 def search_emails_batch(transactions_json: str = "[]") -> dict[str, Any]:
     """
@@ -49,11 +80,15 @@ def search_emails_batch(transactions_json: str = "[]") -> dict[str, Any]:
             start_date = txn_date - timedelta(days=3)
             end_date = txn_date + timedelta(days=3)
 
+            safe_vendor = sanitize_sql_value(vendor)
+            safe_start = sanitize_sql_value(start_date)
+            safe_end = sanitize_sql_value(end_date)
+
             emails = query_gold_tables(f"""
                 SELECT email_id, subject, sender, email_date
                 FROM gold.emails
-                WHERE email_date BETWEEN '{start_date}' AND '{end_date}'
-                  AND (subject LIKE '%{vendor}%' OR body LIKE '%{vendor}%')
+                WHERE email_date BETWEEN '{safe_start}' AND '{safe_end}'
+                  AND (subject LIKE '%{safe_vendor}%' OR body LIKE '%{safe_vendor}%')
                 LIMIT 5
             """)
 
@@ -104,11 +139,15 @@ def search_calendar_events(transaction_date: str, vendor: str) -> list:
         start_date = txn_date - timedelta(days=3)
         end_date = txn_date + timedelta(days=3)
 
+        safe_vendor = sanitize_sql_value(vendor)
+        safe_start = sanitize_sql_value(start_date)
+        safe_end = sanitize_sql_value(end_date)
+
         events = query_gold_tables(f"""
             SELECT event_id, title, event_date, description
             FROM gold.calendar_events
-            WHERE event_date BETWEEN '{start_date}' AND '{end_date}'
-              AND (title LIKE '%{vendor}%' OR description LIKE '%{vendor}%')
+            WHERE event_date BETWEEN '{safe_start}' AND '{safe_end}'
+              AND (title LIKE '%{safe_vendor}%' OR description LIKE '%{safe_vendor}%')
             LIMIT 5
         """)
 
@@ -143,10 +182,11 @@ def extract_approval_chains(email_thread_id: str) -> dict:
 
     try:
         # Query email thread
+        safe_thread_id = sanitize_sql_value(email_thread_id)
         emails = query_gold_tables(f"""
             SELECT email_id, sender, body, email_date
             FROM gold.emails
-            WHERE thread_id = '{email_thread_id}'
+            WHERE thread_id = '{safe_thread_id}'
             ORDER BY email_date ASC
         """)
 
@@ -213,15 +253,20 @@ def find_receipt_images(vendor: str, amount: float, date_range: tuple[str, str])
     try:
         # Parse JSON array to tuple
         import json
-        date_range = json.loads(date_range_json) if date_range_json else ["2025-01-01", "2025-12-31"]
-        start_date, end_date = date_range
+        date_range_parsed = json.loads(date_range) if date_range else ["2025-01-01", "2025-12-31"]
+        start_date, end_date = date_range_parsed
+
+        safe_vendor = sanitize_sql_value(vendor)
+        safe_start = sanitize_sql_value(start_date)
+        safe_end = sanitize_sql_value(end_date)
+        safe_amount = validate_numeric(amount)
 
         receipts = query_gold_tables(f"""
             SELECT receipt_id, file_path, ocr_vendor, ocr_amount, ocr_date
             FROM gold.receipts_ocr
-            WHERE ocr_date BETWEEN '{start_date}' AND '{end_date}'
-              AND ocr_vendor LIKE '%{vendor}%'
-              AND ocr_amount BETWEEN {amount * 0.95} AND {amount * 1.05}
+            WHERE ocr_date BETWEEN '{safe_start}' AND '{safe_end}'
+              AND ocr_vendor LIKE '%{safe_vendor}%'
+              AND ocr_amount BETWEEN {safe_amount * 0.95} AND {safe_amount * 1.05}
             LIMIT 5
         """)
 
@@ -275,10 +320,11 @@ Respond with ONLY the keywords, no explanation:
         # Search documents using keywords (SQL)
         results = []
         for keyword in keywords[:3]:  # Limit to 3 keywords
+            safe_keyword = sanitize_sql_value(keyword)
             docs = query_gold_tables(f"""
                 SELECT doc_id, title, snippet
                 FROM gold.documents
-                WHERE title LIKE '%{keyword}%' OR content LIKE '%{keyword}%'
+                WHERE title LIKE '%{safe_keyword}%' OR content LIKE '%{safe_keyword}%'
                 LIMIT 2
             """)
 

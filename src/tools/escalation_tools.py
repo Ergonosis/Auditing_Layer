@@ -7,6 +7,7 @@ import uuid
 import os
 from datetime import datetime
 from src.tools.llm_client import call_llm
+from src.llm.provider import ANTHROPIC_SMART_MODEL
 from src.utils.logging import get_logger
 from src.utils.config_loader import load_config
 from src.constants import SeverityLevel
@@ -285,7 +286,7 @@ Respond with ONLY a JSON array (no markdown):
 ]
 """
 
-        response = call_llm(prompt, model="anthropic/claude-sonnet-4.5", agent_name="Escalation")
+        response = call_llm(prompt, model=ANTHROPIC_SMART_MODEL, agent_name="Escalation")
 
         # Parse JSON response
         try:

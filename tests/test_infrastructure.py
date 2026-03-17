@@ -46,37 +46,45 @@ def test_databricks_missing_fixture():
 def test_llm_cost_calculation():
     """Test LLM cost calculation."""
     from src.tools.llm_client import calculate_cost
+    from src.llm.provider import ANTHROPIC_FAST_MODEL, ANTHROPIC_SMART_MODEL
 
-    # Test GPT-4o-mini pricing (0.15 per 1M tokens)
-    cost = calculate_cost(1_000_000, "openai/gpt-4o-mini")
-    assert cost == 0.15
+    # Test Haiku pricing ($1.00 per 1M tokens)
+    cost = calculate_cost(1_000_000, ANTHROPIC_FAST_MODEL)
+    assert cost == 1.00
 
-    # Test Claude Haiku pricing (0.80 per 1M tokens)
-    cost = calculate_cost(1_000_000, "anthropic/claude-3-5-haiku")
-    assert cost == 0.80
+    # Test Sonnet pricing ($3.00 per 1M tokens)
+    cost = calculate_cost(1_000_000, ANTHROPIC_SMART_MODEL)
+    assert cost == 3.00
 
-    # Test smaller token count
-    cost = calculate_cost(1000, "openai/gpt-4o-mini")
-    assert abs(cost - 0.00015) < 1e-10  # Close to 0.00015
+    # Test smaller token count ($1.00/1M = $0.001/1K)
+    cost = calculate_cost(1000, ANTHROPIC_FAST_MODEL)
+    assert abs(cost - 0.001) < 1e-10
+
+    # Test legacy model name resolution
+    cost = calculate_cost(1_000_000, "anthropic/claude-haiku-4.5")
+    assert cost == 1.00  # Should resolve to Haiku pricing
 
 
 def test_llm_client_without_api_key():
     """Test LLM client behavior when API key is missing."""
-    from src.tools.llm_client import call_llm
-    from src.utils.errors import LLMError
+    from src.llm.provider import reset_llm_client
 
-    # Temporarily unset API key
-    original_key = os.getenv("OPENROUTER_API_KEY")
-    os.environ["OPENROUTER_API_KEY"] = ""
+    # Reset singleton so it re-reads env on next call
+    reset_llm_client()
+
+    original_key = os.getenv("ANTHROPIC_API_KEY")
+    os.environ.pop("ANTHROPIC_API_KEY", None)
 
     try:
-        # Should fail gracefully with LLMError
-        with pytest.raises(LLMError):
+        # Should raise ValueError from provider (no key set)
+        with pytest.raises(ValueError, match="ANTHROPIC_API_KEY"):
+            from src.tools.llm_client import call_llm
             call_llm("Test prompt")
     finally:
-        # Restore original key
+        # Restore original key and reset singleton
         if original_key:
-            os.environ["OPENROUTER_API_KEY"] = original_key
+            os.environ["ANTHROPIC_API_KEY"] = original_key
+        reset_llm_client()
 
 
 def test_state_manager_save_restore():

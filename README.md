@@ -65,7 +65,7 @@ pip install -r requirements.txt
 
 # Set up environment
 cp .env.example .env
-# Edit .env and add your OPENROUTER_API_KEY
+# Edit .env and add your ANTHROPIC_API_KEY (or OPENAI_API_KEY if using OpenAI)
 
 # Run demo audit
 python scripts/run_demo.py

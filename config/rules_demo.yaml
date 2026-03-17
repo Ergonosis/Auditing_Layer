@@ -54,8 +54,8 @@ domain_configs:
     description: "SaaS subscriptions and operational expenses"
 
 llm:
-  provider: "openrouter"
-  default_model: "anthropic/claude-haiku-4.5"
-  edge_case_model: "anthropic/claude-sonnet-4.5"
+  provider: "anthropic"  # "anthropic" | "openai"
+  default_model: "claude-haiku-4-5-20251001"
+  smart_model: "claude-sonnet-4-6"
   batch_size: 50
   timeout_seconds: 60

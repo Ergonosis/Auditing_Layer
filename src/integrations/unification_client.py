@@ -86,3 +86,59 @@ def try_write_feedback(
             error=str(exc),
         )
         return False
+
+
+def get_ambiguous_matches() -> list:
+    """Fetch pending ambiguous match records from the unification store.
+
+    Returns:
+        List of AmbiguousMatch records with status='pending', or [] on any failure.
+    """
+    try:
+        uqi = get_uqi()
+        return uqi.get_ambiguous_matches(status="pending")
+    except Exception as exc:
+        logger.warning(
+            "Failed to fetch ambiguous matches from unification store — returning empty list",
+            error=str(exc),
+        )
+        return []
+
+
+def resolve_ambiguous_match(
+    ambiguity_id: str,
+    chosen_link_id: str,
+    reason: Optional[str] = None,
+) -> bool:
+    """Submit a resolution for an ambiguous match record.
+
+    Writes a 'confirmed' feedback signal on chosen_link_id. The ambiguity_id
+    is logged for traceability but is not passed to write_feedback (which takes
+    the link_id of the chosen candidate, not the ambiguity record ID).
+
+    Returns:
+        True on success, False on any failure.
+    """
+    try:
+        uqi = get_uqi()
+        uqi.write_feedback(
+            link_id=chosen_link_id,
+            signal="confirmed",
+            source="autonomous",
+            reason=reason,
+        )
+        logger.info(
+            "Ambiguous match resolved",
+            ambiguity_id=ambiguity_id,
+            chosen_link_id=chosen_link_id,
+            reason=reason,
+        )
+        return True
+    except Exception as exc:
+        logger.warning(
+            "Failed to resolve ambiguous match in unification store — continuing without it",
+            ambiguity_id=ambiguity_id,
+            chosen_link_id=chosen_link_id,
+            error=str(exc),
+        )
+        return False

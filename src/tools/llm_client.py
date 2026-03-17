@@ -1,76 +1,56 @@
-"""OpenRouter LLM client with automatic cost tracking and model selection."""
+"""LLM client with automatic cost tracking, retries, and provider abstraction."""
 
-from openai import OpenAI
 import os
 import time
 from typing import Optional
+
+from src.llm.provider import (
+    get_llm_client,
+    _resolve_model,
+    MODEL_PRICING,
+    ANTHROPIC_FAST_MODEL,
+)
 from src.utils.metrics import llm_tokens_counter, llm_cost_counter, llm_api_latency
 from src.utils.errors import LLMError
 from src.utils.logging import get_logger
 
 logger = get_logger(__name__)
 
-# Lazy-initialize OpenRouter client
-_client = None
-
-def get_client():
-    """Get or create the OpenRouter client (lazy initialization)"""
-    global _client
-    if _client is None:
-        api_key = os.getenv("OPENROUTER_API_KEY")
-        if not api_key:
-            raise ValueError("OPENROUTER_API_KEY environment variable is not set")
-        _client = OpenAI(
-            api_key=api_key,
-            base_url="https://openrouter.ai/api/v1"
-        )
-    return _client
-
-# Pricing per 1M tokens (input tokens, simplified)
-MODEL_PRICING = {
-    "anthropic/claude-haiku-4.5": 0.80 / 1_000_000,
-    "anthropic/claude-sonnet-4.5": 3.0 / 1_000_000,
-    "anthropic/claude-sonnet-4": 3.0 / 1_000_000,
-    "openai/gpt-4o-mini": 0.15 / 1_000_000,  # kept for cost calc fallback
-}
-
 
 def call_llm(
     prompt: str,
     model: Optional[str] = None,
     agent_name: str = "unknown",
-    max_retries: int = 3
+    max_retries: int = 3,
 ) -> str:
     """
     Call LLM with automatic cost tracking and retries.
 
     Args:
         prompt: User prompt
-        model: Model name (defaults to GPT-4o-mini)
-        agent_name: Name of agent calling LLM (for metrics)
-        max_retries: Max retry attempts
+        model: Model ID (native or legacy — auto-resolved). Defaults to
+               DEFAULT_LLM_MODEL env var or Anthropic Haiku 4.5.
+        agent_name: Name of calling agent (for metrics labels)
+        max_retries: Max retry attempts on transient errors
 
     Returns:
         LLM response text
 
     Raises:
-        LLMError: If API call fails after retries
+        LLMError: If API call fails after all retries
     """
-    model = model or os.getenv("DEFAULT_LLM_MODEL", "anthropic/claude-haiku-4.5")
+    model = _resolve_model(
+        model or os.getenv("DEFAULT_LLM_MODEL", ANTHROPIC_FAST_MODEL)
+    )
+    client = get_llm_client()
 
     for attempt in range(max_retries):
         try:
             start_time = time.time()
 
-            response = get_client().chat.completions.create(
-                model=model,
-                messages=[{"role": "user", "content": prompt}],
-                timeout=60
-            )
+            text, tokens = client.complete(prompt, model)
 
-            # Track metrics
             latency = time.time() - start_time
-            tokens = response.usage.total_tokens
             cost = calculate_cost(tokens, model)
 
             llm_tokens_counter.labels(model_name=model, agent_name=agent_name).inc(tokens)
@@ -78,22 +58,21 @@ def call_llm(
             llm_api_latency.labels(model_name=model).observe(latency)
 
             logger.info(
-                f"LLM call successful",
+                "LLM call successful",
                 model=model,
                 tokens=tokens,
                 cost=cost,
                 latency=latency,
-                agent=agent_name
+                agent=agent_name,
             )
 
-            return response.choices[0].message.content
+            return text
 
         except Exception as e:
-            # Check if it's a rate limit error
-            if "rate_limit" in str(e).lower() or "429" in str(e):
+            if client.is_rate_limit_error(e):
                 logger.warning(f"Rate limit hit, retrying... (attempt {attempt + 1}/{max_retries})")
                 if attempt < max_retries - 1:
-                    time.sleep(2 ** attempt)  # Exponential backoff
+                    time.sleep(2 ** attempt)
                 else:
                     raise LLMError(f"Rate limit exceeded after {max_retries} attempts: {e}")
             else:
@@ -105,29 +84,12 @@ def call_llm(
 
 
 def calculate_cost(tokens: int, model: str) -> float:
-    """
-    Calculate cost based on token usage and model pricing.
-
-    Args:
-        tokens: Number of tokens used
-        model: Model name
-
-    Returns:
-        Cost in USD
-    """
-    price_per_token = MODEL_PRICING.get(model, 0.15 / 1_000_000)
+    """Calculate cost in USD based on token count and model pricing."""
+    model = _resolve_model(model)
+    price_per_token = MODEL_PRICING.get(model, 1.00 / 1_000_000)  # default to Haiku rate
     return tokens * price_per_token
 
 
 def batch_call_llm(prompts: list[str], model: Optional[str] = None) -> list[str]:
-    """
-    Batch LLM calls for efficiency (processes sequentially but with shared setup).
-
-    Args:
-        prompts: List of prompts
-        model: Model name
-
-    Returns:
-        List of responses
-    """
+    """Batch LLM calls (sequential with shared setup)."""
     return [call_llm(prompt, model) for prompt in prompts]
