@@ -22,6 +22,15 @@ def main():
     logger.info("=" * 60)
 
     try:
+        # Validate required env vars in production
+        if os.getenv("ENVIRONMENT") == "production":
+            REQUIRED = ["ANTHROPIC_API_KEY", "DATABRICKS_HOST", "DATABRICKS_TOKEN",
+                        "DATABRICKS_HTTP_PATH", "UNIFICATION_USER_EMAIL"]
+            missing = [v for v in REQUIRED if not os.getenv(v)]
+            if missing:
+                logger.error(f"Missing required production env vars: {missing}")
+                raise RuntimeError(f"Missing env vars: {missing}")
+
         # Create orchestrator
         orchestrator = AuditOrchestrator()
 

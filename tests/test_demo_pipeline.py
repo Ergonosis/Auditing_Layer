@@ -105,15 +105,19 @@ class TestDemoDataLoader:
         assert 0.4 < receipt_coverage < 0.6  # Between 40% and 60%
 
 
-class TestDemoDatabricksClient:
-    """Test Databricks client in demo mode"""
+class TestDemoUqiClient:
+    """Test UQI returns valid instance in dev/demo mode"""
 
-    def test_demo_mode_detection(self):
-        """Test that demo mode is properly detected"""
-        from src.tools.databricks_client import get_databricks_connection
-
-        conn = get_databricks_connection()
-        assert conn == "DEMO_MODE", "Should return DEMO_MODE sentinel in demo mode"
+    def test_uqi_returns_instance_in_dev_mode(self, monkeypatch, tmp_path):
+        """In dev/demo mode (ENVIRONMENT unset), get_uqi() returns a real UQI."""
+        monkeypatch.delenv("ENVIRONMENT", raising=False)
+        monkeypatch.setenv("UNIFICATION_DB_PATH", str(tmp_path / "demo.db"))
+        from src.integrations.unification_client import get_uqi
+        get_uqi.cache_clear()
+        uqi = get_uqi()
+        from src.query_interface import UnifiedQueryInterface
+        assert isinstance(uqi, UnifiedQueryInterface)
+        get_uqi.cache_clear()
 
     def test_query_gold_tables_demo(self):
         """Test query_gold_tables routes to demo data"""
@@ -163,6 +167,7 @@ class TestDemoStateManager:
     def test_in_memory_state_save_restore(self):
         """Test saving and restoring state in memory"""
         from src.orchestrator.state_manager import save_workflow_state, restore_workflow_state
+        import src.orchestrator.state_manager as sm
 
         test_audit_id = "test-demo-123"
         test_state = {
@@ -171,11 +176,15 @@ class TestDemoStateManager:
             'test_data': 'demo'
         }
 
-        # Save state
-        save_workflow_state(test_audit_id, test_state)
-
-        # Restore state
-        restored = restore_workflow_state(test_audit_id)
+        # STATE_BACKEND is a module-level constant read at import time;
+        # patch it directly rather than relying on the env var fixture.
+        original = sm.STATE_BACKEND
+        sm.STATE_BACKEND = "memory"
+        try:
+            save_workflow_state(test_audit_id, test_state)
+            restored = restore_workflow_state(test_audit_id)
+        finally:
+            sm.STATE_BACKEND = original
 
         assert restored == test_state
         assert restored['test_data'] == 'demo'

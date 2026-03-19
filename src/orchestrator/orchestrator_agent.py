@@ -4,11 +4,10 @@ from crewai import Crew, Process
 import uuid
 from datetime import datetime
 from typing import Dict, Any, List
-from src.tools.databricks_client import query_gold_tables, get_last_audit_timestamp, check_databricks_health
 from src.orchestrator.state_manager import save_workflow_state, restore_workflow_state, mark_audit_complete
 from src.orchestrator.retry_handler import retry_with_exponential_backoff
 from src.utils.logging import get_logger
-from src.utils.errors import AuditSystemError, DatabricksConnectionError
+from src.utils.errors import AuditSystemError
 from src.utils.config_loader import load_config
 from src.utils.metrics import (
     audit_completion_time,
@@ -22,7 +21,7 @@ import time
 from src.agents.data_quality_agent import data_quality_agent, data_quality_task
 from src.agents.reconciliation_agent import reconciliation_agent, reconciliation_task
 # Temporarily disabled: anomaly_detection_agent (not in initial scope)
-# Temporarily disabled: context_enrichment_agent (all tools broken in demo mode)
+from src.agents.context_enrichment_agent import context_agent, context_task
 from src.agents.escalation_agent import escalation_agent, escalation_task
 # Logging agent removed: auto-logging via structured logger is sufficient for transparency
 
@@ -48,24 +47,47 @@ class AuditOrchestrator:
         logger.info(f"🚀 Starting audit run: {self.audit_run_id}")
 
         try:
-            # Step 1: Check Databricks health
-            if not check_databricks_health():
-                raise DatabricksConnectionError("Databricks connection unhealthy")
+            # Step 1: Check unification store is fresh
+            from src.integrations.unification_client import get_uqi, _get_user_id_hash
+            import pandas as pd
 
-            # Step 2: Query new transactions
-            last_audit = get_last_audit_timestamp()
-            logger.info(f"Last audit timestamp: {last_audit}")
+            uqi = get_uqi()
+            last_run = uqi.get_last_run_status()
+            if last_run is None:
+                logger.warning("Unification store has no run_log — skipping audit")
+                return {"audit_run_id": self.audit_run_id, "status": "skipped",
+                        "transaction_count": 0, "flags_created": 0}
 
-            transactions = retry_with_exponential_backoff(
-                query_gold_tables,
-                sql_query=f"""
-                    SELECT * FROM gold.recent_transactions
-                    WHERE created_at > '{last_audit}'
-                    LIMIT 1000
-                """
+            from datetime import timedelta, timezone
+            run_age = datetime.now(timezone.utc) - (
+                last_run.start_time.replace(tzinfo=timezone.utc)
+                if last_run.start_time.tzinfo is None else last_run.start_time
             )
+            if run_age > timedelta(hours=24):
+                logger.warning("Unification store is stale (>24h) — skipping audit",
+                               age_hours=run_age.total_seconds() / 3600)
+                return {"audit_run_id": self.audit_run_id, "status": "skipped",
+                        "transaction_count": 0, "flags_created": 0}
 
-            logger.info(f"📊 Processing {len(transactions)} transactions")
+            # Step 2: Fetch unmatched transactions from UQI
+            user_hash = _get_user_id_hash()
+            unmatched_records = uqi.get_unlinked_entities("transaction", user_id_hash=user_hash)
+            logger.info(f"Fetched {len(unmatched_records)} unmatched transactions from UQI")
+
+            transaction_rows = []
+            for record in unmatched_records:
+                entity = uqi.get_entity(record.entity_id, "transaction", user_id_hash=user_hash)
+                if entity is not None:
+                    transaction_rows.append({
+                        "txn_id": entity.transaction_id,
+                        "vendor": entity.merchant_name or entity.name or "Unknown",
+                        "amount": entity.amount,
+                        "date": str(entity.date),
+                        "source": entity.source,
+                    })
+
+            transactions = pd.DataFrame(transaction_rows)
+            logger.info(f"Processing {len(transactions)} transactions")
 
             if transactions.empty:
                 logger.info("No new transactions to audit")
@@ -101,9 +123,12 @@ class AuditOrchestrator:
             # (LLM agents truncate large lists; compute directly for accuracy)
             parallel_results = self._augment_with_direct_analysis(parallel_results, transactions)
 
+            # Step 4c: Resolve ambiguous matches from unification store
+            self._ambiguous_escalations = self._resolve_ambiguous_matches()
+
             # Step 5: Identify suspicious transactions
             suspicious_txns = self._merge_suspicious_results(parallel_results, transactions)
-            logger.info(f"🚨 {len(suspicious_txns)} suspicious transactions identified")
+            logger.info(f"{len(suspicious_txns)} suspicious transactions identified")
 
             if len(suspicious_txns) == 0:
                 logger.info("No suspicious transactions found - audit complete")
@@ -119,9 +144,14 @@ class AuditOrchestrator:
                     'flags_created': 0
                 }
 
+            # Step 5b: Context enrichment (email/calendar corroboration)
+            enrichment_results = {}
+            if suspicious_txns:
+                enrichment_results = self._run_context_enrichment(suspicious_txns)
+
             # Step 6: Process escalation directly (bypass LLM agent for reliability)
-            logger.info("➡️ Executing escalation (direct mode)...")
-            final_results = self._run_escalation_direct(suspicious_txns, parallel_results)
+            logger.info("Executing escalation (direct mode)...")
+            final_results = self._run_escalation_direct(suspicious_txns, parallel_results, enrichment_results)
 
             # Step 7: Mark complete
             # Flags are collected via TEST_MODE global, not from CrewOutput directly
@@ -288,7 +318,78 @@ class AuditOrchestrator:
 
         return result
 
-    def _run_escalation_direct(self, suspicious_txns: List[dict], parallel_results: dict) -> Dict[str, Any]:
+    def _resolve_ambiguous_matches(self) -> list:
+        """Consume pending ambiguous matches from the unification store.
+
+        - Gap >= 0.15: auto-resolve to top candidate.
+        - Gap < 0.15 (tied): add source_entity_id to suspicious list for escalation.
+        Returns list of txn dicts to add to the suspicious set.
+        """
+        from src.integrations.unification_client import get_ambiguous_matches, resolve_ambiguous_match
+
+        RESOLUTION_CONFIDENCE_GAP = 0.15
+        to_escalate = []
+        try:
+            ambiguous = get_ambiguous_matches()
+        except Exception as exc:
+            logger.warning(f"Ambiguous match resolution failed: {exc}")
+            return []
+        logger.info(f"Fetched {len(ambiguous)} pending ambiguous matches")
+
+        for match in ambiguous:
+            scores = match.candidate_scores or []
+            ids = match.candidate_ids or []
+            if not scores or not ids:
+                continue
+            ranked = sorted(zip(scores, ids), reverse=True)
+            top_score, top_id = ranked[0]
+            score_gap = top_score - (ranked[1][0] if len(ranked) > 1 else 0.0)
+
+            if score_gap >= RESOLUTION_CONFIDENCE_GAP:
+                resolve_ambiguous_match(
+                    ambiguity_id=match.ambiguity_id,
+                    chosen_link_id=top_id,
+                    reason=f"Auto-resolved: gap={score_gap:.2f}",
+                )
+            else:
+                to_escalate.append({
+                    "txn_id": match.source_entity_id,
+                    "vendor": "Ambiguous",
+                    "amount": 0,
+                    "date": str(match.logged_at.date()),
+                })
+        return to_escalate
+
+    def _run_context_enrichment(self, suspicious_txns: list) -> dict:
+        """Run context enrichment on suspicious transactions (capped at 20 to manage LLM spend)."""
+        try:
+            from crewai import Crew, Process
+            import json as _json
+            crew = Crew(
+                agents=[context_agent], tasks=[context_task],
+                process=Process.sequential, verbose=False,
+            )
+            inputs = {"transactions": _json.dumps(suspicious_txns[:20])}
+            output = crew.kickoff(inputs=inputs)
+            raw = getattr(output, "raw", None) or ""
+            if isinstance(raw, str):
+                raw = raw.strip()
+                if raw.startswith("```"):
+                    raw = raw.split("\n", 1)[-1].rsplit("```", 1)[0]
+            result = _json.loads(raw) if raw else {}
+            enriched = {
+                e["txn_id"]: e
+                for e in result.get("enriched_transactions", [])
+                if "txn_id" in e
+            }
+            logger.info(f"Context enrichment complete: {len(enriched)} transactions enriched")
+            return enriched
+        except Exception as exc:
+            logger.warning(f"Context enrichment failed — continuing without it: {exc}")
+            return {}
+
+    def _run_escalation_direct(self, suspicious_txns: List[dict], parallel_results: dict,
+                                enrichment_results: dict = None) -> Dict[str, Any]:
         """
         Process escalation directly without LLM agent overhead.
         Deterministic rule-based processing; more reliable for large transaction sets.
@@ -353,6 +454,12 @@ class AuditOrchestrator:
                 if amount >= 5000:
                     score += 20
                     factors.append('high_amount')
+
+                # Context enrichment: reduce score if email approval found
+                if enrichment_results and txn_id in enrichment_results:
+                    if enrichment_results[txn_id].get("email_approval"):
+                        score -= 20
+                        factors.append("email_approval_found")
 
                 if not factors:
                     continue
@@ -496,10 +603,21 @@ class AuditOrchestrator:
             if isinstance(grp, dict):
                 suspicious_ids.update(grp.get('ids', []))
 
+        # Add ambiguous transactions that couldn't be auto-resolved
+        for txn in getattr(self, '_ambiguous_escalations', []):
+            suspicious_ids.add(txn['txn_id'])
+
         # Filter transactions - keep all rows matching suspicious IDs (including duplicates)
         suspicious_txns = all_transactions[all_transactions['txn_id'].isin(suspicious_ids)]
+        suspicious_list = suspicious_txns.to_dict('records')
 
-        return suspicious_txns.to_dict('records')
+        # Ambiguous txn IDs may not be in the DataFrame — append them directly
+        df_ids = set(all_transactions['txn_id'].values) if 'txn_id' in all_transactions.columns else set()
+        ambiguous_not_in_df = [
+            t for t in getattr(self, '_ambiguous_escalations', [])
+            if t['txn_id'] not in df_ids
+        ]
+        return suspicious_list + ambiguous_not_in_df
 
     def _get_uqi_unmatched(self):
         """Try to get unmatched transaction IDs from the unification layer.
@@ -508,7 +626,7 @@ class AuditOrchestrator:
         unavailable, empty, or stale (last run > 24h ago).
         """
         try:
-            from src.integrations.unification_client import get_uqi
+            from src.integrations.unification_client import get_uqi, _get_user_id_hash
             uqi = get_uqi()
 
             # Guard: check if the unification pipeline has run recently
@@ -532,7 +650,7 @@ class AuditOrchestrator:
                 )
                 return None
 
-            records = uqi.get_unlinked_entities("transaction")
+            records = uqi.get_unlinked_entities("transaction", user_id_hash=_get_user_id_hash())
             if not records:
                 logger.info("UQI returned 0 unmatched transactions")
                 return set()

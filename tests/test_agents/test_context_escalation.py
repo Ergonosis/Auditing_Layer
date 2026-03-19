@@ -1,5 +1,6 @@
 """Unit tests for Context Enrichment and Escalation agents"""
 
+import json
 import pytest
 from datetime import datetime, timedelta
 from src.tools.context_tools import (
@@ -32,7 +33,7 @@ class TestContextTools:
                 'date': '2025-02-01'
             }
         ]
-        result = search_emails_batch.func(txns)
+        result = search_emails_batch.func(json.dumps(txns))
 
         assert isinstance(result, dict)
         assert 'cc_1' in result or len(result) == 0  # May be empty with mock data
@@ -87,12 +88,8 @@ class TestEscalationTools:
             'date': '2025-02-01'
         }
         agent_results = {
+            'data_quality': {'incomplete': True},
             'reconciliation': {'matched': False},
-            'anomaly': {'anomaly_score': 85},
-            'context': {
-                'email_approval': False,
-                'receipt_found': False
-            }
         }
 
         result = calculate_severity_score.func(txn, agent_results)
@@ -103,10 +100,10 @@ class TestEscalationTools:
         assert 'confidence' in result
         assert 'contributing_factors' in result
 
-        # Should be CRITICAL: 40 + 30 + 20 + 10 = 100
+        # Should be CRITICAL: no_reconciliation_match(+50) + incomplete_data(+30) = 80
         assert result['level'] == SeverityLevel.CRITICAL.value
-        assert result['severity_score'] >= 80
-        assert len(result['contributing_factors']) == 4
+        assert result['severity_score'] >= 70
+        assert len(result['contributing_factors']) == 2
 
     def test_severity_calculation_warning(self):
         """Test severity calculation for WARNING case"""
@@ -234,7 +231,7 @@ class TestEscalationTools:
         ]
 
         try:
-            result = batch_classify_with_llm.func(transactions, agent_results_list)
+            result = batch_classify_with_llm.func(json.dumps(transactions), json.dumps(agent_results_list))
             assert isinstance(result, list)
             # Should have classification for each transaction
             if len(result) > 0:

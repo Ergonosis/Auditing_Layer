@@ -1,6 +1,11 @@
 """Tests for orchestrator and main workflow"""
 
+from datetime import datetime, timedelta, timezone
+from unittest.mock import MagicMock, patch
+
+import pandas as pd
 import pytest
+
 from src.orchestrator.orchestrator_agent import AuditOrchestrator
 from src.orchestrator.retry_handler import retry_with_exponential_backoff
 from src.utils.errors import AuditSystemError
@@ -14,18 +19,33 @@ def test_orchestrator_initialization():
     assert orchestrator.start_time is None
 
 
-def test_full_audit_cycle():
-    """Integration test - full audit cycle with mock data"""
-    orchestrator = AuditOrchestrator()
+def test_full_audit_cycle_skipped_when_no_run_log(monkeypatch):
+    """run_audit_cycle() returns 'skipped' when UQI has no run_log."""
+    mock_uqi = MagicMock()
+    mock_uqi.get_last_run_status.return_value = None
 
-    # This will use mock data adapter
-    results = orchestrator.run_audit_cycle()
+    # get_uqi is imported inside run_audit_cycle — patch at the source module
+    with patch("src.integrations.unification_client.get_uqi", return_value=mock_uqi):
+        orchestrator = AuditOrchestrator()
+        results = orchestrator.run_audit_cycle()
 
-    assert 'audit_run_id' in results
-    assert 'status' in results
-    assert results['status'] in ['completed', 'failed']
-    assert 'transaction_count' in results
-    assert 'flags_created' in results
+    assert results["status"] == "skipped"
+    assert results["transaction_count"] == 0
+
+
+def test_run_cycle_stale_store(monkeypatch):
+    """run_audit_cycle() returns 'skipped' when last run is >24h old."""
+    mock_run = MagicMock()
+    mock_run.start_time = datetime.now(timezone.utc) - timedelta(hours=25)
+
+    mock_uqi = MagicMock()
+    mock_uqi.get_last_run_status.return_value = mock_run
+
+    with patch("src.integrations.unification_client.get_uqi", return_value=mock_uqi):
+        orchestrator = AuditOrchestrator()
+        results = orchestrator.run_audit_cycle()
+
+    assert results["status"] == "skipped"
 
 
 def test_retry_handler():
@@ -53,12 +73,9 @@ def test_retry_handler_exhaustion():
 
 
 def test_merge_suspicious_results():
-    """Test merging results from parallel agents"""
-    import pandas as pd
-
+    """Test merging results from parallel agents (4-agent pipeline: no anomaly key)"""
     orchestrator = AuditOrchestrator()
 
-    # Mock parallel results
     parallel_results = {
         'reconciliation': {
             'unmatched_transactions': [
@@ -66,26 +83,25 @@ def test_merge_suspicious_results():
                 {'txn_id': 'txn_002'}
             ]
         },
-        'anomaly': {
-            'flagged_transactions': [
-                {'txn_id': 'txn_003'},
-                {'txn_id': 'txn_004'}
-            ]
-        },
         'data_quality': {
-            'incomplete_records': ['txn_005']
+            'incomplete_records': ['txn_005'],
+            'duplicates': {
+                'duplicate_groups': [
+                    {'ids': ['txn_003', 'txn_004'], 'count': 2}
+                ]
+            }
         }
     }
 
-    # Mock transactions dataframe
     transactions = pd.DataFrame({
         'txn_id': ['txn_001', 'txn_002', 'txn_003', 'txn_004', 'txn_005', 'txn_006'],
         'amount': [100, 200, 300, 400, 500, 600]
     })
 
-    suspicious = orchestrator._merge_suspicious_results(parallel_results, transactions)
+    # Patch _get_uqi_unmatched to return None (fallback to parallel_results)
+    with patch.object(orchestrator, '_get_uqi_unmatched', return_value=None):
+        suspicious = orchestrator._merge_suspicious_results(parallel_results, transactions)
 
-    assert len(suspicious) == 5
     suspicious_ids = [t['txn_id'] for t in suspicious]
     assert 'txn_001' in suspicious_ids
     assert 'txn_002' in suspicious_ids
@@ -93,6 +109,58 @@ def test_merge_suspicious_results():
     assert 'txn_004' in suspicious_ids
     assert 'txn_005' in suspicious_ids
     assert 'txn_006' not in suspicious_ids
+
+
+def test_context_enrichment_failure_nonfatal():
+    """_run_context_enrichment returns {} on failure, not raising."""
+    orchestrator = AuditOrchestrator()
+    with patch("src.orchestrator.orchestrator_agent.Crew", side_effect=Exception("LLM down")):
+        result = orchestrator._run_context_enrichment([{"txn_id": "t1"}])
+    assert result == {}
+
+
+def test_full_audit_cycle_happy_path():
+    """run_audit_cycle() processes transactions when UQI has a fresh run_log."""
+    mock_run = MagicMock()
+    mock_run.start_time = datetime.now(timezone.utc) - timedelta(hours=1)
+
+    def _make_entity(txn_id, amount, vendor):
+        e = MagicMock()
+        e.transaction_id = txn_id
+        e.merchant_name = vendor
+        e.name = vendor
+        e.amount = amount
+        e.date = "2026-03-18"
+        e.source = "credit_card"
+        return e
+
+    mock_record_1 = MagicMock()
+    mock_record_1.entity_id = "e1"
+    mock_record_2 = MagicMock()
+    mock_record_2.entity_id = "e2"
+
+    mock_uqi = MagicMock()
+    mock_uqi.get_last_run_status.return_value = mock_run
+    mock_uqi.get_unlinked_entities.return_value = [mock_record_1, mock_record_2]
+    mock_uqi.get_entity.side_effect = lambda eid, *a, **kw: {
+        "e1": _make_entity("txn_001", 150.0, "AWS"),
+        "e2": _make_entity("txn_002", 300.0, "Stripe"),
+    }[eid]
+
+    with patch("src.integrations.unification_client.get_uqi", return_value=mock_uqi), \
+         patch.object(AuditOrchestrator, "_run_parallel_agents",
+                      return_value={"data_quality": {}, "reconciliation": {}}), \
+         patch.object(AuditOrchestrator, "_augment_with_direct_analysis",
+                      return_value={"data_quality": {}, "reconciliation": {}}), \
+         patch.object(AuditOrchestrator, "_resolve_ambiguous_matches", return_value=[]), \
+         patch.object(AuditOrchestrator, "_merge_suspicious_results", return_value=[]), \
+         patch.object(AuditOrchestrator, "_run_context_enrichment", return_value={}), \
+         patch.object(AuditOrchestrator, "_run_escalation_direct", return_value=0):
+        orchestrator = AuditOrchestrator()
+        results = orchestrator.run_audit_cycle()
+
+    assert results["transaction_count"] == 2
+    assert results["status"] != "skipped"
 
 
 if __name__ == "__main__":

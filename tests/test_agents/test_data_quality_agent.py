@@ -1,5 +1,6 @@
 """Unit tests for Data Quality Agent and tools"""
 
+import json
 import pytest
 import pandas as pd
 from unittest.mock import patch, MagicMock
@@ -74,7 +75,7 @@ def test_schema_validation(mock_transaction_data):
     }
 
     with patch('src.tools.data_quality_tools.query_gold_tables', return_value=mock_transaction_data):
-        result = validate_schema_conformity.func("gold.recent_transactions", expected_schema)
+        result = validate_schema_conformity.func("gold.recent_transactions", json.dumps(expected_schema))
 
         assert isinstance(result, list)
         # Should pass - all types match
@@ -90,7 +91,7 @@ def test_schema_validation_missing_field(mock_transaction_data):
     }
 
     with patch('src.tools.data_quality_tools.query_gold_tables', return_value=mock_transaction_data):
-        result = validate_schema_conformity.func("gold.recent_transactions", expected_schema)
+        result = validate_schema_conformity.func("gold.recent_transactions", json.dumps(expected_schema))
 
         assert isinstance(result, list)
         assert len(result) == 1
@@ -106,7 +107,7 @@ def test_schema_validation_type_mismatch(mock_transaction_data):
     }
 
     with patch('src.tools.data_quality_tools.query_gold_tables', return_value=mock_transaction_data):
-        result = validate_schema_conformity.func("gold.recent_transactions", expected_schema)
+        result = validate_schema_conformity.func("gold.recent_transactions", json.dumps(expected_schema))
 
         assert isinstance(result, list)
         assert len(result) >= 1
@@ -160,7 +161,7 @@ def test_domain_inference_manual_config():
 
     with patch('src.tools.data_quality_tools.load_config', return_value=mock_config), \
          patch('src.tools.data_quality_tools.get_domain_config', return_value=mock_config['domains']['default']):
-        result = infer_domain_freshness.func(pattern)
+        result = infer_domain_freshness.func(json.dumps(pattern))
 
         assert 'domain' in result
         assert result['domain'] == 'default'
@@ -188,7 +189,7 @@ def test_domain_inference_llm_fallback():
     with patch('src.tools.data_quality_tools.load_config', return_value={}), \
          patch('src.tools.data_quality_tools.get_domain_config', return_value=None), \
          patch('src.tools.data_quality_tools.call_llm', return_value=mock_llm_response):
-        result = infer_domain_freshness.func(pattern)
+        result = infer_domain_freshness.func(json.dumps(pattern))
 
         assert result['domain'] == 'business_operations'
         assert result['max_age_hours'] == 48
@@ -201,7 +202,7 @@ def test_domain_inference_error_fallback():
     pattern = {'frequency': 'daily'}
 
     with patch('src.tools.data_quality_tools.load_config', side_effect=Exception("Config error")):
-        result = infer_domain_freshness.func(pattern)
+        result = infer_domain_freshness.func(json.dumps(pattern))
 
         assert result['domain'] == 'default'
         assert result['max_age_hours'] == 48
@@ -220,7 +221,7 @@ def test_quality_gates_pass():
         'completeness_threshold': 0.90
     }
 
-    result = check_data_quality_gates.func(quality_metrics, thresholds)
+    result = check_data_quality_gates.func(json.dumps(quality_metrics), json.dumps(thresholds))
     assert result is True
 
 
@@ -235,7 +236,7 @@ def test_quality_gates_fail():
         'completeness_threshold': 0.90
     }
 
-    result = check_data_quality_gates.func(quality_metrics, thresholds)
+    result = check_data_quality_gates.func(json.dumps(quality_metrics), json.dumps(thresholds))
     assert result is False
 
 
@@ -247,7 +248,7 @@ def test_quality_gates_default_threshold():
 
     thresholds = {}
 
-    result = check_data_quality_gates.func(quality_metrics, thresholds)
+    result = check_data_quality_gates.func(json.dumps(quality_metrics), json.dumps(thresholds))
     assert result is True
 
 

@@ -24,12 +24,12 @@ Triggers (Hourly/Event/Manual)
     ↓
 Orchestrator Agent (CrewAI Manager)
     ↓
-┌─────────────────── PARALLEL EXECUTION (2-3 min) ───────────────────┐
+┌─────────────────── PARALLEL EXECUTION (2-3 min) ──────────────-─────┐
 │  Data Quality Agent       Reconciliation Agent    Anomaly Detection │
-│  (completeness check)     (cross-source match)    (ML-based)       │
+│  (completeness check)     (cross-source match)    (ML-based)        │
 └─────────────────────────────────────────────────────────────────────┘
     ↓
-┌─────────────────── SEQUENTIAL EXECUTION (3-5 min) ─────────────────┐
+┌─────────────────── SEQUENTIAL EXECUTION (3-5 min) ────────────-─────┐
 │  Context Enrichment Agent → Escalation Agent                        │
 │  (email/receipt search)      (severity classification)              │
 └─────────────────────────────────────────────────────────────────────┘
@@ -84,12 +84,14 @@ python tests/demo_testing.py
 ```
 
 **Test Datasets:**
+
 - `clean_data/` - Original pristine data
 - `missing_fields_15pct/` - 15% missing vendor/amount/date fields
 - `duplicates_10pct/` - 10% duplicate transactions
 - `orphan_transactions_60/` - 60 unmatched transactions (no bank reconciliation)
 
 **Benchmark Metrics:**
+
 - Full confusion matrix (TP/FP/TN/FN)
 - Precision, Recall, F1 Score
 - Performance comparison across corruption types
