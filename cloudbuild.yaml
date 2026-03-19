@@ -1,13 +1,9 @@
 steps:
-  # Clone unification repo into build context so Dockerfile can COPY it
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: bash
+  # Copy unification repo from submitted source (uploaded alongside auditing repo)
+  - name: 'bash'
     args:
       - -c
-      - |
-        git clone --depth=1 \
-          https://github.com/dylancc5/Data-Unification-Layer \
-          ergonosis_unification
+      - cp -r ergonosis_unification_src ergonosis_unification
 
   - name: 'gcr.io/cloud-builders/docker'
     args:
@@ -38,7 +34,7 @@ steps:
       - --update-secrets=DATABRICKS_TOKEN=DATABRICKS_TOKEN:latest
       - --update-secrets=DATABRICKS_HTTP_PATH=DATABRICKS_HTTP_PATH:latest
       - --update-secrets=UNIFICATION_USER_EMAIL=UNIFICATION_USER_EMAIL:latest
-      - --set-env-vars=ENVIRONMENT=production,STATE_BACKEND=memory,DATABRICKS_CATALOG=ergonosis,DATABRICKS_SCHEMA=unification,DATABRICKS_AUDIT_SCHEMA=auditing,UNIFICATION_SECURE_STORAGE_REQUIRED=true,LOG_LEVEL=INFO,GCP_PROJECT_ID=ergonosis
+      - --set-env-vars=ENVIRONMENT=production,STATE_BACKEND=databricks,DATABRICKS_CATALOG=ergonosis,DATABRICKS_SCHEMA=unification,DATABRICKS_AUDIT_SCHEMA=auditing,UNIFICATION_SECURE_STORAGE_REQUIRED=true,LOG_LEVEL=INFO,GCP_PROJECT_ID=ergonosis
 
 images:
   - us-central1-docker.pkg.dev/$PROJECT_ID/ergonosis-auditing/pipeline:$SHORT_SHA
