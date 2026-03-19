@@ -1,0 +1,25 @@
+main:
+  steps:
+    - run_unification:
+        call: googleapis.run.v1.namespaces.jobs.run
+        args:
+          name: ${"namespaces/" + sys.get_env("GOOGLE_CLOUD_PROJECT_NUMBER") + "/jobs/ergonosis-unification-pipeline"}
+          location: us-central1
+        result: unification_result
+
+    - wait_1_hour:
+        call: sys.sleep
+        args:
+          seconds: 3600
+
+    - run_auditing:
+        call: googleapis.run.v1.namespaces.jobs.run
+        args:
+          name: ${"namespaces/" + sys.get_env("GOOGLE_CLOUD_PROJECT_NUMBER") + "/jobs/ergonosis-auditing-pipeline"}
+          location: us-central1
+        result: audit_result
+
+    - return_results:
+        return:
+          unification_status: ${unification_result}
+          audit_status: ${audit_result}
