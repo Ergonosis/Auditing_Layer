@@ -38,7 +38,7 @@ steps:
       - --update-secrets=DATABRICKS_TOKEN=DATABRICKS_TOKEN:latest
       - --update-secrets=DATABRICKS_HTTP_PATH=DATABRICKS_HTTP_PATH:latest
       - --update-secrets=UNIFICATION_USER_EMAIL=UNIFICATION_USER_EMAIL:latest
-      - --set-env-vars=ENVIRONMENT=production,STATE_BACKEND=memory,DATABRICKS_CATALOG=ergonosis,DATABRICKS_SCHEMA=unification,UNIFICATION_SECURE_STORAGE_REQUIRED=true,LOG_LEVEL=INFO,GCP_PROJECT_ID=ergonosis
+      - --set-env-vars=ENVIRONMENT=production,STATE_BACKEND=memory,DATABRICKS_CATALOG=ergonosis,DATABRICKS_SCHEMA=unification,DATABRICKS_AUDIT_SCHEMA=auditing,UNIFICATION_SECURE_STORAGE_REQUIRED=true,LOG_LEVEL=INFO,GCP_PROJECT_ID=ergonosis
 
 images:
   - us-central1-docker.pkg.dev/$PROJECT_ID/ergonosis-auditing/pipeline:$SHORT_SHA

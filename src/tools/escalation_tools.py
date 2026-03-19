@@ -325,19 +325,22 @@ def create_audit_flag(transaction_id: str, audit_run_id: str, severity: str, exp
 
     logger.info(f"Created flag {flag_id} for txn {transaction_id} (severity: {severity})")
 
-    # In production, this would write to Flag DB
-    # For now, just log it
     flag_data = {
         'flag_id': flag_id,
         'transaction_id': transaction_id,
         'audit_run_id': audit_run_id,
         'severity_level': severity,
+        'confidence_score': 1.0,
         'explanation': explanation,
         'supporting_evidence_links': evidence_dict,
         'created_at': datetime.now().isoformat()
     }
 
     logger.info(f"Flag created", **flag_data)
+
+    # Persist to Databricks in production
+    from src.db.databricks_writer import write_flag
+    write_flag(flag_data)
 
     # Collect flag in test mode for benchmarking
     if os.getenv('TEST_MODE') == 'true':

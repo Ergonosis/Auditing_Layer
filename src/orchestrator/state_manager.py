@@ -47,9 +47,23 @@ else:
     logger.info(f"Using in-memory state backend ({STATE_BACKEND} mode)")
 
 
+def _persist_state_to_databricks(audit_run_id: str, state: Dict[str, Any]) -> None:
+    """Best-effort Databricks persistence.  No-ops silently outside production."""
+    try:
+        from src.db.databricks_writer import write_workflow_state
+        write_workflow_state(audit_run_id, state)
+    except Exception as exc:
+        logger.warning(
+            "Failed to persist workflow state to Databricks — continuing",
+            audit_run_id=audit_run_id,
+            error=str(exc),
+        )
+
+
 def save_workflow_state(audit_run_id: str, state: Dict[str, Any]) -> None:
     """
-    Save workflow state to Redis or in-memory store.
+    Save workflow state to Redis or in-memory store, and additionally
+    persist to Databricks in production (best-effort).
 
     Args:
         audit_run_id: Unique audit run ID
@@ -62,11 +76,13 @@ def save_workflow_state(audit_run_id: str, state: Dict[str, Any]) -> None:
     if STATE_BACKEND == "memory":
         _in_memory_state[audit_run_id] = state
         logger.info(f"Saved workflow state (in-memory)", audit_run_id=audit_run_id)
+        _persist_state_to_databricks(audit_run_id, state)
         return
 
     # Redis backend
     if not redis_client:
         logger.warning("Redis unavailable, state not saved")
+        _persist_state_to_databricks(audit_run_id, state)
         return
 
     try:
@@ -76,6 +92,8 @@ def save_workflow_state(audit_run_id: str, state: Dict[str, Any]) -> None:
         logger.info(f"Saved workflow state", audit_run_id=audit_run_id)
     except Exception as e:
         raise StateManagerError(f"Failed to save workflow state: {e}")
+
+    _persist_state_to_databricks(audit_run_id, state)
 
 
 def restore_workflow_state(audit_run_id: str) -> Dict[str, Any]:

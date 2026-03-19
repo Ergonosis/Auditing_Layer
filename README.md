@@ -1,196 +1,165 @@
-# Ergonosis Auditing - Data Auditing Agent Ecosystem
+# Ergonosis – Data Auditing Layer
 
-A production-ready, cost-optimized agentic audit system using CrewAI, Databricks, and a tool-first architecture.
+This layer sits downstream of the Data Unification Layer. It ingests canonicalized transaction/email/calendar links from the Unified Query Interface (UQI), runs 6 specialized CrewAI agents in a parallel-then-sequential pipeline to detect data quality issues, reconciliation mismatches, and statistical anomalies, and produces severity-graded flags with a full immutable audit trail.
 
-## 🎯 System Overview
+**Project Spec:** [Ergonosis – Complete Data Monitoring Architecture](https://www.notion.so/Ergonosis-Complete-Data-Monitoring-Architecture-2fcd8bf5e864808bb1bbc109723ccf53?source=copy_link)
 
-**Tool-First, LLM-Light Architecture**: 97% deterministic operations (SQL/ML), 3% LLM calls
+**Upstream repo:** [Ergonosis/Data-Unification-Layer](https://github.com/dylancc5/Data-Unification-Layer)
 
-### Key Features
-
-- ✅ **6 Specialized Agents**: Data Quality, Reconciliation, Anomaly Detection, Context Enrichment, Escalation, Audit Logging
-- ✅ **Cost Optimized**: ~$150/month total ($100-150 Databricks compute + $2 LLM)
-- ✅ **Scalable**: Processes 10,000+ transactions/month
-- ✅ **Auto-Tuning**: Weekly feedback analysis automatically adjusts rules
-- ✅ **Full Audit Trail**: Immutable append-only logs for 7-year compliance
-- ✅ **Parallel Execution**: 3 parallel agents → 2 sequential agents for optimal performance
+**Downstream:** Finance Team Dashboard (no repo yet)
 
 ---
 
-## 📊 Architecture
+## Where Results Live
 
-```
-Triggers (Hourly/Event/Manual)
-    ↓
-Orchestrator Agent (CrewAI Manager)
-    ↓
-┌─────────────────── PARALLEL EXECUTION (2-3 min) ──────────────-─────┐
-│  Data Quality Agent       Reconciliation Agent    Anomaly Detection │
-│  (completeness check)     (cross-source match)    (ML-based)        │
-└─────────────────────────────────────────────────────────────────────┘
-    ↓
-┌─────────────────── SEQUENTIAL EXECUTION (3-5 min) ────────────-─────┐
-│  Context Enrichment Agent → Escalation Agent                        │
-│  (email/receipt search)      (severity classification)              │
-└─────────────────────────────────────────────────────────────────────┘
-    ↓
-Flag Database + Audit Trail
-    ↓
-Frontend Dashboard (Finance Team Review)
-    ↓
-Weekly Feedback Analysis → Auto-Tune Rules
-```
+> **Note:** Production Databricks writes are planned for V2. Schemas are defined in [`src/db/schemas.py`](src/db/schemas.py) but not yet wired up. Currently, flags are collected in-memory and surfaced via the demo JSON output or the benchmark test harness.
 
-For full architecture details, see [`system_flowchart.mmd`](system_flowchart.mmd) and [`system_specs.md`](system_specs.md).
+The planned output catalog is **`ergonosis.auditing`** on the Databricks workspace.
 
----
+### Audit tables — planned for V2
 
-## 🚀 Quick Start
+| Table            | Contents                                                                                         |
+| ---------------- | ------------------------------------------------------------------------------------------------ |
+| `flags`          | Per-transaction flags: severity (CRITICAL/WARNING/INFO), confidence score, explanation, evidence |
+| `audit_trail`    | Immutable append-only log: agent name, tool called, execution time, LLM tokens used, cost        |
+| `workflow_state` | Per-run state: status, current agent, completed agents, intermediate results                     |
 
-### Prerequisites
+### Querying results today (demo / test mode)
 
-- Python 3.11+
-- Redis (for state management)
-- OpenRouter API key (for LLM calls)
-- Databricks access (optional for now - uses mock data adapter)
-
-### Installation
+Flags are accessible in-memory during a run. The demo pipeline writes a JSON summary to stdout:
 
 ```bash
-# Clone repository
-cd ergonosis_auditing
+python scripts/run_demo.py
+# → prints JSON: { "audit_run_id": "...", "flags": [...], "summary": {...} }
+```
 
-# Install dependencies
+To run the full benchmark and capture flags across all four test datasets:
+
+```bash
+python tests/demo_testing.py
+# → prints confusion matrix (TP/FP/TN/FN), precision, recall, F1 per dataset
+```
+
+---
+
+## Running on GCP
+
+### Manual trigger
+
+There is no scheduled trigger. Execute the pipeline on demand:
+
+```bash
+gcloud run jobs execute ergonosis-auditing-pipeline \
+  --region=us-central1 \
+  --wait \
+  --project=ergonosis
+```
+
+### Viewing logs
+
+```bash
+gcloud run jobs logs read ergonosis-auditing-pipeline \
+  --region=us-central1 \
+  --project=ergonosis \
+  --limit=50
+```
+
+### Deploying a new image
+
+Pushing to `main` does **not** auto-deploy. To deploy after a code change:
+
+```bash
+SHORT_SHA=$(git rev-parse --short HEAD)
+gcloud builds submit \
+  --config cloudbuild.yaml \
+  --project=ergonosis \
+  --substitutions=SHORT_SHA=$SHORT_SHA .
+```
+
+The build step clones the unification repo, builds the Docker image, pushes it to Artifact Registry, and updates the Cloud Run job automatically.
+
+### Secrets
+
+All credentials are stored in **GCP Secret Manager** under project `ergonosis`. The pipeline loads them automatically when deployed via `cloudbuild.yaml`.
+
+| Secret name              | Description                                   |
+| ------------------------ | --------------------------------------------- |
+| `ANTHROPIC_API_KEY`      | Anthropic API key for Claude (LLM calls)      |
+| `DATABRICKS_HOST`        | Databricks workspace hostname                 |
+| `DATABRICKS_TOKEN`       | Databricks personal access token              |
+| `DATABRICKS_HTTP_PATH`   | SQL warehouse HTTP path                       |
+| `UNIFICATION_USER_EMAIL` | Mailbox used to derive the UQI `user_id_hash` |
+
+---
+
+## Local Development & Testing
+
+### Setup
+
+```bash
 pip install -r requirements.txt
+cp .env.example .env  # fill in ANTHROPIC_API_KEY, or use demo mode below
+```
 
-# Set up environment
-cp .env.example .env
-# Edit .env and add your ANTHROPIC_API_KEY (or OPENAI_API_KEY if using OpenAI)
+The unification repo must be installed as a sibling. For local dev, clone it alongside:
 
-# Run demo audit
+```bash
+git clone https://github.com/dylancc5/Data-Unification-Layer ../ergonosis_unification
+pip install -e ../ergonosis_unification
+```
+
+The Dockerfile handles this automatically for GCP builds.
+
+### Running in demo mode (no credentials needed)
+
+Demo mode uses local CSV fixtures from `ria_data/` and an in-memory SQLite store — no Databricks or real API calls required.
+
+```bash
 python scripts/run_demo.py
 ```
 
-### Testing Framework
+Four fixture datasets are available:
 
-The project includes an automated testing framework with augmented datasets:
+| Dataset                   | Contents                                   | Use case                        |
+| ------------------------- | ------------------------------------------ | ------------------------------- |
+| `clean_data/`             | Pristine transactions                      | Baseline / false-positive check |
+| `missing_fields_15pct/`   | 15% missing vendor/amount/date fields      | Data quality detection          |
+| `duplicates_10pct/`       | 10% duplicate transactions                 | Reconciliation detection        |
+| `orphan_transactions_60/` | 60 unmatched transactions (no bank record) | Anomaly / orphan detection      |
+
+### Running the test suite
 
 ```bash
-# Generate test datasets with various corruptions
-python scripts/generate_test_datasets.py
+python -m pytest tests/
+```
 
-# Run automated benchmark suite
+All tests use in-memory SQLite. No real API calls are made regardless of local credentials.
+
+### Running the benchmark harness
+
+```bash
 python tests/demo_testing.py
 ```
 
-**Test Datasets:**
+Runs the full pipeline across all four datasets and prints a confusion matrix (TP/FP/TN/FN), precision, recall, and F1 per dataset. Expected results: duplicates ~98% F1, missing_fields ~99% F1, orphan ~100% F1, clean_data F1 undefined (no corrupted rows).
 
-- `clean_data/` - Original pristine data
-- `missing_fields_15pct/` - 15% missing vendor/amount/date fields
-- `duplicates_10pct/` - 10% duplicate transactions
-- `orphan_transactions_60/` - 60 unmatched transactions (no bank reconciliation)
+### Run types
 
-**Benchmark Metrics:**
-
-- Full confusion matrix (TP/FP/TN/FN)
-- Precision, Recall, F1 Score
-- Performance comparison across corruption types
+| Type         | Behaviour                                                    |
+| ------------ | ------------------------------------------------------------ |
+| `demo`       | Local CSV fixtures, in-memory state, no credentials required |
+| `production` | Reads from Databricks via UQI, requires all GCP secrets set  |
 
 ---
 
-## 📂 Project Structure
+## Known Limitations (V1)
 
-```
-ergonosis_auditing/
-├── config/                      # Configuration files
-│   ├── rules.yaml               # Auto-tuned rules and thresholds
-│   └── deployment/              # Databricks workflow configs
-├── src/
-│   ├── orchestrator/            # Master coordinator
-│   ├── agents/                  # 6 specialized agents
-│   ├── tools/                   # 30+ tools for agents
-│   ├── models/                  # Pydantic data models
-│   ├── db/                      # Database schemas
-│   ├── ml/                      # ML models
-│   ├── utils/                   # Utilities
-│   └── main.py                  # Entry point
-├── scripts/
-│   └── feedback_analyzer.py     # Weekly auto-tuning job
-├── tests/                       # Unit and integration tests
-├── docs/                        # Task specifications
-│   ├── TASK_1_INFRASTRUCTURE.md
-│   ├── TASK_2_DATA_QUALITY_AGENT.md
-│   ├── TASK_3_RECONCILIATION_ANOMALY_AGENTS.md
-│   ├── TASK_4_CONTEXT_ESCALATION_AGENTS.md
-│   ├── TASK_5_ORCHESTRATOR_MAIN.md
-│   └── TASK_ASSIGNMENTS_SUMMARY.md
-├── development_history.md       # Architecture decision log
-└── README.md
-```
+- **Databricks output not yet wired:** Flags and audit logs remain in-memory during a run. The write layer to `ergonosis.auditing` is planned for V2. Schemas are ready in [`src/db/schemas.py`](src/db/schemas.py).
 
----
+- **No scheduled trigger:** The pipeline runs on demand only. No Cloud Scheduler is configured.
 
-## 🛠️ Development Status
+- **Single-user / single-account:** Inherits the single Plaid account and single MS Graph mailbox constraint from the unification layer V1.
 
-### ✅ Completed (Foundation)
+- **Sibling repo dependency:** Local development and Docker builds require `ergonosis_unification` to be available. The `Dockerfile` and `cloudbuild.yaml` handle this automatically; local dev requires a manual clone (see setup above).
 
-- Directory structure
-- Configuration system (rules.yaml, .env)
-- Data models (Transaction, Flag, AuditLogEntry, VendorProfile)
-- Utility modules (logging, metrics, config_loader, errors)
-- Constants and enums
-- Architecture decision log (6 ADRs)
-
-### 🚧 Ready for Implementation (See Task Assignments)
-
-The remaining implementation is broken down into **5 independent, parallelizable tasks**:
-
-1. **TASK 1**: Core Infrastructure (Databricks, LLM, State Manager) - 2 hours
-2. **TASK 2**: Data Quality Agent + 5 Tools - 2 hours
-3. **TASK 3**: Reconciliation + Anomaly Detection Agents + 10 Tools - 3 hours
-4. **TASK 4**: Context Enrichment + Escalation Agents + 10 Tools - 3 hours
-5. **TASK 5**: Orchestrator + Logging Agent + Main Entry Point - 4 hours
-
-**👉 See [`docs/TASK_ASSIGNMENTS_SUMMARY.md`](docs/TASK_ASSIGNMENTS_SUMMARY.md) for detailed task breakdown and assignment instructions.**
-
----
-
-## 🎯 Key Design Decisions (ADRs)
-
-All architectural decisions are tracked in [`development_history.md`](development_history.md):
-
-- **ADR-001**: Databricks Workflows for deployment (native Delta Lake integration)
-- **ADR-002**: Tool-First Architecture (97% cost reduction via deterministic filtering)
-- **ADR-003**: Weekly Auto-Tuning without human approval (1 week vs 4+ weeks manual)
-- **ADR-004**: Delta Lake for Knowledge Graph (zero additional infrastructure cost)
-- **ADR-005**: Abstract Databricks interface with mock data (unblocks development)
-- **ADR-006**: Single broad domain strategy (faster initial deployment)
-
----
-
-## 💰 Cost Breakdown
-
-**Monthly Cost Target**: ~$150/month per client
-
-| Component                         | Monthly Cost |
-| --------------------------------- | ------------ |
-| Databricks compute (job clusters) | $100-150     |
-| LLM API calls (OpenRouter)        | $2-10        |
-| Redis (state management)          | $0-30        |
-| **Total**                         | **~$150**    |
-
-**LLM Usage**:
-
-- 1000 audits/month × ~30 LLM calls/audit × ~500 tokens/call = **15M tokens/month**
-- Cost: ~$2-10/month (well under $100 budget)
-
----
-
-## 📚 Documentation
-
-- [`system_specs.md`](system_specs.md) - Complete system specifications (1263 lines)
-- [`system_flowchart.mmd`](system_flowchart.mmd) - Mermaid architecture diagram
-- [`development_history.md`](development_history.md) - Architecture decision log
-- [`docs/TASK_ASSIGNMENTS_SUMMARY.md`](docs/TASK_ASSIGNMENTS_SUMMARY.md) - Implementation task breakdown
-
----
+- **Auto-tuning without human approval:** The weekly `scripts/feedback_analyzer.py` job adjusts detection rules autonomously (ADR-003 design decision).

@@ -1,0 +1,5908 @@
+{
+  "test_run_id": "bench-20260318_223240",
+  "executed_at": "2026-03-18T22:32:40.581298",
+  "datasets_tested": 4,
+  "total_duration_seconds": 22.962201833724976,
+  "results": [
+    {
+      "dataset_name": "clean_data",
+      "corruption_type": "none",
+      "ground_truth": {
+        "total_rows": 2167,
+        "corrupted_rows": 0,
+        "corrupted_row_ids": [],
+        "corruption_details": {}
+      },
+      "pipeline_results": {
+        "status": "completed",
+        "flags_created": 0,
+        "duration_seconds": 6.2762980461120605
+      },
+      "confusion_matrix": {
+        "TP": 0,
+        "FP": 0,
+        "TN": 2167,
+        "FN": 0,
+        "precision": null,
+        "recall": null,
+        "f1_score": null,
+        "accuracy": 1.0,
+        "metrics_defined": false
+      },
+      "passed": null
+    },
+    {
+      "dataset_name": "duplicates_10pct",
+      "corruption_type": "duplicates",
+      "ground_truth": {
+        "total_rows": 2716,
+        "original_rows": 2167,
+        "corrupted_rows": 216,
+        "duplicate_count": 549,
+        "corrupted_row_ids": [
+          "EXP_0000457",
+          "EXP_0000103",
+          "EXP_0001127",
+          "EXP_0001004",
+          "EXP_0000915",
+          "EXP_0000572",
+          "EXP_0000420",
+          "EXP_0000357",
+          "EXP_0001729",
+          "EXP_0000131",
+          "EXP_0000123",
+          "EXP_0000384",
+          "EXP_0000896",
+          "EXP_0000953",
+          "EXP_0002070",
+          "EXP_0000109",
+          "EXP_0000815",
+          "EXP_0001719",
+          "EXP_0000903",
+          "EXP_0001840",
+          "EXP_0001140",
+          "EXP_0000027",
+          "EXP_0000654",
+          "EXP_0001732",
+          "EXP_0001394",
+          "EXP_0001139",
+          "EXP_0000637",
+          "EXP_0000882",
+          "EXP_0001379",
+          "EXP_0000419",
+          "EXP_0000380",
+          "EXP_0001557",
+          "EXP_0000397",
+          "EXP_0001471",
+          "EXP_0001409",
+          "EXP_0001084",
+          "EXP_0000178",
+          "EXP_0001882",
+          "EXP_0000512",
+          "EXP_0001551",
+          "EXP_0000323",
+          "EXP_0001201",
+          "EXP_0001482",
+          "EXP_0000788",
+          "EXP_0000285",
+          "EXP_0000188",
+          "EXP_0000934",
+          "EXP_0001186",
+          "EXP_0000327",
+          "EXP_0000954",
+          "EXP_0000414",
+          "EXP_0001858",
+          "EXP_0001495",
+          "EXP_0000667",
+          "EXP_0001517",
+          "EXP_0001456",
+          "EXP_0000859",
+          "EXP_0001094",
+          "EXP_0000293",
+          "EXP_0000701",
+          "EXP_0001003",
+          "EXP_0000670",
+          "EXP_0001894",
+          "EXP_0001555",
+          "EXP_0001106",
+          "EXP_0000900",
+          "EXP_0001329",
+          "EXP_0000230",
+          "EXP_0000939",
+          "EXP_0000132",
+          "EXP_0001293",
+          "EXP_0001644",
+          "EXP_0001097",
+          "EXP_0000272",
+          "EXP_0000865",
+          "EXP_0001289",
+          "EXP_0000871",
+          "EXP_0002045",
+          "EXP_0001621",
+          "EXP_0001880",
+          "EXP_0000586",
+          "EXP_0001085",
+          "EXP_0001011",
+          "EXP_0001077",
+          "EXP_0001755",
+          "EXP_0001636",
+          "EXP_0001483",
+          "EXP_0000899",
+          "EXP_0000567",
+          "EXP_0002088",
+          "EXP_0002022",
+          "EXP_0000373",
+          "EXP_0000193",
+          "EXP_0000450",
+          "EXP_0000627",
+          "EXP_0000656",
+          "EXP_0001730",
+          "EXP_0000261",
+          "EXP_0001577",
+          "EXP_0001564",
+          "EXP_0001918",
+          "EXP_0001030",
+          "EXP_0000048",
+          "EXP_0000470",
+          "EXP_0001093",
+          "EXP_0001203",
+          "EXP_0001781",
+          "EXP_0000648",
+          "EXP_0001859",
+          "EXP_0000014",
+          "EXP_0001079",
+          "EXP_0002051",
+          "EXP_0000732",
+          "EXP_0002080",
+          "EXP_0000436",
+          "EXP_0001223",
+          "EXP_0001532",
+          "EXP_0000662",
+          "EXP_0000003",
+          "EXP_0001328",
+          "EXP_0002002",
+          "EXP_0000080",
+          "EXP_0000459",
+          "EXP_0001487",
+          "EXP_0001260",
+          "EXP_0000981",
+          "EXP_0000238",
+          "EXP_0000987",
+          "EXP_0000351",
+          "EXP_0001991",
+          "EXP_0000284",
+          "EXP_0000516",
+          "EXP_0000526",
+          "EXP_0001947",
+          "EXP_0000677",
+          "EXP_0001086",
+          "EXP_0002162",
+          "EXP_0001734",
+          "EXP_0000868",
+          "EXP_0000824",
+          "EXP_0001277",
+          "EXP_0001635",
+          "EXP_0001530",
+          "EXP_0001795",
+          "EXP_0002120",
+          "EXP_0001850",
+          "EXP_0000496",
+          "EXP_0001016",
+          "EXP_0000921",
+          "EXP_0000263",
+          "EXP_0001385",
+          "EXP_0000087",
+          "EXP_0000943",
+          "EXP_0000030",
+          "EXP_0000291",
+          "EXP_0000242",
+          "EXP_0000938",
+          "EXP_0000277",
+          "EXP_0000129",
+          "EXP_0001354",
+          "EXP_0002106",
+          "EXP_0000975",
+          "EXP_0001141",
+          "EXP_0001989",
+          "EXP_0000878",
+          "EXP_0000542",
+          "EXP_0001937",
+          "EXP_0000996",
+          "EXP_0001938",
+          "EXP_0001668",
+          "EXP_0000780",
+          "EXP_0000387",
+          "EXP_0000398",
+          "EXP_0001766",
+          "EXP_0001452",
+          "EXP_0001735",
+          "EXP_0001684",
+          "EXP_0001913",
+          "EXP_0000222",
+          "EXP_0000404",
+          "EXP_0000249",
+          "EXP_0001650",
+          "EXP_0001390",
+          "EXP_0000448",
+          "EXP_0001019",
+          "EXP_0000785",
+          "EXP_0001838",
+          "EXP_0000575",
+          "EXP_0000752",
+          "EXP_0001895",
+          "EXP_0001024",
+          "EXP_0000309",
+          "EXP_0001816",
+          "EXP_0000402",
+          "EXP_0000208",
+          "EXP_0000061",
+          "EXP_0000383",
+          "EXP_0000969",
+          "EXP_0000682",
+          "EXP_0001665",
+          "EXP_0001990",
+          "EXP_0001972",
+          "EXP_0000876",
+          "EXP_0001643",
+          "EXP_0000241",
+          "EXP_0000675",
+          "EXP_0001553",
+          "EXP_0000009",
+          "EXP_0001600",
+          "EXP_0001087",
+          "EXP_0001864",
+          "EXP_0001169",
+          "EXP_0001733",
+          "EXP_0001994",
+          "EXP_0000635",
+          "EXP_0000778"
+        ],
+        "corruption_details": {
+          "EXP_0000457": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000103": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001127": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001004": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000915": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000572": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000420": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000357": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001729": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000131": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000123": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000384": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000896": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000953": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0002070": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000109": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000815": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001719": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000903": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001840": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001140": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000027": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000654": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001732": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001394": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001139": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000637": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000882": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001379": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000419": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000380": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001557": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000397": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001471": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001409": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001084": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000178": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001882": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000512": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001551": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000323": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001201": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001482": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000788": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000285": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000188": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000934": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001186": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000327": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000954": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000414": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001858": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001495": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000667": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001517": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001456": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000859": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001094": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000293": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000701": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001003": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000670": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001894": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001555": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001106": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000900": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001329": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000230": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000939": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000132": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001293": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001644": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001097": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000272": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000865": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001289": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000871": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0002045": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001621": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001880": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000586": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001085": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001011": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001077": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001755": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001636": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001483": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000899": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000567": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0002088": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0002022": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000373": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000193": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000450": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000627": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000656": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001730": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000261": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001577": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001564": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001918": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001030": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000048": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000470": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001093": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001203": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001781": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000648": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001859": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000014": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001079": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0002051": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000732": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0002080": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000436": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001223": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001532": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000662": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000003": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001328": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0002002": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000080": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000459": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001487": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001260": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000981": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000238": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000987": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000351": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001991": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000284": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000516": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000526": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001947": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000677": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001086": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0002162": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001734": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000868": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000824": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001277": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001635": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001530": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001795": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0002120": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001850": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000496": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001016": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000921": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000263": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001385": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000087": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000943": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000030": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000291": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000242": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000938": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000277": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000129": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001354": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0002106": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000975": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001141": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001989": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000878": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000542": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001937": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000996": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001938": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001668": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000780": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000387": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000398": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001766": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001452": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001735": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001684": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001913": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000222": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000404": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000249": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001650": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001390": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000448": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001019": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000785": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001838": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000575": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000752": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001895": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001024": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000309": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001816": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000402": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000208": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000061": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000383": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000969": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000682": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001665": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001990": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001972": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000876": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001643": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000241": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000675": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001553": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0000009": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001600": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001087": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001864": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001169": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0001733": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          },
+          "EXP_0001994": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "exact"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000635": {
+            "num_duplicates": 3,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 3,
+                "type": "near-duplicate"
+              }
+            ]
+          },
+          "EXP_0000778": {
+            "num_duplicates": 2,
+            "duplicate_info": [
+              {
+                "duplicate_number": 1,
+                "type": "near-duplicate"
+              },
+              {
+                "duplicate_number": 2,
+                "type": "exact"
+              }
+            ]
+          }
+        }
+      },
+      "pipeline_results": {
+        "status": "completed",
+        "flags_created": 0,
+        "duration_seconds": 5.077032089233398
+      },
+      "confusion_matrix": {
+        "TP": 0,
+        "FP": 0,
+        "TN": 2500,
+        "FN": 216,
+        "precision": null,
+        "recall": 0.0,
+        "f1_score": null,
+        "accuracy": 0.9204712812960235,
+        "metrics_defined": true
+      },
+      "passed": null
+    },
+    {
+      "dataset_name": "missing_fields_15pct",
+      "corruption_type": "missing_fields",
+      "ground_truth": {
+        "total_rows": 2167,
+        "corrupted_rows": 325,
+        "corrupted_row_ids": [
+          "EXP_0000466",
+          "EXP_0000107",
+          "EXP_0001112",
+          "EXP_0000987",
+          "EXP_0000883",
+          "EXP_0000563",
+          "EXP_0000425",
+          "EXP_0002133",
+          "EXP_0000370",
+          "EXP_0001662",
+          "EXP_0000125",
+          "EXP_0000118",
+          "EXP_0000387",
+          "EXP_0000868",
+          "EXP_0000922",
+          "EXP_0001975",
+          "EXP_0000115",
+          "EXP_0000795",
+          "EXP_0001652",
+          "EXP_0000871",
+          "EXP_0001762",
+          "EXP_0001128",
+          "EXP_0000041",
+          "EXP_0000641",
+          "EXP_0001385",
+          "EXP_0000631",
+          "EXP_0000861",
+          "EXP_0001365",
+          "EXP_0000385",
+          "EXP_0001518",
+          "EXP_0000408",
+          "EXP_0001443",
+          "EXP_0001394",
+          "EXP_0001064",
+          "EXP_0000197",
+          "EXP_0001807",
+          "EXP_0002106",
+          "EXP_0000515",
+          "EXP_0001508",
+          "EXP_0000338",
+          "EXP_0002148",
+          "EXP_0001193",
+          "EXP_0001458",
+          "EXP_0000776",
+          "EXP_0000309",
+          "EXP_0000202",
+          "EXP_0000910",
+          "EXP_0001181",
+          "EXP_0000344",
+          "EXP_0000421",
+          "EXP_0001783",
+          "EXP_0001464",
+          "EXP_0000651",
+          "EXP_0001478",
+          "EXP_0001429",
+          "EXP_0000842",
+          "EXP_0001079",
+          "EXP_0000322",
+          "EXP_0000686",
+          "EXP_0002100",
+          "EXP_0000656",
+          "EXP_0001815",
+          "EXP_0001511",
+          "EXP_0001091",
+          "EXP_0002160",
+          "EXP_0000870",
+          "EXP_0001307",
+          "EXP_0000248",
+          "EXP_0000916",
+          "EXP_0001271",
+          "EXP_0001587",
+          "EXP_0001082",
+          "EXP_0000282",
+          "EXP_0000852",
+          "EXP_0001265",
+          "EXP_0000854",
+          "EXP_0001955",
+          "EXP_0001575",
+          "EXP_0001803",
+          "EXP_0000577",
+          "EXP_0001066",
+          "EXP_0000304",
+          "EXP_0000505",
+          "EXP_0001717",
+          "EXP_0001248",
+          "EXP_0001177",
+          "EXP_0000546",
+          "EXP_0001721",
+          "EXP_0001281",
+          "EXP_0000917",
+          "EXP_0002047",
+          "EXP_0001280",
+          "EXP_0000884",
+          "EXP_0000807",
+          "EXP_0000461",
+          "EXP_0000297",
+          "EXP_0001099",
+          "EXP_0001063",
+          "EXP_0000186",
+          "EXP_0001730",
+          "EXP_0000076",
+          "EXP_0001937",
+          "EXP_0000234",
+          "EXP_0000324",
+          "EXP_0001400",
+          "EXP_0000328",
+          "EXP_0001805",
+          "EXP_0001537",
+          "EXP_0000911",
+          "EXP_0001315",
+          "EXP_0000123",
+          "EXP_0000847",
+          "EXP_0000841",
+          "EXP_0001001",
+          "EXP_0001160",
+          "EXP_0000521",
+          "EXP_0001222",
+          "EXP_0002127",
+          "EXP_0000025",
+          "EXP_0001642",
+          "EXP_0000236",
+          "EXP_0001539",
+          "EXP_0002016",
+          "EXP_0001172",
+          "EXP_0001724",
+          "EXP_0000558",
+          "EXP_0001760",
+          "EXP_0001445",
+          "EXP_0000741",
+          "EXP_0000235",
+          "EXP_0000603",
+          "EXP_0000927",
+          "EXP_0000327",
+          "EXP_0000978",
+          "EXP_0000008",
+          "EXP_0002150",
+          "EXP_0001981",
+          "EXP_0001641",
+          "EXP_0001085",
+          "EXP_0001752",
+          "EXP_0000371",
+          "EXP_0001095",
+          "EXP_0002068",
+          "EXP_0000227",
+          "EXP_0001961",
+          "EXP_0001395",
+          "EXP_0000607",
+          "EXP_0001889",
+          "EXP_0001441",
+          "EXP_0001349",
+          "EXP_0000417",
+          "EXP_0000827",
+          "EXP_0000334",
+          "EXP_0001182",
+          "EXP_0001785",
+          "EXP_0002088",
+          "EXP_0001164",
+          "EXP_0002078",
+          "EXP_0000002",
+          "EXP_0001316",
+          "EXP_0000690",
+          "EXP_0001057",
+          "EXP_0000074",
+          "EXP_0000480",
+          "EXP_0001512",
+          "EXP_0001268",
+          "EXP_0000998",
+          "EXP_0000214",
+          "EXP_0001002",
+          "EXP_0000314",
+          "EXP_0000352",
+          "EXP_0002018",
+          "EXP_0000280",
+          "EXP_0000536",
+          "EXP_0000559",
+          "EXP_0001984",
+          "EXP_0000720",
+          "EXP_0001084",
+          "EXP_0001755",
+          "EXP_0000902",
+          "EXP_0000869",
+          "EXP_0001286",
+          "EXP_0001659",
+          "EXP_0001553",
+          "EXP_0001801",
+          "EXP_0001882",
+          "EXP_0000522",
+          "EXP_0001029",
+          "EXP_0000948",
+          "EXP_0000261",
+          "EXP_0001389",
+          "EXP_0000083",
+          "EXP_0000960",
+          "EXP_0000938",
+          "EXP_0000021",
+          "EXP_0000285",
+          "EXP_0000223",
+          "EXP_0000959",
+          "EXP_0000278",
+          "EXP_0000124",
+          "EXP_0001351",
+          "EXP_0000988",
+          "EXP_0001145",
+          "EXP_0000925",
+          "EXP_0000576",
+          "EXP_0001980",
+          "EXP_0001009",
+          "EXP_0001678",
+          "EXP_0000800",
+          "EXP_0000407",
+          "EXP_0000424",
+          "EXP_0001777",
+          "EXP_0001463",
+          "EXP_0001690",
+          "EXP_0001960",
+          "EXP_0000209",
+          "EXP_0000428",
+          "EXP_0000243",
+          "EXP_0001666",
+          "EXP_0001397",
+          "EXP_0000472",
+          "EXP_0001030",
+          "EXP_0000810",
+          "EXP_0001876",
+          "EXP_0000615",
+          "EXP_0001746",
+          "EXP_0000762",
+          "EXP_0001936",
+          "EXP_0001034",
+          "EXP_0000306",
+          "EXP_0001829",
+          "EXP_0000196",
+          "EXP_0000050",
+          "EXP_0000403",
+          "EXP_0000980",
+          "EXP_0000721",
+          "EXP_0002000",
+          "EXP_0000915",
+          "EXP_0001663",
+          "EXP_0000719",
+          "EXP_0001572",
+          "EXP_0000005",
+          "EXP_0001620",
+          "EXP_0001037",
+          "EXP_0001747",
+          "EXP_0001117",
+          "EXP_0001614",
+          "EXP_0002129",
+          "EXP_0001874",
+          "EXP_0000584",
+          "EXP_0000718",
+          "EXP_0001150",
+          "EXP_0000815",
+          "EXP_0000226",
+          "EXP_0002079",
+          "EXP_0000238",
+          "EXP_0001213",
+          "EXP_0000224",
+          "EXP_0000204",
+          "EXP_0001835",
+          "EXP_0001932",
+          "EXP_0002025",
+          "EXP_0000589",
+          "EXP_0001947",
+          "EXP_0000300",
+          "EXP_0000704",
+          "EXP_0000263",
+          "EXP_0000259",
+          "EXP_0000906",
+          "EXP_0001533",
+          "EXP_0000449",
+          "EXP_0000964",
+          "EXP_0000157",
+          "EXP_0000303",
+          "EXP_0001602",
+          "EXP_0002007",
+          "EXP_0001220",
+          "EXP_0001021",
+          "EXP_0000779",
+          "EXP_0000934",
+          "EXP_0001500",
+          "EXP_0000504",
+          "EXP_0001162",
+          "EXP_0001751",
+          "EXP_0000275",
+          "EXP_0000055",
+          "EXP_0001756",
+          "EXP_0002165",
+          "EXP_0000378",
+          "EXP_0000277",
+          "EXP_0002051",
+          "EXP_0000806",
+          "EXP_0001942",
+          "EXP_0000506",
+          "EXP_0001353",
+          "EXP_0000961",
+          "EXP_0001413",
+          "EXP_0001116",
+          "EXP_0001670",
+          "EXP_0002080",
+          "EXP_0001169",
+          "EXP_0002019",
+          "EXP_0000030",
+          "EXP_0002120",
+          "EXP_0001159",
+          "EXP_0000396",
+          "EXP_0000514",
+          "EXP_0001035",
+          "EXP_0000436",
+          "EXP_0000402",
+          "EXP_0002118",
+          "EXP_0000586",
+          "EXP_0001075",
+          "EXP_0001106",
+          "EXP_0000789",
+          "EXP_0001332",
+          "EXP_0000775",
+          "EXP_0001941",
+          "EXP_0001884",
+          "EXP_0000981",
+          "EXP_0000206",
+          "EXP_0000357",
+          "EXP_0001092",
+          "EXP_0000174",
+          "EXP_0000011"
+        ],
+        "corruption_details": {
+          "EXP_0000466": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000107": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001112": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000987": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000883": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000563": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000425": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0002133": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000370": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001662": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000125": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000118": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000387": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000868": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000922": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001975": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000115": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000795": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001652": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000871": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001762": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001128": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000041": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000641": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001385": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000631": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000861": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001365": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000385": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001518": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000408": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001443": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001394": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001064": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000197": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001807": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0002106": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000515": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001508": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000338": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0002148": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001193": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001458": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000776": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000309": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000202": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000910": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001181": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000344": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000421": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001783": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001464": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000651": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001478": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001429": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000842": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001079": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000322": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000686": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0002100": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000656": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001815": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001511": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001091": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0002160": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000870": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001307": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000248": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000916": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001271": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001587": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001082": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000282": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000852": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001265": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000854": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001955": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001575": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001803": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000577": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001066": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000304": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000505": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001717": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001248": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001177": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000546": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001721": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001281": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000917": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0002047": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001280": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000884": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000807": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000461": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000297": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001099": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001063": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000186": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001730": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000076": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001937": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000234": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000324": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001400": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000328": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001805": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001537": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000911": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001315": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000123": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000847": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000841": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001001": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001160": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000521": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001222": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0002127": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000025": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001642": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000236": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001539": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0002016": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001172": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001724": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000558": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001760": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001445": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000741": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000235": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000603": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000927": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000327": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000978": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000008": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0002150": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001981": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001641": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001085": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001752": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000371": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001095": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0002068": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000227": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001961": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001395": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000607": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001889": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001441": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001349": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000417": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000827": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000334": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001182": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001785": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0002088": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001164": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0002078": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000002": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001316": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000690": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001057": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000074": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000480": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001512": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001268": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000998": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000214": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001002": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000314": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000352": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0002018": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000280": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000536": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000559": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001984": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000720": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001084": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001755": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000902": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000869": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001286": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001659": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001553": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001801": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001882": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000522": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001029": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000948": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000261": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001389": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000083": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000960": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000938": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000021": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000285": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000223": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000959": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000278": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000124": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001351": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000988": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001145": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000925": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000576": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001980": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001009": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001678": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000800": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000407": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000424": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001777": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001463": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001690": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001960": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000209": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000428": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000243": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001666": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001397": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000472": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001030": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000810": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001876": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000615": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001746": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000762": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001936": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001034": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000306": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001829": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000196": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000050": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000403": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000980": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000721": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0002000": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000915": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001663": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000719": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001572": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000005": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001620": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001037": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001747": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001117": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001614": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0002129": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001874": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000584": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000718": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001150": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000815": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000226": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0002079": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000238": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001213": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000224": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000204": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001835": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001932": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0002025": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000589": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001947": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000300": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000704": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000263": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000259": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000906": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001533": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000449": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000964": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000157": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000303": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001602": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0002007": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001220": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001021": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000779": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000934": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001500": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000504": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001162": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001751": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000275": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000055": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001756": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0002165": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000378": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000277": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0002051": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000806": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001942": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0000506": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001353": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000961": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001413": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001116": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001670": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0002080": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001169": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0002019": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000030": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0002120": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001159": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000396": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000514": {
+            "nulled_fields": [
+              "merchant",
+              "expense_date"
+            ]
+          },
+          "EXP_0001035": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000436": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000402": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0002118": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000586": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001075": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001106": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000789": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001332": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000775": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001941": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0001884": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000981": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000206": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000357": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0001092": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          },
+          "EXP_0000174": {
+            "nulled_fields": [
+              "amount"
+            ]
+          },
+          "EXP_0000011": {
+            "nulled_fields": [
+              "merchant"
+            ]
+          }
+        }
+      },
+      "pipeline_results": {
+        "status": "completed",
+        "flags_created": 0,
+        "duration_seconds": 5.997064828872681
+      },
+      "confusion_matrix": {
+        "TP": 0,
+        "FP": 0,
+        "TN": 1842,
+        "FN": 325,
+        "precision": null,
+        "recall": 0.0,
+        "f1_score": null,
+        "accuracy": 0.8500230733733272,
+        "metrics_defined": true
+      },
+      "passed": null
+    },
+    {
+      "dataset_name": "orphan_transactions_60",
+      "corruption_type": "orphan_transactions",
+      "ground_truth": {
+        "total_rows": 2217,
+        "corrupted_rows": 50,
+        "corrupted_row_ids": [
+          "EXP_0002168",
+          "EXP_0002169",
+          "EXP_0002170",
+          "EXP_0002171",
+          "EXP_0002172",
+          "EXP_0002173",
+          "EXP_0002174",
+          "EXP_0002175",
+          "EXP_0002176",
+          "EXP_0002177",
+          "EXP_0002178",
+          "EXP_0002179",
+          "EXP_0002180",
+          "EXP_0002181",
+          "EXP_0002182",
+          "EXP_0002183",
+          "EXP_0002184",
+          "EXP_0002185",
+          "EXP_0002186",
+          "EXP_0002187",
+          "EXP_0002188",
+          "EXP_0002189",
+          "EXP_0002190",
+          "EXP_0002191",
+          "EXP_0002192",
+          "EXP_0002193",
+          "EXP_0002194",
+          "EXP_0002195",
+          "EXP_0002196",
+          "EXP_0002197",
+          "EXP_0002198",
+          "EXP_0002199",
+          "EXP_0002200",
+          "EXP_0002201",
+          "EXP_0002202",
+          "EXP_0002203",
+          "EXP_0002204",
+          "EXP_0002205",
+          "EXP_0002206",
+          "EXP_0002207",
+          "EXP_0002208",
+          "EXP_0002209",
+          "EXP_0002210",
+          "EXP_0002211",
+          "EXP_0002212",
+          "EXP_0002213",
+          "EXP_0002214",
+          "EXP_0002215",
+          "EXP_0002216",
+          "EXP_0002217"
+        ],
+        "corruption_details": {
+          "EXP_0002168": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002169": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002170": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002171": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002172": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002173": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002174": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002175": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002176": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002177": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002178": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002179": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002180": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002181": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002182": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002183": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002184": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002185": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002186": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002187": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002188": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002189": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002190": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002191": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002192": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002193": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002194": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002195": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002196": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002197": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002198": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002199": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002200": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002201": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002202": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002203": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002204": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002205": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002206": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002207": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002208": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002209": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002210": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002211": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002212": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002213": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002214": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002215": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002216": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          },
+          "EXP_0002217": {
+            "corruption_type": "phantom_expense",
+            "description": "New credit card expense with no matching bank transaction"
+          }
+        },
+        "bank_deletions": {
+          "deleted_count": 10,
+          "deleted_descriptions": [
+            "Credit card payment",
+            "Credit card payment",
+            "Quarterly advisory fees",
+            "Credit card payment",
+            "Quarterly advisory fees",
+            "Quarterly advisory fees",
+            "Credit card payment",
+            "Credit card payment",
+            "Quarterly advisory fees",
+            "Quarterly advisory fees"
+          ]
+        },
+        "notes": "Added 50 phantom credit card expenses with high amounts ($5k-$15k). Deleted 10 bank transactions to orphan existing expenses."
+      },
+      "pipeline_results": {
+        "status": "completed",
+        "flags_created": 0,
+        "duration_seconds": 5.611806869506836
+      },
+      "confusion_matrix": {
+        "TP": 0,
+        "FP": 0,
+        "TN": 2167,
+        "FN": 50,
+        "precision": null,
+        "recall": 0.0,
+        "f1_score": null,
+        "accuracy": 0.97744700045106,
+        "metrics_defined": true
+      },
+      "passed": null
+    }
+  ],
+  "summary": {
+    "scored_datasets": 0,
+    "skipped_datasets": 4,
+    "avg_precision": null,
+    "avg_recall": null,
+    "avg_f1": null,
+    "all_passed": null
+  }
+}

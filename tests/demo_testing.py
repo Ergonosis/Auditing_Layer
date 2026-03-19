@@ -92,6 +92,7 @@ def run_pipeline_on_dataset(dataset_path: Path) -> Dict:
     env['TEST_MODE'] = 'true'  # Enable flag collection
     env['STATE_BACKEND'] = 'memory'
     env['LOG_LEVEL'] = 'WARNING'  # Reduce noise
+    env.setdefault('UNIFICATION_USER_EMAIL', 'test@ergonosis.com')
 
     print(f"📂 Dataset: {dataset_path}")
     print(f"💾 Output: {output_file}")
@@ -248,13 +249,13 @@ def print_dataset_results(dataset_name: str, metadata: Dict, pipeline_results: D
     print(f"  • False Negatives (FN): {confusion_matrix['FN']:>5}  (Missed corrupted rows)")
 
     print(f"\n✨ Metrics:")
-    if confusion_matrix.get('metrics_defined', True):
-        p = confusion_matrix['precision']
-        r = confusion_matrix['recall']
-        f = confusion_matrix['f1_score']
+    p = confusion_matrix['precision']
+    r = confusion_matrix['recall']
+    f = confusion_matrix['f1_score']
+    if confusion_matrix.get('metrics_defined', True) and p is not None and r is not None:
         print(f"  • Precision: {p*100:>5.1f}%  (TP / (TP + FP))")
         print(f"  • Recall:    {r*100:>5.1f}%  (TP / (TP + FN))")
-        print(f"  • F1 Score:  {f*100:>5.1f}%")
+        print(f"  • F1 Score:  {f*100:>5.1f}%" if f is not None else "  • F1 Score:    N/A")
     else:
         print(f"  • Precision:   N/A  (no corrupted rows — metric undefined)")
         print(f"  • Recall:      N/A  (no corrupted rows — metric undefined)")
@@ -271,9 +272,14 @@ def generate_summary_report(results: List[Dict]):
     total_datasets = len(results)
     total_duration = sum(r['pipeline_results']['duration_seconds'] for r in results)
 
-    # Only include datasets where metrics are defined (exclude clean/no-corruption datasets)
-    scored_results = [r for r in results if r['confusion_matrix'].get('metrics_defined', True)]
-    skipped = [r['dataset_name'] for r in results if not r['confusion_matrix'].get('metrics_defined', True)]
+    # Only include datasets where metrics are fully computable
+    scored_results = [
+        r for r in results
+        if r['confusion_matrix'].get('metrics_defined', True)
+        and r['confusion_matrix']['precision'] is not None
+        and r['confusion_matrix']['recall'] is not None
+    ]
+    skipped = [r['dataset_name'] for r in results if r not in scored_results]
 
     print(f"\n📊 Test Summary:")
     print(f"  • Total Datasets Tested: {total_datasets}")
@@ -302,14 +308,14 @@ def generate_summary_report(results: List[Dict]):
     else:
         print(f"\n📈 No scored datasets (all have undefined metrics)")
 
-    # Recommendations — only for scored datasets
+    # Recommendations — only for scored datasets with computable metrics
     recommendations = []
     for result in scored_results:
         cm = result['confusion_matrix']
         dataset_name = result['dataset_name']
-        if cm['recall'] < 0.80:
+        if cm['recall'] is not None and cm['recall'] < 0.80:
             recommendations.append(f"  • Improve detection for {dataset_name} (low recall: {cm['recall']*100:.1f}%)")
-        if cm['precision'] < 0.80:
+        if cm['precision'] is not None and cm['precision'] < 0.80:
             recommendations.append(f"  • Reduce false positives in {dataset_name} (low precision: {cm['precision']*100:.1f}%)")
 
     if recommendations:
@@ -344,18 +350,26 @@ def save_json_report(results: List[Dict], output_path: Path):
                 'duration_seconds': result['pipeline_results'].get('duration_seconds')
             },
             'confusion_matrix': result['confusion_matrix'],
-            'passed': result['confusion_matrix']['f1_score'] >= 0.80 if result['confusion_matrix'].get('metrics_defined', True) else None
+            'passed': (result['confusion_matrix']['f1_score'] >= 0.80
+                      if result['confusion_matrix'].get('metrics_defined', True)
+                         and result['confusion_matrix']['f1_score'] is not None
+                      else None)
         })
 
-    # Calculate summary — exclude datasets with undefined metrics
-    scored = [r for r in results if r['confusion_matrix'].get('metrics_defined', True)]
+    # Calculate summary — exclude datasets with undefined/None metrics
+    scored = [
+        r for r in results
+        if r['confusion_matrix'].get('metrics_defined', True)
+        and r['confusion_matrix']['precision'] is not None
+        and r['confusion_matrix']['recall'] is not None
+    ]
     report['summary'] = {
         'scored_datasets': len(scored),
         'skipped_datasets': len(results) - len(scored),
         'avg_precision': sum(r['confusion_matrix']['precision'] for r in scored) / len(scored) if scored else None,
         'avg_recall': sum(r['confusion_matrix']['recall'] for r in scored) / len(scored) if scored else None,
         'avg_f1': sum(r['confusion_matrix']['f1_score'] for r in scored) / len(scored) if scored else None,
-        'all_passed': all(r['passed'] for r in report['results'] if r['passed'] is not None)
+        'all_passed': all(r['passed'] for r in report['results'] if r['passed'] is not None) if any(r['passed'] is not None for r in report['results']) else None
     }
 
     # Save to file

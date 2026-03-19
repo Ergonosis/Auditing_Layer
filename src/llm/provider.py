@@ -127,8 +127,8 @@ def get_crewai_llm(temperature: float = 0.1) -> LLM:
     """
     Return a CrewAI LLM instance configured for the active provider.
 
-    Uses LiteLLM model prefix (e.g. "anthropic/claude-sonnet-4-6") which
-    works in CrewAI 0.28+ without needing the provider= argument.
+    Uses the provider/model prefix (e.g. "anthropic/claude-sonnet-4-6")
+    which routes to the native Anthropic SDK in CrewAI 1.x.
     """
     provider = get_provider()
 

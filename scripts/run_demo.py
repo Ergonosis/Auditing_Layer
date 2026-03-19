@@ -32,6 +32,7 @@ os.environ["DEMO_MODE"] = "true"
 os.environ["ENVIRONMENT"] = "demo"
 os.environ["STATE_BACKEND"] = "memory"
 os.environ["LOG_LEVEL"] = "INFO"
+os.environ.setdefault("UNIFICATION_USER_EMAIL", "test@ergonosis.com")
 
 from src.demo.csv_data_loader import DemoDataLoader
 from src.orchestrator.orchestrator_agent import AuditOrchestrator
@@ -132,6 +133,29 @@ def show_data_summary():
         sys.exit(1)
 
 
+def _seed_demo_consent():
+    """Ensure a consent record exists in the local unification store for demo use."""
+    try:
+        import hashlib
+        from src.integrations.unification_client import get_uqi, _unification_imports
+        uqi = get_uqi()
+        email = os.environ.get("UNIFICATION_USER_EMAIL", "test@ergonosis.com")
+        user_hash = hashlib.sha256(email.encode()).hexdigest()
+        if not uqi._storage.has_active_consent(user_hash, "data_processing"):
+            with _unification_imports():
+                from src.models.consent import UserConsent
+            consent = UserConsent(
+                user_id_hash=user_hash,
+                consent_type="data_processing",
+                granted=True,
+                source="demo",
+            )
+            uqi._storage.upsert_consent(consent)
+            logger.info("Seeded demo consent record", user_hash=user_hash[:16])
+    except Exception as exc:
+        logger.warning(f"Could not seed demo consent: {exc}")
+
+
 def run_demo_audit(limit: int = None, json_output: str = None):
     """
     Run full audit cycle in demo mode
@@ -151,6 +175,9 @@ def run_demo_audit(limit: int = None, json_output: str = None):
     print("\n🚀 Initializing orchestrator...")
 
     try:
+        # Seed consent record in local store for demo mode
+        _seed_demo_consent()
+
         orchestrator = AuditOrchestrator()
         print(f"  Audit Run ID: {orchestrator.audit_run_id}")
 

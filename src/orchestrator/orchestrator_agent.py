@@ -506,6 +506,19 @@ class AuditOrchestrator:
                 created_flags.append(flag_data)
                 logger.info(f"Created flag {flag_id} for txn {txn_id} (severity: {severity})")
 
+                # Persist to Databricks in production
+                from src.db.databricks_writer import write_flag as _write_flag
+                _write_flag({
+                    'flag_id': flag_id,
+                    'transaction_id': txn_id,
+                    'audit_run_id': self.audit_run_id,
+                    'severity_level': severity,
+                    'confidence_score': min(len(factors) / 3, 1.0),
+                    'explanation': explanation,
+                    'supporting_evidence_links': {'contributing_factors': factors},
+                    'created_at': datetime.now().isoformat(),
+                })
+
                 # Write feedback to unification layer (best-effort)
                 from src.integrations.unification_client import try_write_feedback
                 try_write_feedback(
