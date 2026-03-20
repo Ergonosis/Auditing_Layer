@@ -220,6 +220,35 @@ class AuditDatabricksWriter:
             status=state.get("status"),
         )
 
+    def read_workflow_state(self, audit_run_id: str) -> Optional[Dict[str, Any]]:
+        """Read the latest workflow state for an audit run from Databricks.
+
+        Returns the state dict, or None if no record exists.
+        """
+        t = self._table("workflow_state")
+        try:
+            with self._connection.cursor() as cursor:
+                cursor.execute(
+                    f"SELECT workflow_status, current_agent, completed_agents, "
+                    f"pending_agents, intermediate_results "
+                    f"FROM {t} WHERE audit_run_id = ? LIMIT 1",
+                    (audit_run_id,)
+                )
+                row = cursor.fetchone()
+                if row is None:
+                    return None
+                return {
+                    "status": row[0],
+                    "current_agent": row[1],
+                    "completed_agents": json.loads(row[2] or "[]"),
+                    "pending_agents": json.loads(row[3] or "[]"),
+                    "intermediate_results": json.loads(row[4] or "{}"),
+                }
+        except Exception as e:
+            logger.error("Failed to read workflow state from Databricks", error=str(e),
+                         audit_run_id=audit_run_id)
+            return None
+
     def close(self) -> None:
         try:
             self._connection.close()
@@ -279,3 +308,11 @@ def write_workflow_state(audit_run_id: str, state: Dict[str, Any]) -> None:
         logger.error("Failed to persist workflow state to Databricks", error=str(exc),
                      audit_run_id=audit_run_id)
         raise
+
+
+def read_workflow_state(audit_run_id: str) -> Optional[Dict[str, Any]]:
+    """Read workflow state from Databricks.  Returns None outside production or on miss."""
+    writer = _get_writer()
+    if writer is None:
+        return None
+    return writer.read_workflow_state(audit_run_id)

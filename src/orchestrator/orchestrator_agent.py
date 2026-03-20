@@ -47,50 +47,32 @@ class AuditOrchestrator:
         logger.info(f"🚀 Starting audit run: {self.audit_run_id}")
 
         try:
-            # Step 1: Check unification store is fresh
-            from src.integrations.unification_client import get_uqi, _get_user_id_hash
+            # Step 1: Check unification store freshness via Gold tables
+            from src.db.gold_table_reader import GoldTableReader
             import pandas as pd
+            from datetime import timedelta, timezone
 
-            uqi = get_uqi()
-            last_run = uqi.get_last_run_status()
-            if last_run is None:
-                logger.warning("Unification store has no run_log — skipping audit")
+            gold_reader = GoldTableReader()
+            last_run_ts = gold_reader.get_last_unification_run_timestamp()
+
+            if last_run_ts is None:
+                logger.warning("No completed unification run found — skipping audit")
                 return {"audit_run_id": self.audit_run_id, "status": "skipped",
                         "transaction_count": 0, "flags_created": 0}
 
-            from datetime import timedelta, timezone
-            run_age = datetime.now(timezone.utc) - (
-                last_run.start_time.replace(tzinfo=timezone.utc)
-                if last_run.start_time.tzinfo is None else last_run.start_time
-            )
+            run_age = datetime.now(timezone.utc) - last_run_ts
             if run_age > timedelta(hours=24):
                 logger.warning("Unification store is stale (>24h) — skipping audit",
                                age_hours=run_age.total_seconds() / 3600)
                 return {"audit_run_id": self.audit_run_id, "status": "skipped",
                         "transaction_count": 0, "flags_created": 0}
 
-            # Step 2: Fetch unmatched transactions from UQI
-            user_hash = _get_user_id_hash()
-            unmatched_records = uqi.get_unlinked_entities("transaction", user_id_hash=user_hash)
-            logger.info(f"Fetched {len(unmatched_records)} unmatched transactions from UQI")
-
-            transaction_rows = []
-            for record in unmatched_records:
-                entity = uqi.get_entity(record.entity_id, "transaction", user_id_hash=user_hash)
-                if entity is not None:
-                    transaction_rows.append({
-                        "txn_id": entity.transaction_id,
-                        "vendor": entity.merchant_name or entity.name or "Unknown",
-                        "amount": entity.amount,
-                        "date": str(entity.date),
-                        "source": entity.source,
-                    })
-
-            transactions = pd.DataFrame(transaction_rows)
+            # Step 2: Load full transaction population from Gold tables
+            transactions = gold_reader.get_transactions()
             logger.info(f"Processing {len(transactions)} transactions")
 
             if transactions.empty:
-                logger.info("No new transactions to audit")
+                logger.info("No transactions in unification store")
                 return {
                     'audit_run_id': self.audit_run_id,
                     'status': 'completed',
@@ -98,13 +80,23 @@ class AuditOrchestrator:
                     'flags_created': 0
                 }
 
+            # Step 3: Enrich with match status (reconciliation signal for downstream scoring)
+            matched_ids = gold_reader.get_linked_transaction_ids()
+            unmatched_ids = gold_reader.get_unmatched_transaction_ids()
+            transactions['reconciliation_matched'] = transactions['txn_id'].isin(matched_ids)
+            self._gold_unmatched_ids = unmatched_ids
+            logger.info(
+                f"{len(matched_ids)} matched, {len(unmatched_ids)} unmatched "
+                f"out of {len(transactions)} total"
+            )
+
             # Step 3: Save initial state (4-agent pipeline)
             save_workflow_state(self.audit_run_id, {
                 'status': 'in_progress',
                 'transaction_count': len(transactions),
                 'started_at': datetime.now().isoformat(),
                 'completed_agents': [],
-                'pending_agents': ['DataQuality', 'Reconciliation', 'Escalation', 'Logging']
+                'pending_agents': ['DataQuality', 'Reconciliation', 'Escalation']
             })
 
             # Step 4: Execute PARALLEL agents (Data Quality, Reconciliation)
@@ -115,7 +107,7 @@ class AuditOrchestrator:
             save_workflow_state(self.audit_run_id, {
                 'status': 'in_progress',
                 'completed_agents': ['DataQuality', 'Reconciliation'],
-                'pending_agents': ['Escalation', 'Logging'],
+                'pending_agents': ['Escalation'],
                 'parallel_results': parallel_results
             })
 
@@ -212,11 +204,10 @@ class AuditOrchestrator:
             # The final task output is in crew_output.raw which is a string containing JSON
             logger.info("Parallel agents completed successfully")
 
-            # DEBUG: Log what CrewAI actually returned
-            logger.info(f"DEBUG: crew_output type: {type(crew_output)}")
+            logger.debug(f"crew_output type: {type(crew_output)}")
             if hasattr(crew_output, 'raw'):
-                logger.info(f"DEBUG: crew_output.raw type: {type(crew_output.raw)}")
-                logger.info(f"DEBUG: crew_output.raw content (first 500 chars): {str(crew_output.raw)[:500]}")
+                logger.debug(f"crew_output.raw type: {type(crew_output.raw)}")
+                logger.debug(f"crew_output.raw content (first 500 chars): {str(crew_output.raw)[:500]}")
 
             # Parse the crew output - it's the final agent's output as a JSON string
             if hasattr(crew_output, 'raw'):
@@ -239,8 +230,8 @@ class AuditOrchestrator:
                     'reconciliation': {}
                 }
 
-            logger.info(f"DEBUG: parsed results keys: {list(results.keys()) if isinstance(results, dict) else 'NOT A DICT'}")
-            logger.info(f"DEBUG: parsed results: {str(results)[:1000]}")
+            logger.debug(f"parsed results keys: {list(results.keys()) if isinstance(results, dict) else 'NOT A DICT'}")
+            logger.debug(f"parsed results: {str(results)[:1000]}")
 
             return results
 
@@ -410,6 +401,8 @@ class AuditOrchestrator:
             for t in parallel_results.get('reconciliation', {}).get('unmatched_transactions', [])
             if isinstance(t, dict) and 'txn_id' in t
         }
+        # Augment with Gold table unmatched signal (set in run_audit_cycle step 3)
+        unmatched_ids.update(getattr(self, '_gold_unmatched_ids', set()))
         incomplete_ids = set(parallel_results.get('data_quality', {}).get('incomplete_records', []))
         duplicate_ids = {
             t
@@ -535,7 +528,7 @@ class AuditOrchestrator:
         return {'flags_created': len(created_flags), 'flags': created_flags}
 
     def _run_sequential_agents(self, suspicious_txns: List[dict], parallel_results: dict) -> Dict[str, Any]:
-        """Run Escalation and Logging agents sequentially"""
+        """Run Escalation agent (logging handled by structured logger)"""
 
         try:
             # 3-agent pipeline: Escalation only (logging handled by structured logger)
@@ -595,15 +588,23 @@ class AuditOrchestrator:
         """
         suspicious_ids = set()
 
-        # --- Unmatched transactions: prefer UQI, fall back to parallel_results ---
+        # --- Unmatched transactions: Gold table column (primary), UQI (supplementary) ---
+        # Gold table signal: transactions where reconciliation_matched=False
+        if 'reconciliation_matched' in all_transactions.columns:
+            unmatched_mask = ~all_transactions['reconciliation_matched']
+            gold_unmatched = all_transactions.loc[unmatched_mask, 'txn_id'].tolist()
+            suspicious_ids.update(gold_unmatched)
+            logger.info(f"Gold tables provided {len(gold_unmatched)} unmatched transaction IDs")
+
+        # UQI supplementary signal (returns None when unavailable)
         uqi_unmatched = self._get_uqi_unmatched()
         if uqi_unmatched is not None:
             suspicious_ids.update(uqi_unmatched)
-            logger.info(f"UQI provided {len(uqi_unmatched)} unmatched transaction IDs")
+            logger.info(f"UQI supplemented with {len(uqi_unmatched)} unmatched transaction IDs")
         else:
             # Fallback: use reconciliation agent results
             unmatched = parallel_results.get('reconciliation', {}).get('unmatched_transactions', [])
-            suspicious_ids.update([t['txn_id'] for t in unmatched])
+            suspicious_ids.update([t['txn_id'] for t in unmatched if isinstance(t, dict) and 'txn_id' in t])
             logger.info(f"Fallback: using {len(suspicious_ids)} unmatched IDs from parallel_results")
 
         # Add incomplete/bad quality records

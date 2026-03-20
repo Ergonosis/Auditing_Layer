@@ -6,39 +6,9 @@ from typing import Dict, Any, List
 from datetime import timedelta
 from src.integrations.unification_client import get_all_entities
 from src.utils.logging import get_logger
-import re
+from src.utils.sql_utils import sanitize_sql_value, validate_numeric  # noqa: F401 — re-exported for backwards compat
 
 logger = get_logger(__name__)
-
-
-def sanitize_sql_value(value: str) -> str:
-    """Sanitize a string for safe interpolation into a SQL query.
-
-    Escapes single quotes (doubling them per SQL standard) and rejects strings
-    containing SQL metacharacters that cannot be safely escaped: semicolons,
-    inline comment sequences (-- and /*).
-
-    Raises:
-        ValueError: If the value contains rejected metacharacters.
-    """
-    s = str(value)
-    if re.search(r";|--|/\*", s):
-        raise ValueError(f"SQL value contains disallowed metacharacters: {s!r}")
-    return s.replace("'", "''")
-
-
-def validate_numeric(value) -> float:
-    """Validate that a value is numeric before SQL interpolation.
-
-    Raises:
-        ValueError: If the value cannot be converted to a float.
-    """
-    try:
-        return float(value)
-    except (ValueError, TypeError) as exc:
-        raise ValueError(
-            f"Expected a numeric value for SQL interpolation, got {value!r}"
-        ) from exc
 
 
 @tool("search_emails_batch")

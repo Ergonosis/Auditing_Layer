@@ -7,6 +7,7 @@ from src.tools.databricks_client import query_gold_tables
 from src.tools.llm_client import call_llm
 from src.utils.config_loader import load_config, get_domain_config
 from src.utils.logging import get_logger
+from src.utils.sql_utils import validate_identifier
 import json
 import os
 
@@ -31,8 +32,7 @@ def check_data_completeness(table_name: str) -> dict[str, Any]:
             'completeness_score': float  # 0-1
         }
     """
-    # Normalize table_name in case LLM passes extra whitespace/quotes
-    table_name = table_name.strip().strip('"').strip("'")
+    table_name = validate_identifier(table_name.strip().strip('"').strip("'"))
     logger.info(f"Checking data completeness for {table_name}")
 
     try:
@@ -96,6 +96,7 @@ def validate_schema_conformity(table_name: str, expected_schema_json: str = "{}"
     """
     # Parse JSON string to dict
     expected_schema = json.loads(expected_schema_json) if expected_schema_json else {}
+    table_name = validate_identifier(table_name.strip().strip('"').strip("'"))
     logger.info(f"Validating schema for {table_name}")
 
     try:
@@ -166,6 +167,7 @@ def detect_duplicate_records(table_name: str, key_fields: list[str]) -> dict[str
         import json as _json
         key_fields = _json.loads(key_fields) if key_fields.startswith('[') else [key_fields]
 
+    table_name = validate_identifier(table_name.strip().strip('"').strip("'"))
     logger.info(f"Detecting duplicates in {table_name} on fields {key_fields}")
 
     try:

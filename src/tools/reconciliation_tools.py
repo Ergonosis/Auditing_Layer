@@ -6,6 +6,7 @@ from typing import Dict, Any, List, Tuple
 from datetime import datetime, timedelta
 from src.tools.databricks_client import query_gold_tables
 from src.utils.logging import get_logger
+from src.utils.sql_utils import sanitize_sql_value, validate_numeric, validate_identifier
 from difflib import SequenceMatcher
 import numpy as np
 
@@ -45,18 +46,23 @@ def cross_source_matcher(source_1: str, source_2: str, date_range_json: str = '[
 
         logger.info(f"Matching {source_1} vs {source_2} for date range {date_range}")
 
+        s1 = sanitize_sql_value(source_1)
+        s2 = sanitize_sql_value(source_2)
+        sd = sanitize_sql_value(start_date)
+        ed = sanitize_sql_value(end_date)
+
         df1 = query_gold_tables(f"""
             SELECT txn_id, amount, vendor, vendor_id, date
             FROM gold.transactions
-            WHERE source = '{source_1}'
-              AND date BETWEEN '{start_date}' AND '{end_date}'
+            WHERE source = '{s1}'
+              AND date BETWEEN '{sd}' AND '{ed}'
         """)
 
         df2 = query_gold_tables(f"""
             SELECT txn_id, amount, vendor, vendor_id, date
             FROM gold.transactions
-            WHERE source = '{source_2}'
-              AND date BETWEEN '{start_date}' AND '{end_date}'
+            WHERE source = '{s2}'
+              AND date BETWEEN '{sd}' AND '{ed}'
         """)
 
         if df1.empty or df2.empty:
@@ -154,11 +160,12 @@ def entity_resolver_kg(vendor_name: str) -> dict[str, Any]:
 
     try:
         # Query KG entities table (Delta Lake)
+        safe_vendor = sanitize_sql_value(vendor_name)
         result = query_gold_tables(f"""
             SELECT entity_id, canonical_name, aliases
             FROM kg_entities
-            WHERE '{vendor_name}' IN (canonical_name, aliases)
-               OR aliases LIKE '%{vendor_name}%'
+            WHERE '{safe_vendor}' IN (canonical_name, aliases)
+               OR aliases LIKE '%{safe_vendor}%'
             LIMIT 1
         """)
 
@@ -253,11 +260,16 @@ def receipt_transaction_matcher(receipt_data_json: str = "{}", transactions_tabl
         start_date = receipt_date - timedelta(days=7)
         end_date = receipt_date + timedelta(days=7)
 
+        safe_table = validate_identifier(transactions_table)
+        safe_sd = sanitize_sql_value(str(start_date.date()))
+        safe_ed = sanitize_sql_value(str(end_date.date()))
+        safe_amount = validate_numeric(amount)
+
         df = query_gold_tables(f"""
             SELECT txn_id, vendor, amount, date
-            FROM {transactions_table}
-            WHERE date BETWEEN '{start_date}' AND '{end_date}'
-              AND amount BETWEEN {amount * 0.95} AND {amount * 1.05}
+            FROM {safe_table}
+            WHERE date BETWEEN '{safe_sd}' AND '{safe_ed}'
+              AND amount BETWEEN {safe_amount * 0.95} AND {safe_amount * 1.05}
         """)
 
         if df.empty:
@@ -333,10 +345,11 @@ def find_orphan_transactions(all_sources: list[str]) -> dict[str, Any]:
         all_txns = []
 
         for source in all_sources:
+            safe_src = sanitize_sql_value(source)
             df = query_gold_tables(f"""
                 SELECT txn_id, source, amount, vendor, date
                 FROM gold.transactions
-                WHERE source = '{source}'
+                WHERE source = '{safe_src}'
             """)
             all_txns.append(df)
 

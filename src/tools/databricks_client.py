@@ -33,9 +33,13 @@ def get_databricks_connection():
     elif os.getenv("DATABRICKS_HOST") and os.getenv("ENVIRONMENT") == "production":
         try:
             from databricks import sql
+            http_path = (
+                os.getenv("DATABRICKS_HTTP_PATH")
+                or f"/sql/1.0/warehouses/{os.getenv('DATABRICKS_WAREHOUSE_ID')}"
+            )
             conn = sql.connect(
                 server_hostname=os.getenv("DATABRICKS_HOST"),
-                http_path=f"/sql/1.0/warehouses/{os.getenv('DATABRICKS_WAREHOUSE_ID')}",
+                http_path=http_path,
                 auth_type="pat",
                 token=os.getenv("DATABRICKS_TOKEN"),
                 timeout_seconds=300

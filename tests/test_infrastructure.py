@@ -157,9 +157,12 @@ def test_database_schemas_valid():
     assert "CREATE TABLE" in AUDIT_TRAIL_TABLE_SCHEMA
     assert "CREATE TABLE" in WORKFLOW_STATE_TABLE_SCHEMA
 
-    assert "PRIMARY KEY" in FLAGS_TABLE_SCHEMA
-    assert "PRIMARY KEY" in AUDIT_TRAIL_TABLE_SCHEMA
-    assert "PRIMARY KEY" in WORKFLOW_STATE_TABLE_SCHEMA
+    assert "NOT NULL" in FLAGS_TABLE_SCHEMA
+    assert "NOT NULL" in AUDIT_TRAIL_TABLE_SCHEMA
+    assert "NOT NULL" in WORKFLOW_STATE_TABLE_SCHEMA
+    assert "USING DELTA" in FLAGS_TABLE_SCHEMA
+    assert "USING DELTA" in AUDIT_TRAIL_TABLE_SCHEMA
+    assert "USING DELTA" in WORKFLOW_STATE_TABLE_SCHEMA
 
 
 def test_database_create_all_tables():

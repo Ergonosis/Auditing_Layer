@@ -20,12 +20,9 @@ def test_orchestrator_initialization():
 
 
 def test_full_audit_cycle_skipped_when_no_run_log(monkeypatch):
-    """run_audit_cycle() returns 'skipped' when UQI has no run_log."""
-    mock_uqi = MagicMock()
-    mock_uqi.get_last_run_status.return_value = None
-
-    # get_uqi is imported inside run_audit_cycle — patch at the source module
-    with patch("src.integrations.unification_client.get_uqi", return_value=mock_uqi):
+    """run_audit_cycle() returns 'skipped' when Gold tables have no completed run."""
+    with patch("src.db.gold_table_reader.GoldTableReader") as MockReader:
+        MockReader.return_value.get_last_unification_run_timestamp.return_value = None
         orchestrator = AuditOrchestrator()
         results = orchestrator.run_audit_cycle()
 
@@ -34,14 +31,10 @@ def test_full_audit_cycle_skipped_when_no_run_log(monkeypatch):
 
 
 def test_run_cycle_stale_store(monkeypatch):
-    """run_audit_cycle() returns 'skipped' when last run is >24h old."""
-    mock_run = MagicMock()
-    mock_run.start_time = datetime.now(timezone.utc) - timedelta(hours=25)
-
-    mock_uqi = MagicMock()
-    mock_uqi.get_last_run_status.return_value = mock_run
-
-    with patch("src.integrations.unification_client.get_uqi", return_value=mock_uqi):
+    """run_audit_cycle() returns 'skipped' when Gold table last run is >24h old."""
+    stale_ts = datetime.now(timezone.utc) - timedelta(hours=25)
+    with patch("src.db.gold_table_reader.GoldTableReader") as MockReader:
+        MockReader.return_value.get_last_unification_run_timestamp.return_value = stale_ts
         orchestrator = AuditOrchestrator()
         results = orchestrator.run_audit_cycle()
 
@@ -120,34 +113,20 @@ def test_context_enrichment_failure_nonfatal():
 
 
 def test_full_audit_cycle_happy_path():
-    """run_audit_cycle() processes transactions when UQI has a fresh run_log."""
-    mock_run = MagicMock()
-    mock_run.start_time = datetime.now(timezone.utc) - timedelta(hours=1)
+    """run_audit_cycle() processes transactions when Gold tables have fresh data."""
+    fresh_ts = datetime.now(timezone.utc) - timedelta(hours=1)
+    txns = pd.DataFrame({
+        'txn_id': ['txn_001', 'txn_002'],
+        'vendor': ['AWS', 'Stripe'],
+        'amount': [150.0, 300.0],
+        'date': ['2026-03-18', '2026-03-18'],
+        'category': ['software', 'payments'],
+        'source': ['plaid', 'plaid'],
+        'account_id': ['acc1', 'acc2'],
+        'ingested_at': [datetime.now(timezone.utc), datetime.now(timezone.utc)],
+    })
 
-    def _make_entity(txn_id, amount, vendor):
-        e = MagicMock()
-        e.transaction_id = txn_id
-        e.merchant_name = vendor
-        e.name = vendor
-        e.amount = amount
-        e.date = "2026-03-18"
-        e.source = "credit_card"
-        return e
-
-    mock_record_1 = MagicMock()
-    mock_record_1.entity_id = "e1"
-    mock_record_2 = MagicMock()
-    mock_record_2.entity_id = "e2"
-
-    mock_uqi = MagicMock()
-    mock_uqi.get_last_run_status.return_value = mock_run
-    mock_uqi.get_unlinked_entities.return_value = [mock_record_1, mock_record_2]
-    mock_uqi.get_entity.side_effect = lambda eid, *a, **kw: {
-        "e1": _make_entity("txn_001", 150.0, "AWS"),
-        "e2": _make_entity("txn_002", 300.0, "Stripe"),
-    }[eid]
-
-    with patch("src.integrations.unification_client.get_uqi", return_value=mock_uqi), \
+    with patch("src.db.gold_table_reader.GoldTableReader") as MockReader, \
          patch.object(AuditOrchestrator, "_run_parallel_agents",
                       return_value={"data_quality": {}, "reconciliation": {}}), \
          patch.object(AuditOrchestrator, "_augment_with_direct_analysis",
@@ -156,11 +135,56 @@ def test_full_audit_cycle_happy_path():
          patch.object(AuditOrchestrator, "_merge_suspicious_results", return_value=[]), \
          patch.object(AuditOrchestrator, "_run_context_enrichment", return_value={}), \
          patch.object(AuditOrchestrator, "_run_escalation_direct", return_value=0):
+        MockReader.return_value.get_last_unification_run_timestamp.return_value = fresh_ts
+        MockReader.return_value.get_transactions.return_value = txns
+        MockReader.return_value.get_linked_transaction_ids.return_value = {'txn_001'}
+        MockReader.return_value.get_unmatched_transaction_ids.return_value = {'txn_002'}
         orchestrator = AuditOrchestrator()
         results = orchestrator.run_audit_cycle()
 
     assert results["transaction_count"] == 2
     assert results["status"] != "skipped"
+
+
+def test_run_audit_cycle_uses_gold_tables():
+    """run_audit_cycle() reads from GoldTableReader for primary data load."""
+    fresh_ts = datetime.now(timezone.utc) - timedelta(hours=1)
+    txns = pd.DataFrame({
+        'txn_id': ['txn_001', 'txn_002'],
+        'vendor': ['Vendor A', 'Vendor B'],
+        'amount': [100.0, 200.0],
+        'date': ['2026-01-01', '2026-01-02'],
+        'category': ['food', 'transport'],
+        'source': ['plaid', 'plaid'],
+        'account_id': ['acc1', 'acc2'],
+        'ingested_at': [datetime.now(timezone.utc), datetime.now(timezone.utc)],
+    })
+
+    with patch("src.db.gold_table_reader.GoldTableReader") as MockReader, \
+         patch.object(AuditOrchestrator, "_run_parallel_agents",
+                      return_value={"data_quality": {"incomplete_records": [], "duplicates": {"duplicate_groups": []}},
+                                    "reconciliation": {"unmatched_transactions": []}}), \
+         patch.object(AuditOrchestrator, "_augment_with_direct_analysis",
+                      side_effect=lambda r, _: r), \
+         patch.object(AuditOrchestrator, "_resolve_ambiguous_matches", return_value=[]), \
+         patch.object(AuditOrchestrator, "_merge_suspicious_results", return_value=[]), \
+         patch.object(AuditOrchestrator, "_run_context_enrichment", return_value={}), \
+         patch.object(AuditOrchestrator, "_run_escalation_direct", return_value=0):
+        mock_reader = MockReader.return_value
+        mock_reader.get_last_unification_run_timestamp.return_value = fresh_ts
+        mock_reader.get_transactions.return_value = txns
+        mock_reader.get_linked_transaction_ids.return_value = {'txn_001'}
+        mock_reader.get_unmatched_transaction_ids.return_value = {'txn_002'}
+
+        orchestrator = AuditOrchestrator()
+        result = orchestrator.run_audit_cycle()
+
+    mock_reader.get_last_unification_run_timestamp.assert_called_once()
+    mock_reader.get_transactions.assert_called_once()
+    mock_reader.get_linked_transaction_ids.assert_called_once()
+    mock_reader.get_unmatched_transaction_ids.assert_called_once()
+    assert result["transaction_count"] == 2
+    assert result["status"] != "skipped"
 
 
 if __name__ == "__main__":

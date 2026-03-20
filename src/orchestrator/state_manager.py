@@ -1,4 +1,11 @@
-"""Redis-backed state management for workflow resumability."""
+"""State management for workflow resumability.
+
+Supported backends (STATE_BACKEND env var):
+  - ``databricks``  — durable; reads/writes to the auditing.workflow_state Delta table.
+                      Required for production.
+  - ``redis``       — durable in-memory; falls back to in-memory if unavailable.
+  - ``memory``      — ephemeral; only permitted outside production.
+"""
 
 import json
 import os
@@ -17,13 +24,20 @@ except ImportError:
     REDIS_AVAILABLE = False
     logger.warning("Redis module not available, will use in-memory backend")
 
-# In-memory state backend for demo mode
+# In-memory state backend for demo/dev mode
 _in_memory_state = {}
 
 # Determine state backend
-STATE_BACKEND = os.getenv("STATE_BACKEND", "redis")  # "redis" or "memory"
+STATE_BACKEND = os.getenv("STATE_BACKEND", "redis")  # "databricks", "redis", or "memory"
 
-# Redis client setup
+# Production safety guard — memory backend must never be used in production.
+if os.getenv("ENVIRONMENT") == "production" and STATE_BACKEND == "memory":
+    raise RuntimeError(
+        "STATE_BACKEND=memory is not permitted in production. "
+        "Set STATE_BACKEND=databricks (recommended) or STATE_BACKEND=redis."
+    )
+
+# Redis client setup (only when redis backend is requested)
 redis_client = None
 if STATE_BACKEND == "redis" and REDIS_AVAILABLE:
     try:
@@ -43,6 +57,8 @@ if STATE_BACKEND == "redis" and REDIS_AVAILABLE:
         redis_client = None
 elif STATE_BACKEND == "redis" and not REDIS_AVAILABLE:
     logger.warning("Redis backend requested but redis module not installed, using in-memory")
+elif STATE_BACKEND == "databricks":
+    logger.info("Using Databricks state backend")
 else:
     logger.info(f"Using in-memory state backend ({STATE_BACKEND} mode)")
 
@@ -61,9 +77,7 @@ def _persist_state_to_databricks(audit_run_id: str, state: Dict[str, Any]) -> No
 
 
 def save_workflow_state(audit_run_id: str, state: Dict[str, Any]) -> None:
-    """
-    Save workflow state to Redis or in-memory store, and additionally
-    persist to Databricks in production (best-effort).
+    """Save workflow state to the configured backend.
 
     Args:
         audit_run_id: Unique audit run ID
@@ -72,16 +86,21 @@ def save_workflow_state(audit_run_id: str, state: Dict[str, Any]) -> None:
     Raises:
         StateManagerError: If save fails
     """
-    # In-memory backend
+    # Databricks backend (production primary)
+    if STATE_BACKEND == "databricks":
+        _persist_state_to_databricks(audit_run_id, state)
+        logger.info("Saved workflow state (Databricks)", audit_run_id=audit_run_id)
+        return
+
+    # In-memory backend (dev/demo only)
     if STATE_BACKEND == "memory":
         _in_memory_state[audit_run_id] = state
-        logger.info(f"Saved workflow state (in-memory)", audit_run_id=audit_run_id)
-        _persist_state_to_databricks(audit_run_id, state)
+        logger.info("Saved workflow state (in-memory)", audit_run_id=audit_run_id)
         return
 
     # Redis backend
     if not redis_client:
-        logger.warning("Redis unavailable, state not saved")
+        logger.warning("Redis unavailable, falling back to Databricks")
         _persist_state_to_databricks(audit_run_id, state)
         return
 
@@ -89,16 +108,13 @@ def save_workflow_state(audit_run_id: str, state: Dict[str, Any]) -> None:
         key = f"audit:{audit_run_id}:state"
         value = json.dumps(state, default=str)  # default=str handles datetime
         redis_client.setex(key, 86400, value)  # 24 hour TTL
-        logger.info(f"Saved workflow state", audit_run_id=audit_run_id)
+        logger.info("Saved workflow state", audit_run_id=audit_run_id)
     except Exception as e:
         raise StateManagerError(f"Failed to save workflow state: {e}")
 
-    _persist_state_to_databricks(audit_run_id, state)
-
 
 def restore_workflow_state(audit_run_id: str) -> Dict[str, Any]:
-    """
-    Restore workflow state from Redis or in-memory store.
+    """Restore workflow state from the configured backend.
 
     Args:
         audit_run_id: Unique audit run ID
@@ -106,11 +122,25 @@ def restore_workflow_state(audit_run_id: str) -> Dict[str, Any]:
     Returns:
         State dictionary, or empty dict if not found
     """
+    # Databricks backend (production primary)
+    if STATE_BACKEND == "databricks":
+        try:
+            from src.db.databricks_writer import read_workflow_state as _db_read
+            state = _db_read(audit_run_id) or {}
+            if state:
+                logger.info("Restored workflow state (Databricks)", audit_run_id=audit_run_id)
+            else:
+                logger.warning(f"No saved state found for {audit_run_id} (Databricks)")
+            return state
+        except Exception as e:
+            logger.error(f"Failed to restore workflow state from Databricks: {e}")
+            return {}
+
     # In-memory backend
     if STATE_BACKEND == "memory":
         state = _in_memory_state.get(audit_run_id, {})
         if state:
-            logger.info(f"Restored workflow state (in-memory)", audit_run_id=audit_run_id)
+            logger.info("Restored workflow state (in-memory)", audit_run_id=audit_run_id)
         else:
             logger.warning(f"No saved state found for {audit_run_id} (in-memory)")
         return state
@@ -126,7 +156,7 @@ def restore_workflow_state(audit_run_id: str) -> Dict[str, Any]:
 
         if value:
             state = json.loads(value)
-            logger.info(f"Restored workflow state", audit_run_id=audit_run_id)
+            logger.info("Restored workflow state", audit_run_id=audit_run_id)
             return state
         else:
             logger.warning(f"No saved state found for {audit_run_id}")

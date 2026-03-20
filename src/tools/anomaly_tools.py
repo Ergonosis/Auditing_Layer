@@ -1,26 +1,62 @@
 """Anomaly detection tools using ML and statistical methods"""
 
 from crewai.tools import tool
+import hashlib
+import os
 import pandas as pd
 import numpy as np
+import pickle
+from pathlib import Path
 from typing import Dict, Any, List
 from src.tools.databricks_client import query_gold_tables
 from src.utils.logging import get_logger
+from src.utils.sql_utils import sanitize_sql_value, validate_numeric
 from sklearn.ensemble import IsolationForest
-import pickle
-from pathlib import Path
 
 logger = get_logger(__name__)
 
-# Load pre-trained model (if exists)
-MODEL_PATH = Path("src/ml/isolation_forest_model.pkl")
-if MODEL_PATH.exists():
-    with open(MODEL_PATH, 'rb') as f:
-        isolation_forest_model = pickle.load(f)
-else:
-    # Create default model
-    isolation_forest_model = IsolationForest(contamination=0.05, random_state=42)
-    logger.warning("No pre-trained model found, using default Isolation Forest")
+# Model is loaded lazily on first use to avoid import-time RCE risk from
+# untrusted pickle artifacts.  See _get_isolation_forest_model().
+_isolation_forest_model = None
+
+_MODEL_PATH = Path(os.path.abspath("src/ml/isolation_forest_model.pkl"))
+_PROJECT_ROOT = Path(os.path.abspath("."))
+
+
+def _get_isolation_forest_model() -> IsolationForest:
+    """Lazy-load the Isolation Forest model with integrity verification.
+
+    If the env var ISOLATION_FOREST_MODEL_SHA256 is set, the file's SHA-256
+    digest is verified before loading.  The model is cached in-process after
+    the first successful load.
+    """
+    global _isolation_forest_model
+    if _isolation_forest_model is not None:
+        return _isolation_forest_model
+
+    # Enforce that the resolved path stays within the project root.
+    try:
+        _MODEL_PATH.resolve().relative_to(_PROJECT_ROOT.resolve())
+    except ValueError:
+        raise ValueError(f"Model path {_MODEL_PATH} is outside the project root — refusing to load")
+
+    if _MODEL_PATH.exists():
+        expected_hash = os.getenv("ISOLATION_FOREST_MODEL_SHA256")
+        if expected_hash:
+            actual_hash = hashlib.sha256(_MODEL_PATH.read_bytes()).hexdigest()
+            if actual_hash != expected_hash:
+                raise RuntimeError(
+                    f"Model artifact hash mismatch — refusing to load pickle. "
+                    f"Expected {expected_hash}, got {actual_hash}"
+                )
+        with open(_MODEL_PATH, "rb") as f:
+            _isolation_forest_model = pickle.load(f)
+        logger.info("Loaded pre-trained Isolation Forest model")
+    else:
+        _isolation_forest_model = IsolationForest(contamination=0.05, random_state=42)
+        logger.warning("No pre-trained model found, using default Isolation Forest")
+
+    return _isolation_forest_model
 
 
 @tool("run_isolation_forest")
@@ -73,12 +109,13 @@ def run_isolation_forest(transactions_json: str = "[]") -> dict[str, Any]:
         X = df[features].fillna(0)
 
         # Predict anomaly scores
-        if hasattr(isolation_forest_model, 'decision_function'):
-            scores = isolation_forest_model.decision_function(X)
+        model = _get_isolation_forest_model()
+        if hasattr(model, 'decision_function'):
+            scores = model.decision_function(X)
         else:
             # Train model if not fitted
-            isolation_forest_model.fit(X)
-            scores = isolation_forest_model.decision_function(X)
+            model.fit(X)
+            scores = model.decision_function(X)
 
         df['anomaly_score'] = scores
         df['is_anomaly'] = scores < -0.5  # Threshold for anomaly
@@ -121,10 +158,12 @@ def check_vendor_spending_profile(vendor_id: str, amount: float) -> dict[str, An
 
     try:
         # Query vendor profile from cached stats
+        safe_vendor_id = sanitize_sql_value(vendor_id)
+        safe_amount = validate_numeric(amount)
         profile = query_gold_tables(f"""
             SELECT mean_amount, std_dev, frequency
             FROM gold.vendor_profiles
-            WHERE vendor_id = '{vendor_id}'
+            WHERE vendor_id = '{safe_vendor_id}'
         """)
 
         if profile.empty:
@@ -141,11 +180,11 @@ def check_vendor_spending_profile(vendor_id: str, amount: float) -> dict[str, An
         std = profile['std_dev'].iloc[0]
 
         # Calculate z-score
-        z_score = (amount - mean) / std if std > 0 else 0
+        z_score = (safe_amount - mean) / std if std > 0 else 0
 
         is_outlier = abs(z_score) > 3.0
 
-        explanation = f"Amount ${amount:.2f} is {z_score:.1f}σ from mean ${mean:.2f}"
+        explanation = f"Amount ${safe_amount:.2f} is {z_score:.1f}σ from mean ${mean:.2f}"
 
         result = {
             'is_outlier': is_outlier,

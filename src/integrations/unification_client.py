@@ -223,3 +223,14 @@ def get_all_entities(entity_type: str) -> list:
     except Exception as exc:
         logger.warning("Failed to fetch entities", entity_type=entity_type, error=str(exc))
         return []
+
+
+def get_gold_transactions(since_timestamp=None):
+    """Convenience wrapper: read the full transaction population from Gold tables.
+
+    Returns a DataFrame with columns: txn_id, vendor, amount, date, category,
+    source, account_id, ingested_at.
+    """
+    from src.db.gold_table_reader import GoldTableReader
+    reader = GoldTableReader()
+    return reader.get_transactions(since_timestamp=since_timestamp)

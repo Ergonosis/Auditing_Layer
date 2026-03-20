@@ -13,10 +13,13 @@ class StructuredLogger:
         self.logger = logging.getLogger(name)
         self.logger.setLevel(getattr(logging, level.upper()))
 
-        # Console handler with JSON formatter
-        handler = logging.StreamHandler()
-        handler.setFormatter(JSONFormatter())
-        self.logger.addHandler(handler)
+        # Only add the handler once per named logger — calling get_logger()
+        # multiple times for the same module would otherwise stack handlers
+        # and produce duplicate log lines.
+        if not self.logger.handlers:
+            handler = logging.StreamHandler()
+            handler.setFormatter(JSONFormatter())
+            self.logger.addHandler(handler)
 
     def log(self, level: str, message: str, **kwargs):
         """Log structured message"""
