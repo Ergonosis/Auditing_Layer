@@ -9,6 +9,11 @@ from dotenv import load_dotenv
 env_path = Path(__file__).parent.parent / '.env'
 load_dotenv(dotenv_path=env_path)
 
+# Load secrets from GCP Secret Manager if GCP_PROJECT_ID is set (prod).
+# No-op locally — .env file is used instead. Mirrors unification layer pattern.
+from src.utils.secrets_loader import load_secrets_to_env
+load_secrets_to_env()
+
 from src.orchestrator.orchestrator_agent import AuditOrchestrator
 from src.utils.logging import get_logger
 

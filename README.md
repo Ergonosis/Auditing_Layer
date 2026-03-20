@@ -12,11 +12,9 @@ This layer sits downstream of the Data Unification Layer. It ingests canonicaliz
 
 ## Where Results Live
 
-> **Note:** Production Databricks writes are planned for V2. Schemas are defined in [`src/db/schemas.py`](src/db/schemas.py) but not yet wired up. Currently, flags are collected in-memory and surfaced via the demo JSON output or the benchmark test harness.
+In production, flags and workflow state are written to the **`ergonosis.auditing`** catalog on the Databricks workspace in real time. In demo/dev mode, flags are collected in-memory and surfaced via the demo JSON output or the benchmark test harness.
 
-The planned output catalog is **`ergonosis.auditing`** on the Databricks workspace.
-
-### Audit tables — planned for V2
+### Audit tables
 
 | Table            | Contents                                                                                         |
 | ---------------- | ------------------------------------------------------------------------------------------------ |
@@ -44,9 +42,45 @@ python tests/demo_testing.py
 
 ## Running on GCP
 
+### Automatic trigger (30 minutes after unification)
+
+The auditing pipeline is chained to the unification pipeline via **GCP Workflows** with a 30-minute delay. The workflow definition lives at [`workflows/audit_trigger.yaml`](workflows/audit_trigger.yaml).
+
+**Deploy or update the workflow:**
+
+```bash
+gcloud workflows deploy ergonosis-audit-trigger \
+  --location=us-central1 \
+  --source=workflows/audit_trigger.yaml \
+  --project=ergonosis
+```
+
+**Schedule it to run on a recurring basis** (e.g. nightly at 2am UTC):
+
+```bash
+gcloud scheduler jobs create http ergonosis-nightly \
+  --location=us-central1 \
+  --schedule="0 2 * * *" \
+  --uri="https://workflowexecutions.googleapis.com/v1/projects/ergonosis/locations/us-central1/workflows/ergonosis-audit-trigger/executions" \
+  --message-body="{}" \
+  --oauth-service-account-email=YOUR_SERVICE_ACCOUNT@ergonosis.iam.gserviceaccount.com \
+  --project=ergonosis
+```
+
+The workflow: (1) executes `ergonosis-unification-pipeline`, (2) waits 30 minutes, (3) executes `ergonosis-auditing-pipeline`.
+
+**Monitor a workflow execution:**
+
+```bash
+gcloud workflows executions list ergonosis-audit-trigger \
+  --location=us-central1 \
+  --project=ergonosis \
+  --limit=5
+```
+
 ### Manual trigger
 
-There is no scheduled trigger. Execute the pipeline on demand:
+To run the auditing pipeline immediately (bypassing the workflow):
 
 ```bash
 gcloud run jobs execute ergonosis-auditing-pipeline \
@@ -76,11 +110,20 @@ gcloud builds submit \
   --substitutions=SHORT_SHA=$SHORT_SHA .
 ```
 
-The build step clones the unification repo, builds the Docker image, pushes it to Artifact Registry, and updates the Cloud Run job automatically.
+The build step copies the unification repo (passed in as `ergonosis_unification_src` alongside the source upload), builds the Docker image, pushes it to Artifact Registry, and updates the Cloud Run job. You must copy the unification repo before submitting:
+
+```bash
+cp -r ../ergonosis_unification ./ergonosis_unification_src
+SHORT_SHA=$(git rev-parse --short HEAD)
+gcloud builds submit --config cloudbuild.yaml --project=ergonosis --substitutions=SHORT_SHA=$SHORT_SHA .
+rm -rf ./ergonosis_unification_src
+```
+
+The Cloud Run job runs as `ergonosis-pipeline-sa@ergonosis.iam.gserviceaccount.com` (same SA as the unification job).
 
 ### Secrets
 
-All credentials are stored in **GCP Secret Manager** under project `ergonosis`. The pipeline loads them automatically when deployed via `cloudbuild.yaml`.
+All credentials are stored in **GCP Secret Manager** under project `ergonosis`. Secrets are loaded at **runtime** via `load_secrets_to_env()` in `src/main.py` — the same pattern as the unification layer. `cloudbuild.yaml` does **not** use `--update-secrets`; do not add it back, as it requires extra IAM grants that aren't needed with the runtime loading approach.
 
 | Secret name              | Description                                   |
 | ------------------------ | --------------------------------------------- |
@@ -89,6 +132,7 @@ All credentials are stored in **GCP Secret Manager** under project `ergonosis`. 
 | `DATABRICKS_TOKEN`       | Databricks personal access token              |
 | `DATABRICKS_HTTP_PATH`   | SQL warehouse HTTP path                       |
 | `UNIFICATION_USER_EMAIL` | Mailbox used to derive the UQI `user_id_hash` |
+
 
 ---
 
@@ -145,18 +189,14 @@ Runs the full pipeline across all four datasets and prints a confusion matrix (T
 
 ### Run types
 
-| Type         | Behaviour                                                    |
-| ------------ | ------------------------------------------------------------ |
-| `demo`       | Local CSV fixtures, in-memory state, no credentials required |
-| `production` | Reads from Databricks via UQI, requires all GCP secrets set  |
+| Type         | Behaviour                                                                                  |
+| ------------ | ------------------------------------------------------------------------------------------ |
+| `demo`       | Local CSV fixtures, in-memory state, no credentials required                               |
+| `production` | Reads from Databricks via UQI, writes flags/state to `ergonosis.auditing`, requires all GCP secrets set |
 
 ---
 
-## Known Limitations (V1)
-
-- **Databricks output not yet wired:** Flags and audit logs remain in-memory during a run. The write layer to `ergonosis.auditing` is planned for V2. Schemas are ready in [`src/db/schemas.py`](src/db/schemas.py).
-
-- **No scheduled trigger:** The pipeline runs on demand only. No Cloud Scheduler is configured.
+## Known Limitations
 
 - **Single-user / single-account:** Inherits the single Plaid account and single MS Graph mailbox constraint from the unification layer V1.
 
