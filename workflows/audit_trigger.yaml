@@ -7,10 +7,10 @@ main:
           location: us-central1
         result: unification_result
 
-    - wait_1_hour:
+    - wait_for_unification:
         call: sys.sleep
         args:
-          seconds: 3600
+          seconds: 6000
 
     - run_auditing:
         call: googleapis.run.v1.namespaces.jobs.run

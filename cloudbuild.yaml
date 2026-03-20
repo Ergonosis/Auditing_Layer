@@ -30,6 +30,8 @@ steps:
       - --region=us-central1
       - --image=us-central1-docker.pkg.dev/$PROJECT_ID/ergonosis-auditing/pipeline:$SHORT_SHA
       - --service-account=ergonosis-pipeline-sa@ergonosis.iam.gserviceaccount.com
+      - --task-timeout=5400
+      - --max-retries=1
       - --set-env-vars=ENVIRONMENT=production,STATE_BACKEND=databricks,DATABRICKS_CATALOG=ergonosis,DATABRICKS_SCHEMA=unification,DATABRICKS_AUDIT_SCHEMA=auditing,UNIFICATION_SECURE_STORAGE_REQUIRED=true,LOG_LEVEL=INFO,GCP_PROJECT_ID=ergonosis
 
 images:
