@@ -42,9 +42,11 @@ python tests/demo_testing.py
 
 ## Running on GCP
 
-### Automatic trigger (30 minutes after unification)
+### Automatic trigger (1 hour after unification)
 
-The auditing pipeline is chained to the unification pipeline via **GCP Workflows** with a 30-minute delay. The workflow definition lives at [`workflows/audit_trigger.yaml`](workflows/audit_trigger.yaml).
+The auditing pipeline is chained to the unification pipeline via **GCP Workflows** with a 1-hour delay. The workflow definition lives at [`workflows/audit_trigger.yaml`](workflows/audit_trigger.yaml).
+
+The workflow is triggered daily at **6am UTC** by Cloud Scheduler job `ergonosis-full-pipeline-nightly`. It: (1) executes `ergonosis-unification-pipeline`, (2) waits 1 hour, (3) executes `ergonosis-auditing-pipeline`.
 
 **Deploy or update the workflow:**
 
@@ -54,20 +56,6 @@ gcloud workflows deploy ergonosis-audit-trigger \
   --source=workflows/audit_trigger.yaml \
   --project=ergonosis
 ```
-
-**Schedule it to run on a recurring basis** (e.g. nightly at 2am UTC):
-
-```bash
-gcloud scheduler jobs create http ergonosis-nightly \
-  --location=us-central1 \
-  --schedule="0 2 * * *" \
-  --uri="https://workflowexecutions.googleapis.com/v1/projects/ergonosis/locations/us-central1/workflows/ergonosis-audit-trigger/executions" \
-  --message-body="{}" \
-  --oauth-service-account-email=YOUR_SERVICE_ACCOUNT@ergonosis.iam.gserviceaccount.com \
-  --project=ergonosis
-```
-
-The workflow: (1) executes `ergonosis-unification-pipeline`, (2) waits 30 minutes, (3) executes `ergonosis-auditing-pipeline`.
 
 **Monitor a workflow execution:**
 
@@ -100,17 +88,7 @@ gcloud run jobs logs read ergonosis-auditing-pipeline \
 
 ### Deploying a new image
 
-Pushing to `main` does **not** auto-deploy. To deploy after a code change:
-
-```bash
-SHORT_SHA=$(git rev-parse --short HEAD)
-gcloud builds submit \
-  --config cloudbuild.yaml \
-  --project=ergonosis \
-  --substitutions=SHORT_SHA=$SHORT_SHA .
-```
-
-The build step copies the unification repo (passed in as `ergonosis_unification_src` alongside the source upload), builds the Docker image, pushes it to Artifact Registry, and updates the Cloud Run job. You must copy the unification repo before submitting:
+Pushing to `main` does **not** auto-deploy. The build requires the unification repo to be present in the source upload. To deploy after a code change:
 
 ```bash
 cp -r ../ergonosis_unification ./ergonosis_unification_src
@@ -119,7 +97,7 @@ gcloud builds submit --config cloudbuild.yaml --project=ergonosis --substitution
 rm -rf ./ergonosis_unification_src
 ```
 
-The Cloud Run job runs as `ergonosis-pipeline-sa@ergonosis.iam.gserviceaccount.com` (same SA as the unification job).
+The Cloud Run job runs as `ergonosis-pipeline-sa@ergonosis.iam.gserviceaccount.com` (same SA as the unification job). Task timeout is **3 hours**.
 
 ### Secrets
 
