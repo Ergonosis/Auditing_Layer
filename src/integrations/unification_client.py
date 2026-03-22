@@ -16,8 +16,13 @@ from src.utils.logging import get_logger
 
 logger = get_logger(__name__)
 
-# Path to the sibling unification repo (dev/test only; ignored in Docker)
-_UNIFICATION_SRC = Path(__file__).resolve().parents[3] / "ergonosis_unification" / "src"
+# Path to the unification repo's src/.
+# In Docker: set UNIFICATION_SRC_PATH=/app/ergonosis_unification/src
+# In dev: falls back to sibling directory convention.
+_UNIFICATION_SRC = Path(
+    os.getenv("UNIFICATION_SRC_PATH", "")
+    or str(Path(__file__).resolve().parents[3] / "ergonosis_unification" / "src")
+)
 
 # Default DB path
 _DEFAULT_DB_PATH = str(

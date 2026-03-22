@@ -28,5 +28,6 @@ COPY config/ ./config/
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONPATH=/app
+ENV UNIFICATION_SRC_PATH=/app/ergonosis_unification/src
 
 ENTRYPOINT ["python", "-m", "src.main"]
