@@ -26,13 +26,16 @@ _CONNECT_TIMEOUT_SECONDS = 30
 class GoldTableReader:
     """Read-only client for ergonosis.unification Gold tables."""
 
-    def __init__(self):
+    def __init__(self, connection=None):
         self.catalog = os.getenv("DATABRICKS_CATALOG", _DEFAULT_CATALOG)
         if not _SAFE_IDENTIFIER.match(self.catalog):
             raise DatabricksConnectionError(
                 f"GoldTableReader catalog must be alphanumeric/underscores only: {self.catalog!r}"
             )
-        self._connection = self._connect()
+        if connection is not None:
+            self._connection = connection
+        else:
+            self._connection = self._connect()
 
     def _connect(self):
         host = os.getenv("DATABRICKS_HOST", "")

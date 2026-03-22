@@ -23,8 +23,17 @@ from src.tools.anomaly_tools import (
 
 def test_cross_source_matcher():
     """Test cross-source transaction matching"""
-    # This will use mock data from databricks_client
-    result = cross_source_matcher.func('credit_card', 'bank', json.dumps(['2025-02-01', '2025-02-28']))
+    import pandas as pd
+    mock_df = pd.DataFrame({
+        'txn_id': ['cc_1', 'cc_2', 'bank_1', 'bank_2'],
+        'source': ['credit_card', 'credit_card', 'bank', 'bank'],
+        'amount': [100.0, 200.0, 100.0, 300.0],
+        'vendor': ['Amazon', 'Walmart', 'Amazon', 'Target'],
+        'vendor_id': [None, None, None, None],
+        'date': ['2025-02-10', '2025-02-15', '2025-02-10', '2025-02-20'],
+    })
+    txn_json = mock_df.to_json(orient='records')
+    result = cross_source_matcher.func(txn_json, 'credit_card', 'bank', json.dumps(['2025-02-01', '2025-02-28']))
 
     assert 'matched_pairs' in result
     assert 'match_rate' in result
@@ -79,9 +88,16 @@ def test_receipt_transaction_matcher():
 
 def test_find_orphan_transactions():
     """Test orphan transaction detection"""
-    sources = ['credit_card', 'bank', 'receipts']
-
-    result = find_orphan_transactions.func(json.dumps(sources))
+    import pandas as pd
+    mock_df = pd.DataFrame({
+        'txn_id': ['cc_1', 'cc_2', 'bank_1'],
+        'source': ['credit_card', 'credit_card', 'bank'],
+        'amount': [100.0, 200.0, 100.0],
+        'vendor': ['Amazon', 'Walmart', 'Amazon'],
+        'date': ['2025-02-10', '2025-02-15', '2025-02-10'],
+    })
+    txn_json = mock_df.to_json(orient='records')
+    result = find_orphan_transactions.func(txn_json, '["credit_card","bank"]')
 
     assert 'orphan_count' in result
     assert 'orphans' in result

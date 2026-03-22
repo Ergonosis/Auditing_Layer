@@ -12,8 +12,29 @@ import numpy as np
 
 logger = get_logger(__name__)
 
+_PRELOADED_DATA: dict = {}
+
+
+def _get_transactions_df(transactions_json: str = "[]") -> pd.DataFrame:
+    """Three-tier data fetch: cache → JSON arg → Databricks fallback."""
+    if _PRELOADED_DATA.get("populated"):
+        logger.debug(f"Cache hit: {len(_PRELOADED_DATA['transactions'])} rows")
+        return _PRELOADED_DATA["transactions"].copy()
+    if transactions_json and transactions_json not in ("[]", "{}"):
+        try:
+            import json as _json
+            records = _json.loads(transactions_json)
+            if records:
+                logger.debug(f"Using transactions_json arg ({len(records)} records)")
+                return pd.DataFrame(records)
+        except Exception as exc:
+            logger.warning(f"Failed to parse transactions_json; falling back to Databricks: {exc}")
+    logger.info("Cache not populated — querying Databricks")
+    return query_gold_tables("SELECT * FROM ergonosis.unification.transactions")
+
+
 @tool("cross_source_matcher")
-def cross_source_matcher(source_1: str, source_2: str, date_range_json: str = '["2025-01-01", "2025-12-31"]') -> dict[str, Any]:
+def cross_source_matcher(transactions_json: str = "[]", source_1: str = "credit_card", source_2: str = "bank", date_range_json: str = '["2025-01-01", "2025-12-31"]') -> dict[str, Any]:
     """
     Match transactions from two sources based on amount, date, and vendor
 
@@ -23,6 +44,7 @@ def cross_source_matcher(source_1: str, source_2: str, date_range_json: str = '[
     - Vendor: exact match or KG-resolved entity match
 
     Args:
+        transactions_json: JSON array string of transactions from crew inputs {transactions}.
         source_1: First source name (e.g., 'credit_card')
         source_2: Second source name (e.g., 'bank')
         date_range_json: JSON array of [start_date, end_date] as ISO strings like '["2025-01-01", "2025-01-31"]'
@@ -46,24 +68,13 @@ def cross_source_matcher(source_1: str, source_2: str, date_range_json: str = '[
 
         logger.info(f"Matching {source_1} vs {source_2} for date range {date_range}")
 
-        s1 = sanitize_sql_value(source_1)
-        s2 = sanitize_sql_value(source_2)
-        sd = sanitize_sql_value(start_date)
-        ed = sanitize_sql_value(end_date)
+        all_df = _get_transactions_df(transactions_json)
 
-        df1 = query_gold_tables(f"""
-            SELECT txn_id, amount, vendor, vendor_id, date
-            FROM gold.transactions
-            WHERE source = '{s1}'
-              AND date BETWEEN '{sd}' AND '{ed}'
-        """)
-
-        df2 = query_gold_tables(f"""
-            SELECT txn_id, amount, vendor, vendor_id, date
-            FROM gold.transactions
-            WHERE source = '{s2}'
-              AND date BETWEEN '{sd}' AND '{ed}'
-        """)
+        # Filter by source and date range
+        all_df['date'] = pd.to_datetime(all_df['date'])
+        date_mask = (all_df['date'] >= pd.to_datetime(start_date)) & (all_df['date'] <= pd.to_datetime(end_date))
+        df1 = all_df[date_mask & (all_df['source'] == source_1)].copy()
+        df2 = all_df[date_mask & (all_df['source'] == source_2)].copy()
 
         if df1.empty or df2.empty:
             logger.warning(f"No data found for {source_1} or {source_2}")
@@ -77,10 +88,6 @@ def cross_source_matcher(source_1: str, source_2: str, date_range_json: str = '[
         matched_pairs = []
         matched_ids_1 = set()
         matched_ids_2 = set()
-
-        # Convert dates to datetime if needed
-        df1['date'] = pd.to_datetime(df1['date'])
-        df2['date'] = pd.to_datetime(df2['date'])
 
         # Match on amount + date + vendor
         for idx1, row1 in df1.iterrows():
@@ -317,12 +324,13 @@ def receipt_transaction_matcher(receipt_data_json: str = "{}", transactions_tabl
 
 
 @tool("find_orphan_transactions")
-def find_orphan_transactions(all_sources: list[str]) -> dict[str, Any]:
+def find_orphan_transactions(transactions_json: str = "[]", all_sources_json: str = '["credit_card","bank"]') -> dict[str, Any]:
     """
     Find transactions that appear in only one source (SUSPICIOUS)
 
     Args:
-        all_sources: List of source names ['credit_card', 'bank', 'receipts']
+        transactions_json: JSON array string of transactions from crew inputs {transactions}.
+        all_sources_json: JSON array of source names like '["credit_card", "bank"]'
 
     Returns:
         {
@@ -333,28 +341,18 @@ def find_orphan_transactions(all_sources: list[str]) -> dict[str, Any]:
             ]
         }
     """
-    # Coerce all_sources in case LLM passes a JSON string instead of a list
-    if isinstance(all_sources, str):
+    # Coerce all_sources_json
+    if isinstance(all_sources_json, str):
         import json as _json
-        all_sources = _json.loads(all_sources) if all_sources.startswith('[') else [all_sources]
+        all_sources = _json.loads(all_sources_json) if all_sources_json.startswith('[') else [all_sources_json]
+    else:
+        all_sources = all_sources_json
 
     logger.info(f"Finding orphan transactions across sources: {all_sources}")
 
     try:
-        # Query all transactions from all sources
-        all_txns = []
-
-        for source in all_sources:
-            safe_src = sanitize_sql_value(source)
-            df = query_gold_tables(f"""
-                SELECT txn_id, source, amount, vendor, date
-                FROM gold.transactions
-                WHERE source = '{safe_src}'
-            """)
-            all_txns.append(df)
-
-        # Concatenate all dataframes
-        combined = pd.concat(all_txns, ignore_index=True)
+        df = _get_transactions_df(transactions_json)
+        combined = df[df['source'].isin(all_sources)].copy() if 'source' in df.columns else df.copy()
 
         if combined.empty:
             return {'orphan_count': 0, 'orphans': []}

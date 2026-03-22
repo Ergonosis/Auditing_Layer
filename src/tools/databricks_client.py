@@ -154,6 +154,70 @@ def get_last_audit_timestamp() -> datetime:
     return datetime(2025, 1, 1)
 
 
+def _prewarm_warehouse() -> None:
+    """Fire a trivial query to wake the Serverless warehouse before real work starts.
+    No-ops in dev/test. Never raises — failure is logged as a warning only."""
+    if os.getenv("ENVIRONMENT") != "production":
+        return
+    try:
+        import time
+        t0 = time.time()
+        conn = get_databricks_connection()
+        if conn is None or conn == "DEMO_MODE":
+            return
+        cursor = conn.cursor()
+        cursor.execute("SELECT 1")
+        cursor.close()
+        logger.info(f"Warehouse pre-warm complete ({time.time() - t0:.1f}s)")
+    except Exception as e:
+        logger.warning(f"Warehouse pre-warm failed (non-fatal): {e}")
+
+
+# ── Shared production connection (Option B) ──────────────────────────────
+
+_shared_conn = None
+
+
+def get_shared_production_connection():
+    """Singleton production connection shared by GoldTableReader and AuditDatabricksWriter.
+    Returns None in dev/test.
+
+    Passes _retry_stop_after_attempts_duration=60 to the SDK to cap the built-in
+    retry loop at 60s. The default (900s) causes the pipeline to silently hang for
+    15 minutes on every transient connection error from Cloud Run.
+    """
+    global _shared_conn
+    if os.getenv("ENVIRONMENT") != "production":
+        return None
+    if _shared_conn is None:
+        host = os.getenv("DATABRICKS_HOST", "")
+        token = os.getenv("DATABRICKS_TOKEN", "")
+        http_path = os.getenv("DATABRICKS_HTTP_PATH", "")
+        from databricks import sql as _dbsql
+        import time as _time
+        t0 = _time.time()
+        logger.info("Connecting to Databricks shared connection...")
+        _shared_conn = _dbsql.connect(
+            server_hostname=host,
+            http_path=http_path,
+            access_token=token,
+            _retry_stop_after_attempts_duration=60,
+        )
+        logger.info(f"Shared Databricks connection established ({_time.time() - t0:.1f}s)")
+    return _shared_conn
+
+
+def close_shared_connection() -> None:
+    """Close the shared production connection. Safe to call multiple times."""
+    global _shared_conn
+    if _shared_conn is not None:
+        try:
+            _shared_conn.close()
+        except Exception:
+            pass
+        _shared_conn = None
+
+
 def check_databricks_health() -> bool:
     """
     Check if Databricks connection is healthy.

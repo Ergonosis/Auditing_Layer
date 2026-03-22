@@ -41,7 +41,7 @@ def _esc(val: str) -> str:
 class AuditDatabricksWriter:
     """Thin write layer for the ``ergonosis.auditing`` Databricks catalog."""
 
-    def __init__(self):
+    def __init__(self, connection=None, skip_ensure_tables: bool = False):
         self.catalog = os.getenv("DATABRICKS_CATALOG", _DEFAULT_CATALOG)
         self.schema = os.getenv("DATABRICKS_AUDIT_SCHEMA", _DEFAULT_AUDIT_SCHEMA)
         for name, val in [("catalog", self.catalog), ("schema", self.schema)]:
@@ -49,8 +49,12 @@ class AuditDatabricksWriter:
                 raise DatabricksConnectionError(
                     f"AuditDatabricksWriter {name} must be alphanumeric/underscores only: {val!r}"
                 )
-        self._connection = self._connect()
-        self._ensure_tables()
+        if connection is not None:
+            self._connection = connection
+        else:
+            self._connection = self._connect()
+        if not skip_ensure_tables:
+            self._ensure_tables()
 
     def _connect(self):
         host = os.getenv("DATABRICKS_HOST", "")
@@ -270,7 +274,12 @@ def _get_writer() -> Optional[AuditDatabricksWriter]:
     if not _is_production():
         return None
     if _writer is None:
-        _writer = AuditDatabricksWriter()
+        from src.tools.databricks_client import get_shared_production_connection
+        skip = os.getenv("AUDIT_TABLES_VERIFIED", "").lower() == "true"
+        _writer = AuditDatabricksWriter(
+            connection=get_shared_production_connection(),
+            skip_ensure_tables=skip,
+        )
     return _writer
 
 

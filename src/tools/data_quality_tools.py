@@ -13,13 +13,33 @@ import os
 
 logger = get_logger(__name__)
 
+_PRELOADED_DATA: dict = {}
+
+
+def _get_transactions_df(transactions_json: str = "[]") -> pd.DataFrame:
+    """Three-tier data fetch: cache → JSON arg → Databricks fallback."""
+    if _PRELOADED_DATA.get("populated"):
+        logger.debug(f"Cache hit: {len(_PRELOADED_DATA['transactions'])} rows")
+        return _PRELOADED_DATA["transactions"].copy()
+    if transactions_json and transactions_json not in ("[]", "{}"):
+        try:
+            records = json.loads(transactions_json)
+            if records:
+                logger.debug(f"Using transactions_json arg ({len(records)} records)")
+                return pd.DataFrame(records)
+        except Exception as exc:
+            logger.warning("Failed to parse transactions_json; falling back to Databricks", error=str(exc))
+    logger.info("Cache not populated — querying Databricks")
+    return query_gold_tables("SELECT * FROM ergonosis.unification.transactions")
+
+
 @tool("check_data_completeness")
-def check_data_completeness(table_name: str) -> dict[str, Any]:
+def check_data_completeness(transactions_json: str = "[]") -> dict[str, Any]:
     """
     Validate data completeness - check if required fields are populated
 
     Args:
-        table_name: Name of table to check (e.g., 'gold.recent_transactions')
+        transactions_json: JSON array string of transactions from crew inputs {transactions}.
 
     Returns:
         Dictionary with completeness metrics:
@@ -32,14 +52,13 @@ def check_data_completeness(table_name: str) -> dict[str, Any]:
             'completeness_score': float  # 0-1
         }
     """
-    table_name = validate_identifier(table_name.strip().strip('"').strip("'"))
-    logger.info(f"Checking data completeness for {table_name}")
+    logger.info("Checking data completeness")
 
     try:
-        df = query_gold_tables(f"SELECT * FROM {table_name}")
+        df = _get_transactions_df(transactions_json)
 
         if df.empty:
-            logger.warning(f"No data found in {table_name}")
+            logger.warning("No transaction data found")
             return {
                 'total_records': 0,
                 'missing_vendor': 0,
@@ -79,12 +98,12 @@ def check_data_completeness(table_name: str) -> dict[str, Any]:
 
 
 @tool("validate_schema_conformity")
-def validate_schema_conformity(table_name: str, expected_schema_json: str = "{}") -> list[dict[str, str]]:
+def validate_schema_conformity(transactions_json: str = "[]", expected_schema_json: str = "{}") -> list[dict[str, str]]:
     """
     Validate schema conformity - check data types and structure
 
     Args:
-        table_name: Name of table to validate
+        transactions_json: JSON array string of transactions from crew inputs {transactions}.
         expected_schema_json: JSON string of expected schema like '{"amount": "float", "vendor": "str", "date": "datetime"}'
 
     Returns:
@@ -96,11 +115,10 @@ def validate_schema_conformity(table_name: str, expected_schema_json: str = "{}"
     """
     # Parse JSON string to dict
     expected_schema = json.loads(expected_schema_json) if expected_schema_json else {}
-    table_name = validate_identifier(table_name.strip().strip('"').strip("'"))
-    logger.info(f"Validating schema for {table_name}")
+    logger.info("Validating schema")
 
     try:
-        df = query_gold_tables(f"SELECT * FROM {table_name}")
+        df = _get_transactions_df(transactions_json)
 
         if df.empty:
             return []
@@ -143,14 +161,14 @@ def validate_schema_conformity(table_name: str, expected_schema_json: str = "{}"
 
 
 @tool("detect_duplicate_records")
-def detect_duplicate_records(table_name: str, key_fields: list[str]) -> dict[str, Any]:
+def detect_duplicate_records(transactions_json: str = "[]", key_fields_json: str = '["txn_id"]') -> dict[str, Any]:
     """
     Detect duplicate records based on key fields
 
     Args:
-        table_name: Name of table to check
-        key_fields: List of fields to check for duplicates
-                   e.g., ['txn_id'] or ['vendor', 'amount', 'date']
+        transactions_json: JSON array string of transactions from crew inputs {transactions}.
+        key_fields_json: JSON array of fields to check for duplicates
+                   e.g., '["txn_id"]' or '["vendor", "amount", "date"]'
 
     Returns:
         Dictionary with duplicate info:
@@ -162,16 +180,16 @@ def detect_duplicate_records(table_name: str, key_fields: list[str]) -> dict[str
             ]
         }
     """
-    # Coerce key_fields in case LLM passes a JSON string instead of a list
-    if isinstance(key_fields, str):
-        import json as _json
-        key_fields = _json.loads(key_fields) if key_fields.startswith('[') else [key_fields]
+    # Coerce key_fields_json to list
+    if isinstance(key_fields_json, str):
+        key_fields = json.loads(key_fields_json) if key_fields_json.startswith('[') else [key_fields_json]
+    else:
+        key_fields = key_fields_json
 
-    table_name = validate_identifier(table_name.strip().strip('"').strip("'"))
-    logger.info(f"Detecting duplicates in {table_name} on fields {key_fields}")
+    logger.info(f"Detecting duplicates on fields {key_fields}")
 
     try:
-        df = query_gold_tables(f"SELECT * FROM {table_name}")
+        df = _get_transactions_df(transactions_json)
 
         if df.empty or not all(field in df.columns for field in key_fields):
             return {'duplicate_count': 0, 'duplicate_groups': []}

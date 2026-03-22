@@ -41,28 +41,27 @@ def mock_duplicate_data():
 
 def test_check_completeness(mock_transaction_data):
     """Test completeness check with mock data"""
-    with patch('src.tools.data_quality_tools.query_gold_tables', return_value=mock_transaction_data):
-        result = check_data_completeness.func("gold.recent_transactions")
+    txn_json = mock_transaction_data.to_json(orient='records')
+    result = check_data_completeness.func(txn_json)
 
-        assert 'total_records' in result
-        assert result['total_records'] == 5
-        assert 'completeness_score' in result
-        assert 0 <= result['completeness_score'] <= 1
-        assert 'missing_vendor' in result
-        assert result['missing_vendor'] == 1  # One null vendor
-        assert 'missing_source' in result
-        assert result['missing_source'] == 1  # One null source
+    assert 'total_records' in result
+    assert result['total_records'] == 5
+    assert 'completeness_score' in result
+    assert 0 <= result['completeness_score'] <= 1
+    assert 'missing_vendor' in result
+    assert result['missing_vendor'] == 1  # One null vendor
+    assert 'missing_source' in result
+    assert result['missing_source'] == 1  # One null source
 
 
 def test_check_completeness_empty_table():
-    """Test completeness check with empty table"""
-    with patch('src.tools.data_quality_tools.query_gold_tables', return_value=pd.DataFrame()):
-        result = check_data_completeness.func("gold.empty_table")
+    """Test completeness check with empty data"""
+    result = check_data_completeness.func("[]")
 
-        assert result['total_records'] == 0
-        assert result['completeness_score'] == 0.0
-        assert result['missing_vendor'] == 0
-        assert result['missing_amount'] == 0
+    assert result['total_records'] == 0
+    assert result['completeness_score'] == 0.0
+    assert result['missing_vendor'] == 0
+    assert result['missing_amount'] == 0
 
 
 def test_schema_validation(mock_transaction_data):
@@ -70,16 +69,15 @@ def test_schema_validation(mock_transaction_data):
     expected_schema = {
         'amount': 'float',
         'vendor': 'str',
-        'date': 'datetime',
         'txn_id': 'str'
     }
+    txn_json = mock_transaction_data.to_json(orient='records')
 
-    with patch('src.tools.data_quality_tools.query_gold_tables', return_value=mock_transaction_data):
-        result = validate_schema_conformity.func("gold.recent_transactions", json.dumps(expected_schema))
+    result = validate_schema_conformity.func(txn_json, json.dumps(expected_schema))
 
-        assert isinstance(result, list)
-        # Should pass - all types match
-        assert len(result) == 0
+    assert isinstance(result, list)
+    # Should pass - all types match (date excluded: JSON round-trip loses datetime type)
+    assert len(result) == 0
 
 
 def test_schema_validation_missing_field(mock_transaction_data):
@@ -89,14 +87,14 @@ def test_schema_validation_missing_field(mock_transaction_data):
         'vendor': 'str',
         'missing_field': 'str'
     }
+    txn_json = mock_transaction_data.to_json(orient='records')
 
-    with patch('src.tools.data_quality_tools.query_gold_tables', return_value=mock_transaction_data):
-        result = validate_schema_conformity.func("gold.recent_transactions", json.dumps(expected_schema))
+    result = validate_schema_conformity.func(txn_json, json.dumps(expected_schema))
 
-        assert isinstance(result, list)
-        assert len(result) == 1
-        assert result[0]['field'] == 'missing_field'
-        assert result[0]['error'] == 'Missing field'
+    assert isinstance(result, list)
+    assert len(result) == 1
+    assert result[0]['field'] == 'missing_field'
+    assert result[0]['error'] == 'Missing field'
 
 
 def test_schema_validation_type_mismatch(mock_transaction_data):
@@ -105,42 +103,41 @@ def test_schema_validation_type_mismatch(mock_transaction_data):
         'amount': 'str',  # Should be float
         'vendor': 'str'
     }
+    txn_json = mock_transaction_data.to_json(orient='records')
 
-    with patch('src.tools.data_quality_tools.query_gold_tables', return_value=mock_transaction_data):
-        result = validate_schema_conformity.func("gold.recent_transactions", json.dumps(expected_schema))
+    result = validate_schema_conformity.func(txn_json, json.dumps(expected_schema))
 
-        assert isinstance(result, list)
-        assert len(result) >= 1
-        assert any(err['field'] == 'amount' for err in result)
+    assert isinstance(result, list)
+    assert len(result) >= 1
+    assert any(err['field'] == 'amount' for err in result)
 
 
 def test_duplicate_detection(mock_duplicate_data):
     """Test duplicate detection"""
-    with patch('src.tools.data_quality_tools.query_gold_tables', return_value=mock_duplicate_data):
-        result = detect_duplicate_records.func("gold.recent_transactions", ['txn_id'])
+    txn_json = mock_duplicate_data.to_json(orient='records')
+    result = detect_duplicate_records.func(txn_json, '["txn_id"]')
 
-        assert 'duplicate_count' in result
-        assert 'duplicate_groups' in result
-        assert result['duplicate_count'] == 4  # 4 records in duplicate groups
-        assert len(result['duplicate_groups']) == 2  # 2 unique duplicate groups
+    assert 'duplicate_count' in result
+    assert 'duplicate_groups' in result
+    assert result['duplicate_count'] == 4  # 4 records in duplicate groups
+    assert len(result['duplicate_groups']) == 2  # 2 unique duplicate groups
 
 
 def test_duplicate_detection_no_duplicates(mock_transaction_data):
     """Test duplicate detection with no duplicates"""
-    with patch('src.tools.data_quality_tools.query_gold_tables', return_value=mock_transaction_data):
-        result = detect_duplicate_records.func("gold.recent_transactions", ['txn_id'])
+    txn_json = mock_transaction_data.to_json(orient='records')
+    result = detect_duplicate_records.func(txn_json, '["txn_id"]')
 
-        assert result['duplicate_count'] == 0
-        assert len(result['duplicate_groups']) == 0
+    assert result['duplicate_count'] == 0
+    assert len(result['duplicate_groups']) == 0
 
 
 def test_duplicate_detection_empty_table():
-    """Test duplicate detection with empty table"""
-    with patch('src.tools.data_quality_tools.query_gold_tables', return_value=pd.DataFrame()):
-        result = detect_duplicate_records.func("gold.empty_table", ['txn_id'])
+    """Test duplicate detection with empty data"""
+    result = detect_duplicate_records.func("[]", '["txn_id"]')
 
-        assert result['duplicate_count'] == 0
-        assert result['duplicate_groups'] == []
+    assert result['duplicate_count'] == 0
+    assert result['duplicate_groups'] == []
 
 
 def test_domain_inference_manual_config():

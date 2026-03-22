@@ -47,12 +47,14 @@ class AuditOrchestrator:
         logger.info(f"🚀 Starting audit run: {self.audit_run_id}")
 
         try:
+            from src.tools.databricks_client import get_shared_production_connection, close_shared_connection
+
             # Step 1: Check unification store freshness via Gold tables
             from src.db.gold_table_reader import GoldTableReader
             import pandas as pd
             from datetime import timedelta, timezone
 
-            gold_reader = GoldTableReader()
+            gold_reader = GoldTableReader(connection=get_shared_production_connection())
             last_run_ts = gold_reader.get_last_unification_run_timestamp()
 
             if last_run_ts is None:
@@ -180,9 +182,17 @@ class AuditOrchestrator:
                 'timestamp': datetime.now().isoformat()
             })
             raise AuditSystemError(f"Audit {self.audit_run_id} failed: {e}")
+        finally:
+            close_shared_connection()
 
     def _run_parallel_agents(self, transactions) -> Dict[str, Any]:
         """Run Data Quality and Reconciliation agents (sequential in CrewAI)"""
+        import src.tools.data_quality_tools as _dqt
+        import src.tools.reconciliation_tools as _rect
+
+        # Populate cache so tools skip Databricks queries
+        _dqt._PRELOADED_DATA.update({"transactions": transactions, "populated": True})
+        _rect._PRELOADED_DATA.update({"transactions": transactions, "populated": True})
 
         try:
             # Simplified 4-agent pipeline: Data Quality + Reconciliation only
@@ -194,10 +204,10 @@ class AuditOrchestrator:
             )
 
             # Execute parallel agents
-            # Convert DataFrame to JSON-serializable format
+            # Convert DataFrame to JSON string (CrewAI interpolates {transactions} into task description)
             import json
-            transactions_json = json.loads(transactions.to_json(orient='records', date_format='iso'))
-            inputs = {'transactions': transactions_json}
+            transactions_str = transactions.to_json(orient='records', date_format='iso')
+            inputs = {'transactions': transactions_str}
             crew_output = parallel_crew.kickoff(inputs=inputs)
 
             # CrewOutput object - extract the actual result
@@ -238,6 +248,10 @@ class AuditOrchestrator:
         except Exception as e:
             logger.error(f"Parallel agents failed: {e}")
             raise
+        finally:
+            _dqt._PRELOADED_DATA.clear()
+            _rect._PRELOADED_DATA.clear()
+            logger.debug("Pre-loaded data cache cleared")
 
     def _augment_with_direct_analysis(self, parallel_results: dict, transactions) -> dict:
         """

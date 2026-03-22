@@ -38,15 +38,16 @@ data_quality_agent = Agent(
 # Task definition
 data_quality_task = Task(
     description="""
-    Given a table of transactions from Databricks Gold layer:
+    Given transaction data, validate quality before audit begins:
 
-    1. **Check data completeness** - ensure required fields (vendor, amount, date, source) are populated
-    2. **Validate schema conformity** - verify data types match expected schema
-    3. **Detect duplicate records** - find duplicate transactions based on txn_id
-    4. **Infer domain freshness** - determine business domain and max data age (use config if available, else infer via LLM)
-    5. **Apply quality gates** - check if completeness score meets threshold (default 90%)
+    1. **Check data completeness** - pass transactions_json={transactions} to check_data_completeness
+    2. **Validate schema conformity** - pass transactions_json={transactions} to validate_schema_conformity
+    3. **Detect duplicate records** - pass transactions_json={transactions} to detect_duplicate_records
+    4. **Infer domain freshness** - use infer_domain_freshness (do NOT pass transactions to this tool)
+    5. **Apply quality gates** - use check_data_quality_gates with metrics from step 1 (do NOT pass transactions to this tool)
 
-    **Input**: transactions table name (e.g., 'gold.recent_transactions')
+    **Input**: The full transaction data is in `{transactions}` (JSON array string).
+    Pass `{transactions}` as the `transactions_json` argument to tools in steps 1-3.
     **Output**: Structured report with:
     - quality_score (0-1)
     - incomplete_records (list of transaction ID STRINGS like ["EXP_001", "EXP_002"])
