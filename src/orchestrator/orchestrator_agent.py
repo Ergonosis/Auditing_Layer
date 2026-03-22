@@ -217,6 +217,7 @@ class AuditOrchestrator:
                 logger.debug(f"crew_output.raw content (first 500 chars): {str(crew_output.raw)[:500]}")
 
             # Parse the crew output - it's the final agent's output as a JSON string
+            import json
             if hasattr(crew_output, 'raw'):
                 raw = crew_output.raw
                 if isinstance(raw, str):
