@@ -203,12 +203,9 @@ class AuditOrchestrator:
                 verbose=True
             )
 
-            # Execute parallel agents
-            # Convert DataFrame to JSON string (CrewAI interpolates {transactions} into task description)
-            import json
-            transactions_str = transactions.to_json(orient='records', date_format='iso')
-            inputs = {'transactions': transactions_str}
-            crew_output = parallel_crew.kickoff(inputs=inputs)
+            # Execute agents — transaction data is in _PRELOADED_DATA cache,
+            # tools load from cache when passed "[]". No raw data in LLM prompts.
+            crew_output = parallel_crew.kickoff(inputs={})
 
             # CrewOutput object - extract the actual result
             # The final task output is in crew_output.raw which is a string containing JSON

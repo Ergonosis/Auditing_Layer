@@ -44,7 +44,7 @@ def cross_source_matcher(transactions_json: str = "[]", source_1: str = "credit_
     - Vendor: exact match or KG-resolved entity match
 
     Args:
-        transactions_json: JSON array string of transactions from crew inputs {transactions}.
+        transactions_json: Pass '[]' to load from preloaded cache (default).
         source_1: First source name (e.g., 'credit_card')
         source_2: Second source name (e.g., 'bank')
         date_range_json: JSON array of [start_date, end_date] as ISO strings like '["2025-01-01", "2025-01-31"]'
@@ -329,7 +329,7 @@ def find_orphan_transactions(transactions_json: str = "[]", all_sources_json: st
     Find transactions that appear in only one source (SUSPICIOUS)
 
     Args:
-        transactions_json: JSON array string of transactions from crew inputs {transactions}.
+        transactions_json: Pass '[]' to load from preloaded cache (default).
         all_sources_json: JSON array of source names like '["credit_card", "bank"]'
 
     Returns:

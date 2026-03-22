@@ -168,15 +168,8 @@ def test_domain_inference_manual_config():
         assert result['confidence'] == 1.0
 
 
-def test_domain_inference_llm_fallback():
-    """Test domain inference with LLM fallback"""
-    mock_llm_response = """{
-        "domain": "business_operations",
-        "max_age_hours": 48,
-        "confidence": 0.8,
-        "reasoning": "Regular business transactions"
-    }"""
-
+def test_domain_inference_no_config_returns_default():
+    """Test domain inference returns hardcoded default when no manual config exists"""
     pattern = {
         'frequency': 'daily',
         'vendor_type': 'service',
@@ -184,14 +177,13 @@ def test_domain_inference_llm_fallback():
     }
 
     with patch('src.tools.data_quality_tools.load_config', return_value={}), \
-         patch('src.tools.data_quality_tools.get_domain_config', return_value=None), \
-         patch('src.tools.data_quality_tools.call_llm', return_value=mock_llm_response):
+         patch('src.tools.data_quality_tools.get_domain_config', return_value=None):
         result = infer_domain_freshness.func(json.dumps(pattern))
 
-        assert result['domain'] == 'business_operations'
+        assert result['domain'] == 'default'
         assert result['max_age_hours'] == 48
-        assert result['source'] == 'inferred'
-        assert result['confidence'] == 0.8
+        assert result['source'] == 'default_config'
+        assert result['confidence'] == 0.5
 
 
 def test_domain_inference_error_fallback():

@@ -4,7 +4,6 @@ from crewai.tools import tool
 import pandas as pd
 from typing import Dict, Any, List
 from src.tools.databricks_client import query_gold_tables
-from src.tools.llm_client import call_llm
 from src.utils.config_loader import load_config, get_domain_config
 from src.utils.logging import get_logger
 from src.utils.sql_utils import validate_identifier
@@ -39,7 +38,7 @@ def check_data_completeness(transactions_json: str = "[]") -> dict[str, Any]:
     Validate data completeness - check if required fields are populated
 
     Args:
-        transactions_json: JSON array string of transactions from crew inputs {transactions}.
+        transactions_json: Pass '[]' to load from preloaded cache (default).
 
     Returns:
         Dictionary with completeness metrics:
@@ -103,7 +102,7 @@ def validate_schema_conformity(transactions_json: str = "[]", expected_schema_js
     Validate schema conformity - check data types and structure
 
     Args:
-        transactions_json: JSON array string of transactions from crew inputs {transactions}.
+        transactions_json: Pass '[]' to load from preloaded cache (default).
         expected_schema_json: JSON string of expected schema like '{"amount": "float", "vendor": "str", "date": "datetime"}'
 
     Returns:
@@ -166,7 +165,7 @@ def detect_duplicate_records(transactions_json: str = "[]", key_fields_json: str
     Detect duplicate records based on key fields
 
     Args:
-        transactions_json: JSON array string of transactions from crew inputs {transactions}.
+        transactions_json: Pass '[]' to load from preloaded cache (default).
         key_fields_json: JSON array of fields to check for duplicates
                    e.g., '["txn_id"]' or '["vendor", "amount", "date"]'
 
@@ -265,40 +264,16 @@ def infer_domain_freshness(transaction_pattern_json: str = "{}") -> dict[str, An
                     'critical_amount_threshold': domain_config.get('critical_amount_threshold', 1000)
                 }
 
-        # No manual config - use LLM for inference
-        logger.info("No manual config found, using LLM for domain inference")
-
-        prompt = f"""
-Given this transaction pattern, infer the business domain and data freshness requirements:
-- Frequency: {transaction_pattern.get('frequency', 'unknown')}
-- Vendor type: {transaction_pattern.get('vendor_type', 'unknown')}
-- Average amount: ${transaction_pattern.get('avg_amount', 0)}
-
-Respond with ONLY a JSON object (no markdown, no explanation):
-{{
-  "domain": "inventory_management" or "senior_living" or "business_operations" or "default",
-  "max_age_hours": 24 or 48 or 168,
-  "confidence": 0.0 to 1.0,
-  "reasoning": "brief explanation"
-}}
-"""
-
-        response = call_llm(prompt, agent_name="DataQuality")
-
-        # Parse JSON response
-        try:
-            result = json.loads(response.strip())
-            result['source'] = 'inferred'
-            logger.info(f"Domain inferred: {result['domain']} (confidence: {result.get('confidence', 0)})")
-            return result
-        except json.JSONDecodeError:
-            logger.warning(f"Failed to parse LLM response, using default")
-            return {
-                'domain': 'default',
-                'max_age_hours': 48,
-                'confidence': 0.5,
-                'source': 'fallback'
-            }
+        # No manual config — return hardcoded default.
+        # (LLM fallback removed: without a real transaction pattern the LLM
+        # has no signal and always returns the same generic response.)
+        logger.info("No domain config found, using default")
+        return {
+            'domain': 'default',
+            'max_age_hours': 48,
+            'confidence': 0.5,
+            'source': 'default_config'
+        }
 
     except Exception as e:
         logger.error(f"Domain inference failed: {e}")

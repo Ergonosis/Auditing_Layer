@@ -39,8 +39,8 @@ reconciliation_task = Task(
     3. **COMBINE both results into ONE JSON output**
 
     **Reconciliation steps:**
-    1. Use cross_source_matcher — pass transactions_json={transactions}, source_1="credit_card", source_2="bank"
-    2. Use find_orphan_transactions — pass transactions_json={transactions}, all_sources_json='["credit_card","bank"]'
+    1. Use cross_source_matcher — pass transactions_json="[]", source_1="credit_card", source_2="bank"
+    2. Use find_orphan_transactions — pass transactions_json="[]", all_sources_json='["credit_card","bank"]'
     3. Extract unmatched transaction IDs from reconciliation results
 
     **CRITICAL OUTPUT FORMAT - Must return COMBINED results:**
