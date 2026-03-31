@@ -86,7 +86,7 @@ def _get_user_id_hash() -> str:
     email = os.getenv("UNIFICATION_USER_EMAIL", "")
     if not email:
         raise RuntimeError("UNIFICATION_USER_EMAIL env var is required")
-    return hashlib.sha256(email.encode()).hexdigest()
+    return hashlib.sha256(email.encode()).hexdigest()[:16]
 
 
 @lru_cache(maxsize=1)

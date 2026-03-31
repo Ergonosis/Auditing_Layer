@@ -45,7 +45,7 @@ if _UNIFICATION_SRC.is_dir():
 import pytest
 
 TEST_USER_EMAIL = "test@ergonosis.com"
-TEST_USER_HASH = hashlib.sha256(TEST_USER_EMAIL.encode()).hexdigest()
+TEST_USER_HASH = hashlib.sha256(TEST_USER_EMAIL.encode()).hexdigest()[:16]
 
 
 @pytest.fixture(autouse=True)

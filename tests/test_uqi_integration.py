@@ -7,14 +7,14 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 TEST_USER_EMAIL = "test@ergonosis.com"
-TEST_USER_HASH = hashlib.sha256(TEST_USER_EMAIL.encode()).hexdigest()
+TEST_USER_HASH = hashlib.sha256(TEST_USER_EMAIL.encode()).hexdigest()[:16]
 
 
 class TestGetUserIdHash:
     def test_returns_sha256_of_email(self, monkeypatch):
         monkeypatch.setenv("UNIFICATION_USER_EMAIL", "foo@bar.com")
         from src.integrations.unification_client import _get_user_id_hash
-        assert _get_user_id_hash() == hashlib.sha256(b"foo@bar.com").hexdigest()
+        assert _get_user_id_hash() == hashlib.sha256(b"foo@bar.com").hexdigest()[:16]
 
     def test_raises_when_env_var_missing(self, monkeypatch):
         monkeypatch.delenv("UNIFICATION_USER_EMAIL", raising=False)

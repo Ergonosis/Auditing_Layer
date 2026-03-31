@@ -372,7 +372,7 @@ class AuditOrchestrator:
                 agents=[context_agent], tasks=[context_task],
                 process=Process.sequential, verbose=False,
             )
-            inputs = {"transactions": _json.dumps(suspicious_txns[:20])}
+            inputs = {"transactions": _json.dumps(suspicious_txns[:20], default=str)}
             output = crew.kickoff(inputs=inputs)
             raw = getattr(output, "raw", None) or ""
             if isinstance(raw, str):
