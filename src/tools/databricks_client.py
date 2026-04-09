@@ -1,6 +1,5 @@
 """Databricks client with automatic fallback to mock JSON data for local development."""
 
-from functools import lru_cache
 import os
 import pandas as pd
 from datetime import datetime
@@ -10,11 +9,12 @@ from src.utils.logging import get_logger
 
 logger = get_logger(__name__)
 
+_legacy_conn = None
 
-@lru_cache(maxsize=1)
+
 def get_databricks_connection():
     """
-    Singleton connection pool with automatic retry.
+    Singleton connection — returns same object on repeated calls, can be closed.
     Returns None if in dev mode (uses mock data instead).
     Returns "DEMO_MODE" if in demo mode (uses CSV data instead).
 
@@ -24,10 +24,14 @@ def get_databricks_connection():
     Raises:
         DatabricksConnectionError: If connection fails in production mode
     """
+    global _legacy_conn
+    if _legacy_conn is not None:
+        return _legacy_conn
+
     # Check for demo mode first
     if os.getenv("DEMO_MODE") == "true" or os.getenv("ENVIRONMENT") == "demo":
         logger.info("Using CSV demo data loader")
-        return "DEMO_MODE"  # Sentinel value
+        return "DEMO_MODE"  # Sentinel value (not cached — stateless)
 
     # Production mode
     elif os.getenv("DATABRICKS_HOST") and os.getenv("ENVIRONMENT") == "production":
@@ -37,7 +41,7 @@ def get_databricks_connection():
                 os.getenv("DATABRICKS_HTTP_PATH")
                 or f"/sql/1.0/warehouses/{os.getenv('DATABRICKS_WAREHOUSE_ID')}"
             )
-            conn = sql.connect(
+            _legacy_conn = sql.connect(
                 server_hostname=os.getenv("DATABRICKS_HOST"),
                 http_path=http_path,
                 auth_type="pat",
@@ -45,7 +49,7 @@ def get_databricks_connection():
                 timeout_seconds=300
             )
             logger.info("Connected to Databricks", host=os.getenv("DATABRICKS_HOST"))
-            return conn
+            return _legacy_conn
         except Exception as e:
             raise DatabricksConnectionError(f"Failed to connect to Databricks: {e}")
 
@@ -53,6 +57,17 @@ def get_databricks_connection():
     else:
         logger.info("Using mock data adapter (dev mode)")
         return None
+
+
+def close_legacy_connection() -> None:
+    """Close the legacy singleton connection. Safe to call multiple times."""
+    global _legacy_conn
+    if _legacy_conn is not None:
+        try:
+            _legacy_conn.close()
+        except Exception:
+            pass
+        _legacy_conn = None
 
 
 def query_gold_tables(sql_query: str) -> pd.DataFrame:

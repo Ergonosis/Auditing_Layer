@@ -59,6 +59,10 @@ def main():
     except Exception as e:
         logger.error(f"Main execution failed: {e}")
         raise
+    finally:
+        from src.tools.databricks_client import close_shared_connection, close_legacy_connection
+        close_shared_connection()
+        close_legacy_connection()
 
 
 if __name__ == "__main__":

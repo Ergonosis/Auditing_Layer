@@ -29,10 +29,10 @@ steps:
       - ergonosis-auditing-pipeline
       - --region=us-central1
       - --image=us-central1-docker.pkg.dev/$PROJECT_ID/ergonosis-auditing/pipeline:$SHORT_SHA
-      - --service-account=ergonosis-pipeline-sa@ergonosis.iam.gserviceaccount.com
+      - --service-account=ergonosis-pipeline-sa@auspicious-silo-492102-j6.iam.gserviceaccount.com
       - --task-timeout=2400
       - --max-retries=1
-      - --set-env-vars=ENVIRONMENT=production,STATE_BACKEND=databricks,AUDIT_TABLES_VERIFIED=true,DATABRICKS_CATALOG=ergonosis,DATABRICKS_SCHEMA=unification,DATABRICKS_AUDIT_SCHEMA=auditing,UNIFICATION_SECURE_STORAGE_REQUIRED=true,LOG_LEVEL=INFO,GCP_PROJECT_ID=ergonosis
+      - --set-env-vars=ENVIRONMENT=production,STATE_BACKEND=databricks,AUDIT_TABLES_VERIFIED=true,DATABRICKS_CATALOG=ergonosis,DATABRICKS_SCHEMA=unification,DATABRICKS_AUDIT_SCHEMA=auditing,UNIFICATION_SECURE_STORAGE_REQUIRED=true,LOG_LEVEL=INFO,GCP_PROJECT_ID=auspicious-silo-492102-j6
 
 images:
   - us-central1-docker.pkg.dev/$PROJECT_ID/ergonosis-auditing/pipeline:$SHORT_SHA
