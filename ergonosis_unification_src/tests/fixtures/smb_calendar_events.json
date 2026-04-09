@@ -1,0 +1,141 @@
+[
+  {
+    "event_id": "smb_t3h_evt_10",
+    "start_time": "2026-03-10T14:00:00Z",
+    "end_time": "2026-03-10T15:00:00Z",
+    "organizer": "owner@smbbiz.com",
+    "subject": "Team offsite - Marriott",
+    "attendees": [],
+    "location": null
+  },
+  {
+    "event_id": "smb_t3h_evt_16",
+    "start_time": "2026-03-18T14:00:00Z",
+    "end_time": "2026-03-18T15:00:00Z",
+    "organizer": "owner@smbbiz.com",
+    "subject": "Team sync at WeWork",
+    "attendees": [],
+    "location": null
+  },
+  {
+    "event_id": "smb_null_evt_01",
+    "start_time": "2026-03-11T14:00:00Z",
+    "end_time": "2026-03-11T15:00:00Z",
+    "organizer": "owner@smbbiz.com",
+    "subject": null,
+    "attendees": [],
+    "location": null
+  },
+  {
+    "event_id": "smb_null_evt_02",
+    "start_time": "2026-03-18T14:00:00Z",
+    "end_time": "2026-03-18T15:00:00Z",
+    "organizer": "owner@smbbiz.com",
+    "subject": null,
+    "attendees": [],
+    "location": null
+  },
+  {
+    "event_id": "smb_multiday_evt_001",
+    "start_time": "2026-03-18T15:00:00Z",
+    "end_time": "2026-03-21T11:00:00Z",
+    "organizer": "owner@smbbiz.com",
+    "subject": "Marriott hotel stay - NYC conference",
+    "attendees": [
+      "owner@smbbiz.com",
+      "colleague@partner.com"
+    ],
+    "location": "New York Marriott Marquis"
+  },
+  {
+    "event_id": "smb_multiday_evt_002",
+    "start_time": "2026-03-25T16:00:00Z",
+    "end_time": "2026-03-27T10:00:00Z",
+    "organizer": "owner@smbbiz.com",
+    "subject": "Airbnb stay - Austin SXSW",
+    "attendees": [
+      "owner@smbbiz.com"
+    ],
+    "location": "Austin, TX"
+  },
+  {
+    "event_id": "smb_cal_01",
+    "start_time": "2026-03-10T14:00:00Z",
+    "end_time": "2026-03-10T15:00:00Z",
+    "organizer": "owner@smbbiz.com",
+    "subject": "Q1 Business Review",
+    "attendees": [
+      "owner@smbbiz.com",
+      "cfo@smbbiz.com"
+    ],
+    "location": "Board room"
+  },
+  {
+    "event_id": "smb_cal_02",
+    "start_time": "2026-03-13T14:00:00Z",
+    "end_time": "2026-03-13T15:00:00Z",
+    "organizer": "owner@smbbiz.com",
+    "subject": "Vendor onboarding - AWS",
+    "attendees": [
+      "owner@smbbiz.com",
+      "aws@amazon.com"
+    ],
+    "location": "Zoom"
+  },
+  {
+    "event_id": "smb_cal_03",
+    "start_time": "2026-03-17T14:00:00Z",
+    "end_time": "2026-03-17T15:00:00Z",
+    "organizer": "owner@smbbiz.com",
+    "subject": "Coffee with investor",
+    "attendees": [
+      "owner@smbbiz.com"
+    ],
+    "location": "Blue Bottle SOMA"
+  },
+  {
+    "event_id": "smb_cal_04",
+    "start_time": "2026-03-20T14:00:00Z",
+    "end_time": "2026-03-20T15:00:00Z",
+    "organizer": "owner@smbbiz.com",
+    "subject": "WeWork community event",
+    "attendees": [],
+    "location": "WeWork 340 Pine"
+  },
+  {
+    "event_id": "smb_cal_05",
+    "start_time": "2026-03-25T14:00:00Z",
+    "end_time": "2026-03-25T15:00:00Z",
+    "organizer": "owner@smbbiz.com",
+    "subject": "DoorDash partner meeting",
+    "attendees": [
+      "owner@smbbiz.com",
+      "partner@dd.com"
+    ],
+    "location": "DoorDash HQ"
+  },
+  {
+    "event_id": "smb_cal_06",
+    "start_time": "2026-03-30T14:00:00Z",
+    "end_time": "2026-03-30T15:00:00Z",
+    "organizer": "owner@smbbiz.com",
+    "subject": "Team retrospective",
+    "attendees": [
+      "owner@smbbiz.com",
+      "eng@smbbiz.com"
+    ],
+    "location": "Zoom"
+  },
+  {
+    "event_id": "smb_cal_07",
+    "start_time": "2026-04-01T14:00:00Z",
+    "end_time": "2026-04-01T15:00:00Z",
+    "organizer": "owner@smbbiz.com",
+    "subject": "Payroll planning - Gusto review",
+    "attendees": [
+      "owner@smbbiz.com",
+      "cfo@smbbiz.com"
+    ],
+    "location": "Conference room"
+  }
+]

@@ -1,0 +1,17 @@
+pydantic>=2.0
+python-dotenv
+plaid-python>=15.0.0,<17
+pyyaml
+prometheus-client
+rapidfuzz
+python-dateutil
+databricks-sql-connector
+pytest
+pytest-env
+tenacity>=8.2
+flask>=3.0
+pybreaker>=1.0
+msal>=1.28
+beautifulsoup4>=4.12
+# GCP (optional — required when GCP_PROJECT_ID is set)
+google-cloud-secret-manager>=2.16

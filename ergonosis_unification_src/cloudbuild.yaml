@@ -1,0 +1,40 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - build
+      - -t
+      - us-central1-docker.pkg.dev/$PROJECT_ID/ergonosis-unification/pipeline:$SHORT_SHA
+      - -t
+      - us-central1-docker.pkg.dev/$PROJECT_ID/ergonosis-unification/pipeline:latest
+      - .
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - push
+      - us-central1-docker.pkg.dev/$PROJECT_ID/ergonosis-unification/pipeline:$SHORT_SHA
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - push
+      - us-central1-docker.pkg.dev/$PROJECT_ID/ergonosis-unification/pipeline:latest
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - run
+      - jobs
+      - update
+      - ergonosis-unification-pipeline
+      - --region=us-central1
+      - --image=us-central1-docker.pkg.dev/$PROJECT_ID/ergonosis-unification/pipeline:$SHORT_SHA
+
+images:
+  - us-central1-docker.pkg.dev/$PROJECT_ID/ergonosis-unification/pipeline:$SHORT_SHA
+  - us-central1-docker.pkg.dev/$PROJECT_ID/ergonosis-unification/pipeline:latest
+
+substitutions:
+  _SHORT_SHA: manual
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  substitution_option: ALLOW_LOOSE

@@ -1,0 +1,14 @@
+.env
+__pycache__/
+.pytest_cache/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+dist/
+build/
+*.egg
+.DS_Store
+
+# Local data — must not be committed (compliance / data breach risk)
+.local_store/

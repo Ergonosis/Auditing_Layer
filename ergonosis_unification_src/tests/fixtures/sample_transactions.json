@@ -1,0 +1,62 @@
+[
+  {
+    "transaction_id": "txn_001_abc123",
+    "account_id": "acc_001",
+    "amount": 42.50,
+    "date": "2026-02-15",
+    "merchant_name": "Whole Foods Market",
+    "name": "WHOLEFDS #123",
+    "payment_channel": "in store",
+    "category": ["Food and Drink", "Groceries"]
+  },
+  {
+    "transaction_id": "txn_002_def456",
+    "account_id": "acc_001",
+    "amount": 12.99,
+    "date": "2026-02-16",
+    "merchant_name": "Starbucks",
+    "name": "STARBUCKS #4521",
+    "payment_channel": "in store",
+    "category": ["Food and Drink", "Coffee Shop"]
+  },
+  {
+    "transaction_id": "txn_003_ghi789",
+    "account_id": "acc_001",
+    "amount": 128.00,
+    "date": "2026-02-17",
+    "merchant_name": "Delta Air Lines",
+    "name": "DELTA AIR 006124891234",
+    "payment_channel": "online",
+    "category": ["Travel", "Airlines and Aviation Services"]
+  },
+  {
+    "transaction_id": "txn_004_jkl012",
+    "account_id": "acc_002",
+    "amount": 9.99,
+    "date": "2026-02-18",
+    "merchant_name": null,
+    "name": "RECURRING CHARGE 4421",
+    "payment_channel": "online",
+    "category": null
+  },
+  {
+    "transaction_id": "txn_005_mno345",
+    "account_id": "acc_001",
+    "amount": -50.00,
+    "date": "2026-02-19",
+    "merchant_name": "Ergonosis Inc",
+    "name": "DIRECT DEPOSIT PAYROLL",
+    "payment_channel": "other",
+    "category": ["Transfer", "Payroll"]
+  },
+  {
+    "transaction_id": "txn_006_pqr678",
+    "account_id": "acc_001",
+    "amount": 0.01,
+    "date": "2026-02-20",
+    "merchant_name": "Micro Verify",
+    "name": "MICRO DEPOSIT VERIFY",
+    "payment_channel": "online",
+    "category": ["Transfer", "Account Services"]
+  }
+]

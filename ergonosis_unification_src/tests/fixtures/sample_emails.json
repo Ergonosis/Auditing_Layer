@@ -1,0 +1,56 @@
+[
+  {
+    "message_id": "msg_001_xyz",
+    "received_at": "2026-02-15T14:32:00Z",
+    "sender": "receipts@wholefoods.com",
+    "recipients": ["dylan@ergonosis.com"],
+    "subject": "Your Whole Foods receipt - $42.50",
+    "body_preview": "Thank you for shopping at Whole Foods Market. Your total was $42.50.",
+    "thread_id": "thread_001"
+  },
+  {
+    "message_id": "msg_002_abc",
+    "received_at": "2026-02-16T09:05:00Z",
+    "sender": "noreply@starbucks.com",
+    "recipients": ["dylan@ergonosis.com"],
+    "subject": "Starbucks receipt - $12.99",
+    "body_preview": "Thank you for your Starbucks order. Total charged: $12.99.",
+    "thread_id": "thread_002"
+  },
+  {
+    "message_id": "msg_003_def",
+    "received_at": "2026-02-17T11:22:00Z",
+    "sender": "itinerary@delta.com",
+    "recipients": ["dylan@ergonosis.com"],
+    "subject": "Your Delta flight booking confirmation",
+    "body_preview": "Your booking is confirmed. Flight DL 428 on 2026-03-01. Amount charged: $128.00.",
+    "thread_id": "thread_003"
+  },
+  {
+    "message_id": "msg_004_ghi",
+    "received_at": "2026-02-18T08:00:00Z",
+    "sender": "billing@someservice.com",
+    "recipients": ["dylan@ergonosis.com"],
+    "subject": "Monthly subscription renewed",
+    "body_preview": "Your subscription has been renewed for $9.99.",
+    "thread_id": null
+  },
+  {
+    "message_id": "msg_005_jkl",
+    "received_at": "2026-02-19T16:45:00Z",
+    "sender": "payroll@ergonosis.com",
+    "recipients": ["dylan@ergonosis.com"],
+    "subject": "Payroll deposit processed",
+    "body_preview": null,
+    "thread_id": "thread_005"
+  },
+  {
+    "message_id": "msg_006_mno",
+    "received_at": "2026-02-20T10:00:00Z",
+    "sender": "verify@bankdomain.com",
+    "recipients": ["dylan@ergonosis.com"],
+    "subject": "Micro-deposit verification",
+    "body_preview": "We have sent two small deposits to verify your account ownership.",
+    "thread_id": "thread_006"
+  }
+]

@@ -1,0 +1,137 @@
+[
+  {
+    "message_id": "rich_msg_001",
+    "received_at": "2026-03-01T14:32:00Z",
+    "sender": "receipts@starbucks.com",
+    "recipients": ["user@example.com"],
+    "subject": "Starbucks Coffee $5.75",
+    "body_preview": "Thank you for your purchase at Starbucks Coffee.",
+    "thread_id": "thread_001"
+  },
+  {
+    "message_id": "rich_msg_002",
+    "received_at": "2026-03-02T09:15:00Z",
+    "sender": "orders@wholefoods.com",
+    "recipients": ["user@example.com"],
+    "subject": "Whole Foods Market $47.50 refund",
+    "body_preview": "Your refund of $47.50 has been processed.",
+    "thread_id": "thread_002"
+  },
+  {
+    "message_id": "rich_msg_003",
+    "received_at": "2026-03-05T11:00:00Z",
+    "sender": "noreply@delta.com",
+    "recipients": ["user@example.com"],
+    "subject": "Delta Air Lines booking confirmation",
+    "body_preview": "Your Delta Air Lines booking is confirmed.",
+    "thread_id": "thread_003"
+  },
+  {
+    "message_id": "rich_msg_004a",
+    "received_at": "2026-03-03T08:30:00Z",
+    "sender": "receipts@uber.com",
+    "recipients": ["user@example.com"],
+    "subject": "Uber Technologies trip $14.50",
+    "body_preview": "Thanks for riding with Uber Technologies. Your trip cost $14.50.",
+    "thread_id": "thread_004a"
+  },
+  {
+    "message_id": "rich_msg_004b",
+    "received_at": "2026-03-03T10:45:00Z",
+    "sender": "noreply@uber.com",
+    "recipients": ["user@example.com"],
+    "subject": "Uber Technologies ride confirmation",
+    "body_preview": "Your Uber Technologies ride has been charged.",
+    "thread_id": "thread_004b"
+  },
+  {
+    "message_id": "rich_msg_005",
+    "received_at": "2026-03-11T09:00:00Z",
+    "sender": "noreply@shopify.com",
+    "recipients": ["user@example.com"],
+    "subject": "Shopify purchase confirmation",
+    "body_preview": "Your Shopify order has been placed.",
+    "thread_id": "thread_005"
+  },
+  {
+    "message_id": "rich_msg_006",
+    "received_at": "2026-03-02T16:00:00Z",
+    "sender": "billing@techservices.com",
+    "recipients": ["user@example.com"],
+    "subject": "Tech Services Invoice #2847",
+    "body_preview": "Please find your invoice for tech services rendered.",
+    "thread_id": "thread_006"
+  },
+  {
+    "message_id": "rich_msg_007",
+    "received_at": "2026-03-03T07:55:00Z",
+    "sender": "billing@netflix.com",
+    "recipients": ["user@example.com"],
+    "subject": "Netflix $15.60 monthly subscription",
+    "body_preview": "Your Netflix subscription of $15.60 has been billed.",
+    "thread_id": "thread_007"
+  },
+  {
+    "message_id": "rich_msg_008",
+    "received_at": "2026-03-04T06:00:00Z",
+    "sender": "noreply@spotify.com",
+    "recipients": ["user@example.com"],
+    "subject": "Spotify $9.99",
+    "body_preview": "Your Spotify Premium subscription has been renewed.",
+    "thread_id": "thread_008"
+  },
+  {
+    "message_id": "rich_msg_009",
+    "received_at": "2026-03-05T08:10:00Z",
+    "sender": "noreply@apple.com",
+    "recipients": ["user@example.com"],
+    "subject": "Re: Apple $1.29",
+    "body_preview": "Your Apple purchase has been processed.",
+    "thread_id": "thread_009"
+  },
+  {
+    "message_id": "rich_msg_010",
+    "received_at": "2026-03-04T13:30:00Z",
+    "sender": "receipts@chipotle.com",
+    "recipients": ["user@example.com"],
+    "subject": "Chipotle Mexican Grill $62.00",
+    "body_preview": "Thanks for visiting Chipotle Mexican Grill.",
+    "thread_id": "thread_010"
+  },
+  {
+    "message_id": "rich_msg_011",
+    "received_at": "2026-03-05T10:00:00Z",
+    "sender": "planning@company.com",
+    "recipients": ["user@example.com"],
+    "subject": "Q1 Planning Meeting",
+    "body_preview": "Reminder for the Q1 Planning Meeting tomorrow.",
+    "thread_id": "thread_011"
+  },
+  {
+    "message_id": "rich_msg_012",
+    "received_at": "2026-03-03T15:00:00Z",
+    "sender": "no-reply@vendor.com",
+    "recipients": ["user@example.com"],
+    "subject": null,
+    "body_preview": "Please see attached invoice.",
+    "thread_id": "thread_012"
+  },
+  {
+    "message_id": "rich_msg_013",
+    "received_at": "2026-03-06T09:00:00Z",
+    "sender": "alerts@bank.com",
+    "recipients": ["user@example.com"],
+    "subject": "Zendesk Pro subscription renewal",
+    "body_preview": "Your Zendesk subscription has been renewed.",
+    "thread_id": "thread_013"
+  },
+  {
+    "message_id": "rich_msg_014",
+    "received_at": "2026-03-02T11:00:00Z",
+    "sender": "noreply@box.com",
+    "recipients": ["user@example.com"],
+    "subject": "Dropbox Business annual invoice",
+    "body_preview": "Your annual Dropbox Business plan has been billed.",
+    "thread_id": "thread_014"
+  }
+]

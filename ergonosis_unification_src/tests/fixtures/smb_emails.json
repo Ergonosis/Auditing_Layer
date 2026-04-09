@@ -1,0 +1,761 @@
+[
+  {
+    "message_id": "smb_t2_msg_01",
+    "received_at": "2026-03-10T11:00:00Z",
+    "sender": "receipt@starbucks.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Starbucks",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t2_msg_02",
+    "received_at": "2026-03-11T11:00:00Z",
+    "sender": "receipt@whole_foods.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Whole Foods Market",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t2_msg_03",
+    "received_at": "2026-03-12T11:00:00Z",
+    "sender": "receipt@aws.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Amazon Web Services",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t2_msg_04",
+    "received_at": "2026-03-13T11:00:00Z",
+    "sender": "receipt@quickbooks.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "QuickBooks",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t2_msg_05",
+    "received_at": "2026-03-16T11:00:00Z",
+    "sender": "receipt@zoom.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Zoom",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t2_msg_06",
+    "received_at": "2026-03-17T11:00:00Z",
+    "sender": "receipt@gusto.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Gusto",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t2_msg_07",
+    "received_at": "2026-03-18T11:00:00Z",
+    "sender": "receipt@stripe.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Stripe",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t2_msg_08",
+    "received_at": "2026-03-19T11:00:00Z",
+    "sender": "receipt@fedex.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "FedEx",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3h_msg_01",
+    "received_at": "2026-03-24T10:00:00Z",
+    "sender": "receipt@wholefoods.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Your Whole Foods Market receipt",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3h_msg_02",
+    "received_at": "2026-03-26T10:00:00Z",
+    "sender": "receipt@wholefoods.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Whole Foods order confirmation",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3h_msg_03",
+    "received_at": "2026-03-26T10:00:00Z",
+    "sender": "receipt@starbucks.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Your Starbucks receipt",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3h_msg_04",
+    "received_at": "2026-03-31T10:00:00Z",
+    "sender": "receipt@starbucks.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Thanks for your Starbucks order",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3h_msg_05",
+    "received_at": "2026-03-30T10:00:00Z",
+    "sender": "receipt@delta.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Your Delta flight booking confirmation",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3h_msg_06",
+    "received_at": "2026-04-01T10:00:00Z",
+    "sender": "receipt@delta.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Your Delta itinerary",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3h_msg_07",
+    "received_at": "2026-04-01T10:00:00Z",
+    "sender": "receipt@uber.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Your Tuesday trip with Uber",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3h_msg_08",
+    "received_at": "2026-03-10T10:00:00Z",
+    "sender": "receipt@uber.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Here's your Uber receipt",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3h_msg_09",
+    "received_at": "2026-04-03T10:00:00Z",
+    "sender": "receipt@marriott.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Your Marriott reservation confirmation",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3h_msg_11",
+    "received_at": "2026-03-11T10:00:00Z",
+    "sender": "receipt@airbnb.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Airbnb booking confirmed",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3h_msg_12",
+    "received_at": "2026-03-13T10:00:00Z",
+    "sender": "receipt@airbnb.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Your Airbnb reservation is confirmed",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3h_msg_13",
+    "received_at": "2026-03-13T10:00:00Z",
+    "sender": "receipt@aws.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "AWS Invoice for March 2026",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3h_msg_14",
+    "received_at": "2026-03-17T10:00:00Z",
+    "sender": "receipt@aws.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "AWS: Invoice available",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3h_msg_15",
+    "received_at": "2026-03-17T10:00:00Z",
+    "sender": "receipt@wework.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "WeWork invoice - March 2026",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3h_msg_17",
+    "received_at": "2026-03-19T10:00:00Z",
+    "sender": "receipt@doordash.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Your DoorDash order is confirmed",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3h_msg_18",
+    "received_at": "2026-03-24T10:00:00Z",
+    "sender": "receipt@doordash.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Your order from DoorDash",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3h_msg_19",
+    "received_at": "2026-03-23T10:00:00Z",
+    "sender": "receipt@homedepot.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "The Home Depot order confirmation",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3h_msg_20",
+    "received_at": "2026-03-24T10:00:00Z",
+    "sender": "receipt@lyft.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Your Lyft receipt",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3b_msg_01",
+    "received_at": "2026-03-27T10:00:00Z",
+    "sender": "billing@vendor.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Grocery receipt attached",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3b_msg_02",
+    "received_at": "2026-03-30T10:00:00Z",
+    "sender": "billing@vendor.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Warehouse receipt - March",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3b_msg_03",
+    "received_at": "2026-03-31T10:00:00Z",
+    "sender": "billing@vendor.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Coffee purchase confirmation",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3b_msg_04",
+    "received_at": "2026-04-01T10:00:00Z",
+    "sender": "billing@vendor.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Flight booking receipt",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3b_msg_05",
+    "received_at": "2026-04-02T10:00:00Z",
+    "sender": "billing@vendor.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Hardware store receipt",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3b_msg_06",
+    "received_at": "2026-04-03T10:00:00Z",
+    "sender": "billing@vendor.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Software subscription invoice",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3b_msg_07",
+    "received_at": "2026-03-10T10:00:00Z",
+    "sender": "billing@vendor.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Payment processor invoice",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_t3b_msg_08",
+    "received_at": "2026-03-11T10:00:00Z",
+    "sender": "billing@vendor.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Shipping label confirmation",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_amb_msg_01a",
+    "received_at": "2026-03-12T09:00:00Z",
+    "sender": "noreply@uber.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Your Uber trip receipt - AM",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_amb_msg_01b",
+    "received_at": "2026-03-12T14:00:00Z",
+    "sender": "noreply@uber.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Your Uber trip receipt - PM",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_amb_msg_02a",
+    "received_at": "2026-03-13T09:00:00Z",
+    "sender": "noreply@starbucks.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Your Starbucks receipt",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_amb_msg_02b",
+    "received_at": "2026-03-13T14:00:00Z",
+    "sender": "noreply@starbucks.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Thanks for your Starbucks order",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_amb_msg_03a",
+    "received_at": "2026-03-16T09:00:00Z",
+    "sender": "noreply@delta.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Your Delta flight booking confirmation",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_amb_msg_03b",
+    "received_at": "2026-03-16T14:00:00Z",
+    "sender": "noreply@delta.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Delta flight change confirmation",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_amb_msg_04a",
+    "received_at": "2026-03-17T09:00:00Z",
+    "sender": "noreply@wework.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "WeWork invoice - March 2026",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_amb_msg_04b",
+    "received_at": "2026-03-17T14:00:00Z",
+    "sender": "noreply@wework.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "WeWork invoice updated - March 2026",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_amb_msg_05a",
+    "received_at": "2026-03-18T09:00:00Z",
+    "sender": "noreply@doordash.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Your DoorDash order is confirmed",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_amb_msg_05b",
+    "received_at": "2026-03-18T14:00:00Z",
+    "sender": "noreply@doordash.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "DoorDash order update - delivered",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_amb_msg_06a",
+    "received_at": "2026-03-19T09:00:00Z",
+    "sender": "noreply@aws.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "AWS Invoice for March 2026",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_amb_msg_06b",
+    "received_at": "2026-03-19T14:00:00Z",
+    "sender": "noreply@aws.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "AWS: Payment received for March",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_unm_msg_01_outofwindow",
+    "received_at": "2026-03-31T10:00:00Z",
+    "sender": "receipt@vendor.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Your Whole Foods Market receipt",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_unm_msg_02_outofwindow",
+    "received_at": "2026-04-02T10:00:00Z",
+    "sender": "receipt@vendor.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Your Starbucks receipt",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_unm_msg_03_outofwindow",
+    "received_at": "2026-04-06T10:00:00Z",
+    "sender": "receipt@vendor.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Your Tuesday trip with Uber",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_unm_msg_04_lowsim",
+    "received_at": "2026-03-31T10:00:00Z",
+    "sender": "billing@consulting.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Office supplies monthly invoice",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_unm_msg_05_lowsim",
+    "received_at": "2026-04-01T10:00:00Z",
+    "sender": "billing@consulting.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Technology services - quarterly",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_unm_msg_06_lowsim",
+    "received_at": "2026-04-02T10:00:00Z",
+    "sender": "billing@consulting.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Consulting agreement payment",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_promo_msg_01",
+    "received_at": "2026-03-10T10:00:00Z",
+    "sender": "deals@amazon.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Today's deals just for you",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_promo_msg_02",
+    "received_at": "2026-03-12T10:00:00Z",
+    "sender": "newsletter@techcrunch.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "TechCrunch Daily: Top stories",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_promo_msg_03",
+    "received_at": "2026-03-16T10:00:00Z",
+    "sender": "noreply@linkedin.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "You have 5 new connection requests",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_promo_msg_04",
+    "received_at": "2026-03-18T10:00:00Z",
+    "sender": "offers@delta.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Exclusive offer: miles double this week",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_promo_msg_05",
+    "received_at": "2026-03-20T10:00:00Z",
+    "sender": "promo@doordash.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Free delivery this weekend only",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_promo_msg_06",
+    "received_at": "2026-03-24T10:00:00Z",
+    "sender": "news@quickbooks.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "QuickBooks product update - March 2026",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_promo_msg_07",
+    "received_at": "2026-03-26T10:00:00Z",
+    "sender": "unknown@vendor.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": null,
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_null_msg_01",
+    "received_at": "2026-03-10T10:00:00Z",
+    "sender": "system@invoicing.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": null,
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_null_msg_02",
+    "received_at": "2026-03-13T10:00:00Z",
+    "sender": "system@invoicing.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": null,
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_null_msg_03",
+    "received_at": "2026-03-18T10:00:00Z",
+    "sender": "system@invoicing.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": null,
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_null_msg_04",
+    "received_at": "2026-03-23T10:00:00Z",
+    "sender": "system@invoicing.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": null,
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_null_msg_05",
+    "received_at": "2026-03-26T10:00:00Z",
+    "sender": "system@invoicing.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": null,
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_ref_msg_01",
+    "received_at": "2026-03-31T10:00:00Z",
+    "sender": "refunds@wholefoods.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Whole Foods Market refund confirmation",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_ref_msg_02",
+    "received_at": "2026-04-02T10:00:00Z",
+    "sender": "refunds@delta.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Delta Air Lines refund issued",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_ref_msg_03",
+    "received_at": "2026-03-10T10:00:00Z",
+    "sender": "refunds@airbnb.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Airbnb refund processed",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_ref_msg_04",
+    "received_at": "2026-03-12T10:00:00Z",
+    "sender": "refunds@uber.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "Uber trip refund receipt",
+    "body_preview": null,
+    "thread_id": null
+  },
+  {
+    "message_id": "smb_ref_msg_05",
+    "received_at": "2026-03-16T10:00:00Z",
+    "sender": "refunds@aws.com",
+    "recipients": [
+      "owner@smbbiz.com"
+    ],
+    "subject": "AWS credit memo for March 2026",
+    "body_preview": null,
+    "thread_id": null
+  }
+]

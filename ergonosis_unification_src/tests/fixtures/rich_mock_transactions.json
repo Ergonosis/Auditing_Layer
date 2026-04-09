@@ -1,0 +1,152 @@
+[
+  {
+    "transaction_id": "rich_txn_001",
+    "account_id": "acc_rich_001",
+    "amount": 5.75,
+    "date": "2026-03-01",
+    "merchant_name": "Starbucks Coffee LLC",
+    "name": "STARBUCKS COFFEE 8821",
+    "payment_channel": "in store",
+    "category": ["Food and Drink", "Coffee Shop"]
+  },
+  {
+    "transaction_id": "rich_txn_002",
+    "account_id": "acc_rich_001",
+    "amount": -47.50,
+    "date": "2026-03-02",
+    "merchant_name": "Whole Foods Market",
+    "name": "WHOLEFDS #881",
+    "payment_channel": "in store",
+    "category": ["Food and Drink", "Groceries"]
+  },
+  {
+    "transaction_id": "rich_txn_003",
+    "account_id": "acc_rich_001",
+    "amount": 215.00,
+    "date": "2026-03-03",
+    "merchant_name": "Delta Airlines",
+    "name": "DELTA AIR 0061",
+    "payment_channel": "online",
+    "category": ["Travel", "Airlines"]
+  },
+  {
+    "transaction_id": "rich_txn_004",
+    "account_id": "acc_rich_001",
+    "amount": 189.00,
+    "date": "2026-03-04",
+    "merchant_name": "Marriott Hotels",
+    "name": "MARRIOTT HOTEL 9921",
+    "payment_channel": "online",
+    "category": ["Travel", "Lodging"]
+  },
+  {
+    "transaction_id": "rich_txn_005",
+    "account_id": "acc_rich_001",
+    "amount": 14.50,
+    "date": "2026-03-03",
+    "merchant_name": "Uber Technologies",
+    "name": "UBER TRIP XXABCD",
+    "payment_channel": "online",
+    "category": ["Travel", "Ride Share"]
+  },
+  {
+    "transaction_id": "rich_txn_006",
+    "account_id": "acc_rich_001",
+    "amount": 500.00,
+    "date": "2026-03-06",
+    "merchant_name": "WeWork",
+    "name": "WEWORK OFFICES",
+    "payment_channel": "online",
+    "category": ["Business", "Office Space"]
+  },
+  {
+    "transaction_id": "rich_txn_007",
+    "account_id": "acc_rich_001",
+    "amount": 99.99,
+    "date": "2026-03-01",
+    "merchant_name": "Obscure Vendor XR99",
+    "name": "OBSCURE VENDOR XR99",
+    "payment_channel": "other",
+    "category": ["General Merchandise"]
+  },
+  {
+    "transaction_id": "rich_txn_008",
+    "account_id": "acc_rich_001",
+    "amount": 75.00,
+    "date": "2026-03-01",
+    "merchant_name": "Shopify",
+    "name": "SHOPIFY PURCHASE",
+    "payment_channel": "online",
+    "category": ["Shops", "E-Commerce"]
+  },
+  {
+    "transaction_id": "rich_txn_009",
+    "account_id": "acc_rich_001",
+    "amount": 200.00,
+    "date": "2026-03-02",
+    "merchant_name": "ACME Industrial",
+    "name": "ACME INDUSTRIAL CORP",
+    "payment_channel": "other",
+    "category": ["Business", "Manufacturing"]
+  },
+  {
+    "transaction_id": "rich_txn_010",
+    "account_id": "acc_rich_001",
+    "amount": 42.00,
+    "date": "2026-03-02",
+    "merchant_name": null,
+    "name": null,
+    "payment_channel": "other",
+    "category": ["General Merchandise"]
+  },
+  {
+    "transaction_id": "rich_txn_011",
+    "account_id": "acc_rich_001",
+    "amount": 15.49,
+    "date": "2026-03-03",
+    "merchant_name": "Netflix",
+    "name": "NETFLIX.COM",
+    "payment_channel": "online",
+    "category": ["Entertainment", "Streaming"]
+  },
+  {
+    "transaction_id": "rich_txn_012",
+    "account_id": "acc_rich_001",
+    "amount": 9.99,
+    "date": "2026-03-04",
+    "merchant_name": "Spotify",
+    "name": "SPOTIFY USA",
+    "payment_channel": "online",
+    "category": ["Entertainment", "Music"]
+  },
+  {
+    "transaction_id": "rich_txn_013",
+    "account_id": "acc_rich_001",
+    "amount": 1.29,
+    "date": "2026-03-05",
+    "merchant_name": "Apple Inc",
+    "name": "APPLE.COM/BILL",
+    "payment_channel": "online",
+    "category": ["Entertainment", "Apps"]
+  },
+  {
+    "transaction_id": "rich_txn_014",
+    "account_id": "acc_rich_001",
+    "amount": 62.00,
+    "date": "2026-03-04",
+    "merchant_name": "Chipotle Mexican Grill",
+    "name": "CHIPOTLE #2211",
+    "payment_channel": "in store",
+    "category": ["Food and Drink", "Restaurants"]
+  },
+  {
+    "transaction_id": "rich_txn_015",
+    "account_id": "acc_rich_001",
+    "amount": 28.50,
+    "date": "2026-03-07",
+    "merchant_name": "Lyft",
+    "name": "LYFT RIDE",
+    "payment_channel": "online",
+    "category": ["Travel", "Ride Share"]
+  }
+]

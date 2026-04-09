@@ -1,0 +1,909 @@
+[
+  {
+    "transaction_id": "smb_t2_txn_01",
+    "account_id": "smb_acct_001",
+    "amount": 5.75,
+    "date": "2026-03-10",
+    "merchant_name": "Starbucks",
+    "name": "Starbucks",
+    "payment_channel": "in store",
+    "category": [
+      "Food and Drink",
+      "Coffee Shop"
+    ]
+  },
+  {
+    "transaction_id": "smb_t2_txn_02",
+    "account_id": "smb_acct_001",
+    "amount": 52.2,
+    "date": "2026-03-11",
+    "merchant_name": "Whole Foods Market",
+    "name": "Whole Foods Market",
+    "payment_channel": "in store",
+    "category": [
+      "Food and Drink",
+      "Groceries"
+    ]
+  },
+  {
+    "transaction_id": "smb_t2_txn_03",
+    "account_id": "smb_acct_001",
+    "amount": 342.8,
+    "date": "2026-03-12",
+    "merchant_name": "Amazon Web Services",
+    "name": "Amazon Web Services",
+    "payment_channel": "online",
+    "category": [
+      "Service",
+      "Computers and Electronics"
+    ]
+  },
+  {
+    "transaction_id": "smb_t2_txn_04",
+    "account_id": "smb_acct_001",
+    "amount": 55.0,
+    "date": "2026-03-13",
+    "merchant_name": "QuickBooks",
+    "name": "QuickBooks",
+    "payment_channel": "online",
+    "category": [
+      "Service",
+      "Financial Services"
+    ]
+  },
+  {
+    "transaction_id": "smb_t2_txn_05",
+    "account_id": "smb_acct_001",
+    "amount": 14.99,
+    "date": "2026-03-16",
+    "merchant_name": "Zoom",
+    "name": "Zoom",
+    "payment_channel": "online",
+    "category": [
+      "Service",
+      "Computers and Electronics"
+    ]
+  },
+  {
+    "transaction_id": "smb_t2_txn_06",
+    "account_id": "smb_acct_001",
+    "amount": 45.0,
+    "date": "2026-03-17",
+    "merchant_name": "Gusto",
+    "name": "Gusto",
+    "payment_channel": "online",
+    "category": [
+      "Service",
+      "Financial Services"
+    ]
+  },
+  {
+    "transaction_id": "smb_t2_txn_07",
+    "account_id": "smb_acct_001",
+    "amount": 99.0,
+    "date": "2026-03-18",
+    "merchant_name": "Stripe",
+    "name": "Stripe",
+    "payment_channel": "online",
+    "category": [
+      "Service",
+      "Financial Services"
+    ]
+  },
+  {
+    "transaction_id": "smb_t2_txn_08",
+    "account_id": "smb_acct_001",
+    "amount": 28.9,
+    "date": "2026-03-19",
+    "merchant_name": "FedEx",
+    "name": "FedEx",
+    "payment_channel": "in store",
+    "category": [
+      "Service",
+      "Shipping and Freight"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3h_txn_01",
+    "account_id": "smb_acct_001",
+    "amount": 38.5,
+    "date": "2026-03-24",
+    "merchant_name": null,
+    "name": "WHOLEFDS MKT #0523",
+    "payment_channel": "in store",
+    "category": [
+      "Food and Drink",
+      "Groceries"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3h_txn_02",
+    "account_id": "smb_acct_001",
+    "amount": 91.0,
+    "date": "2026-03-25",
+    "merchant_name": null,
+    "name": "WFM #0523 SAN FRANCISCO CA",
+    "payment_channel": "in store",
+    "category": [
+      "Food and Drink",
+      "Groceries"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3h_txn_03",
+    "account_id": "smb_acct_001",
+    "amount": 6.85,
+    "date": "2026-03-26",
+    "merchant_name": null,
+    "name": "STARBUCKS #12345 SAN FRANCISCO CA",
+    "payment_channel": "in store",
+    "category": [
+      "Food and Drink",
+      "Coffee Shop"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3h_txn_04",
+    "account_id": "smb_acct_001",
+    "amount": 12.5,
+    "date": "2026-03-27",
+    "merchant_name": null,
+    "name": "STARBUCKS STORE 12345",
+    "payment_channel": "in store",
+    "category": [
+      "Food and Drink",
+      "Coffee Shop"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3h_txn_05",
+    "account_id": "smb_acct_001",
+    "amount": 189.0,
+    "date": "2026-03-30",
+    "merchant_name": null,
+    "name": "DELTA AIR LINES 006",
+    "payment_channel": "online",
+    "category": [
+      "Travel",
+      "Airlines and Aviation Services"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3h_txn_06",
+    "account_id": "smb_acct_001",
+    "amount": 328.5,
+    "date": "2026-03-31",
+    "merchant_name": null,
+    "name": "DELTA AIR 0062234556778",
+    "payment_channel": "online",
+    "category": [
+      "Travel",
+      "Airlines and Aviation Services"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3h_txn_07",
+    "account_id": "smb_acct_001",
+    "amount": 12.4,
+    "date": "2026-04-01",
+    "merchant_name": null,
+    "name": "UBER * TRIP",
+    "payment_channel": "online",
+    "category": [
+      "Travel",
+      "Taxi"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3h_txn_08",
+    "account_id": "smb_acct_001",
+    "amount": 18.75,
+    "date": "2026-04-02",
+    "merchant_name": null,
+    "name": "UBER TECHNOLOGIES",
+    "payment_channel": "online",
+    "category": [
+      "Travel",
+      "Taxi"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3h_txn_09",
+    "account_id": "smb_acct_001",
+    "amount": 254.0,
+    "date": "2026-04-03",
+    "merchant_name": null,
+    "name": "MARRIOTT SF DOWNTOWN",
+    "payment_channel": "in store",
+    "category": [
+      "Travel",
+      "Lodging"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3h_txn_10",
+    "account_id": "smb_acct_001",
+    "amount": 189.0,
+    "date": "2026-03-10",
+    "merchant_name": null,
+    "name": "MARRIOTT INTL HOTELS",
+    "payment_channel": "in store",
+    "category": [
+      "Travel",
+      "Lodging"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3h_txn_11",
+    "account_id": "smb_acct_001",
+    "amount": 145.0,
+    "date": "2026-03-11",
+    "merchant_name": null,
+    "name": "AIRBNB * HMWM2ABCDE",
+    "payment_channel": "online",
+    "category": [
+      "Travel",
+      "Lodging"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3h_txn_12",
+    "account_id": "smb_acct_001",
+    "amount": 220.0,
+    "date": "2026-03-12",
+    "merchant_name": null,
+    "name": "AIRBNB INC",
+    "payment_channel": "online",
+    "category": [
+      "Travel",
+      "Lodging"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3h_txn_13",
+    "account_id": "smb_acct_001",
+    "amount": 511.2,
+    "date": "2026-03-13",
+    "merchant_name": null,
+    "name": "AWS EMEA",
+    "payment_channel": "online",
+    "category": [
+      "Service",
+      "Computers and Electronics"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3h_txn_14",
+    "account_id": "smb_acct_001",
+    "amount": 89.4,
+    "date": "2026-03-16",
+    "merchant_name": null,
+    "name": "AWS EMEA LLC",
+    "payment_channel": "online",
+    "category": [
+      "Service",
+      "Computers and Electronics"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3h_txn_15",
+    "account_id": "smb_acct_001",
+    "amount": 500.0,
+    "date": "2026-03-17",
+    "merchant_name": null,
+    "name": "WEWORK 340 PINE ST SF",
+    "payment_channel": "online",
+    "category": [
+      "Service",
+      "Real Estate"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3h_txn_16",
+    "account_id": "smb_acct_001",
+    "amount": 750.0,
+    "date": "2026-03-18",
+    "merchant_name": null,
+    "name": "WEWORK COMPANIES INC",
+    "payment_channel": "online",
+    "category": [
+      "Service",
+      "Real Estate"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3h_txn_17",
+    "account_id": "smb_acct_001",
+    "amount": 18.4,
+    "date": "2026-03-19",
+    "merchant_name": null,
+    "name": "DOORDASH*CHIPOTLE",
+    "payment_channel": "online",
+    "category": [
+      "Food and Drink",
+      "Food Delivery Services"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3h_txn_18",
+    "account_id": "smb_acct_001",
+    "amount": 55.2,
+    "date": "2026-03-20",
+    "merchant_name": null,
+    "name": "DOORDASH INC",
+    "payment_channel": "online",
+    "category": [
+      "Food and Drink",
+      "Food Delivery Services"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3h_txn_19",
+    "account_id": "smb_acct_001",
+    "amount": 89.0,
+    "date": "2026-03-23",
+    "merchant_name": null,
+    "name": "THE HOME DEPOT #0547",
+    "payment_channel": "in store",
+    "category": [
+      "Shops",
+      "Hardware Store"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3h_txn_20",
+    "account_id": "smb_acct_001",
+    "amount": 11.2,
+    "date": "2026-03-24",
+    "merchant_name": null,
+    "name": "LYFT *RIDE SUN 9PM",
+    "payment_channel": "online",
+    "category": [
+      "Travel",
+      "Taxi"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3b_txn_01",
+    "account_id": "smb_acct_001",
+    "amount": 45.6,
+    "date": "2026-03-27",
+    "merchant_name": null,
+    "name": "TRADER JOE S #127",
+    "payment_channel": "in store",
+    "category": [
+      "Food and Drink",
+      "Groceries"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3b_txn_02",
+    "account_id": "smb_acct_001",
+    "amount": 128.4,
+    "date": "2026-03-30",
+    "merchant_name": null,
+    "name": "COSTCO WHSE #0456",
+    "payment_channel": "in store",
+    "category": [
+      "Shops",
+      "Warehouses and Wholesale Stores"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3b_txn_03",
+    "account_id": "smb_acct_001",
+    "amount": 7.25,
+    "date": "2026-03-31",
+    "merchant_name": null,
+    "name": "BLUE BOTTLE COFFEE SF",
+    "payment_channel": "in store",
+    "category": [
+      "Food and Drink",
+      "Coffee Shop"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3b_txn_04",
+    "account_id": "smb_acct_001",
+    "amount": 175.0,
+    "date": "2026-04-01",
+    "merchant_name": null,
+    "name": "UNITED AIRLINES 016",
+    "payment_channel": "online",
+    "category": [
+      "Travel",
+      "Airlines and Aviation Services"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3b_txn_05",
+    "account_id": "smb_acct_001",
+    "amount": 34.5,
+    "date": "2026-04-02",
+    "merchant_name": null,
+    "name": "HOME DEPOT #547 SAN FRANCISCO",
+    "payment_channel": "in store",
+    "category": [
+      "Shops",
+      "Hardware Store"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3b_txn_06",
+    "account_id": "smb_acct_001",
+    "amount": 30.0,
+    "date": "2026-04-03",
+    "merchant_name": null,
+    "name": "INTUIT *QUICKBOOKS",
+    "payment_channel": "online",
+    "category": [
+      "Service",
+      "Financial Services"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3b_txn_07",
+    "account_id": "smb_acct_001",
+    "amount": 29.0,
+    "date": "2026-03-10",
+    "merchant_name": null,
+    "name": "STRIPE PAYMENTS",
+    "payment_channel": "online",
+    "category": [
+      "Service",
+      "Financial Services"
+    ]
+  },
+  {
+    "transaction_id": "smb_t3b_txn_08",
+    "account_id": "smb_acct_001",
+    "amount": 12.5,
+    "date": "2026-03-11",
+    "merchant_name": null,
+    "name": "FEDEX OFFIC 1234",
+    "payment_channel": "in store",
+    "category": [
+      "Service",
+      "Shipping and Freight"
+    ]
+  },
+  {
+    "transaction_id": "smb_amb_txn_01",
+    "account_id": "smb_acct_001",
+    "amount": 34.2,
+    "date": "2026-03-12",
+    "merchant_name": null,
+    "name": "UBER * TRIP",
+    "payment_channel": "online",
+    "category": [
+      "Travel",
+      "Taxi"
+    ]
+  },
+  {
+    "transaction_id": "smb_amb_txn_02",
+    "account_id": "smb_acct_001",
+    "amount": 18.4,
+    "date": "2026-03-13",
+    "merchant_name": null,
+    "name": "STARBUCKS STORE 12345",
+    "payment_channel": "in store",
+    "category": [
+      "Food and Drink",
+      "Coffee Shop"
+    ]
+  },
+  {
+    "transaction_id": "smb_amb_txn_03",
+    "account_id": "smb_acct_001",
+    "amount": 412.0,
+    "date": "2026-03-16",
+    "merchant_name": null,
+    "name": "DELTA AIR LINES 006",
+    "payment_channel": "online",
+    "category": [
+      "Travel",
+      "Airlines and Aviation Services"
+    ]
+  },
+  {
+    "transaction_id": "smb_amb_txn_04",
+    "account_id": "smb_acct_001",
+    "amount": 1200.0,
+    "date": "2026-03-17",
+    "merchant_name": null,
+    "name": "WEWORK 340 PINE ST SF",
+    "payment_channel": "online",
+    "category": [
+      "Service",
+      "Real Estate"
+    ]
+  },
+  {
+    "transaction_id": "smb_amb_txn_05",
+    "account_id": "smb_acct_001",
+    "amount": 32.6,
+    "date": "2026-03-18",
+    "merchant_name": null,
+    "name": "DOORDASH INC",
+    "payment_channel": "online",
+    "category": [
+      "Food and Drink",
+      "Food Delivery Services"
+    ]
+  },
+  {
+    "transaction_id": "smb_amb_txn_06",
+    "account_id": "smb_acct_001",
+    "amount": 89.4,
+    "date": "2026-03-19",
+    "merchant_name": null,
+    "name": "AWS EMEA",
+    "payment_channel": "online",
+    "category": [
+      "Service",
+      "Computers and Electronics"
+    ]
+  },
+  {
+    "transaction_id": "smb_unm_txn_01",
+    "account_id": "smb_acct_001",
+    "amount": 22.0,
+    "date": "2026-03-20",
+    "merchant_name": null,
+    "name": "POS PURCHASE 4821",
+    "payment_channel": "in store",
+    "category": [
+      "Other"
+    ]
+  },
+  {
+    "transaction_id": "smb_unm_txn_02",
+    "account_id": "smb_acct_001",
+    "amount": 8.5,
+    "date": "2026-03-23",
+    "merchant_name": null,
+    "name": "CHECKCARD 0315 PURCHASE",
+    "payment_channel": "in store",
+    "category": [
+      "Other"
+    ]
+  },
+  {
+    "transaction_id": "smb_unm_txn_03",
+    "account_id": "smb_acct_001",
+    "amount": 45.0,
+    "date": "2026-03-24",
+    "merchant_name": null,
+    "name": "DEBIT CARD PURCHASE",
+    "payment_channel": "in store",
+    "category": [
+      "Other"
+    ]
+  },
+  {
+    "transaction_id": "smb_unm_txn_04",
+    "account_id": "smb_acct_001",
+    "amount": 12.0,
+    "date": "2026-03-25",
+    "merchant_name": null,
+    "name": "MISC DEBIT 889920",
+    "payment_channel": "in store",
+    "category": [
+      "Other"
+    ]
+  },
+  {
+    "transaction_id": "smb_unm_txn_05",
+    "account_id": "smb_acct_001",
+    "amount": 38.5,
+    "date": "2026-03-26",
+    "merchant_name": null,
+    "name": "WHOLEFDS MKT #0523",
+    "payment_channel": "in store",
+    "category": [
+      "Food and Drink",
+      "Groceries"
+    ]
+  },
+  {
+    "transaction_id": "smb_unm_txn_06",
+    "account_id": "smb_acct_001",
+    "amount": 5.75,
+    "date": "2026-03-27",
+    "merchant_name": null,
+    "name": "STARBUCKS #12345 SAN FRANCISCO CA",
+    "payment_channel": "in store",
+    "category": [
+      "Food and Drink",
+      "Coffee Shop"
+    ]
+  },
+  {
+    "transaction_id": "smb_unm_txn_07",
+    "account_id": "smb_acct_001",
+    "amount": 12.4,
+    "date": "2026-03-30",
+    "merchant_name": null,
+    "name": "UBER * TRIP",
+    "payment_channel": "online",
+    "category": [
+      "Travel",
+      "Taxi"
+    ]
+  },
+  {
+    "transaction_id": "smb_unm_txn_08",
+    "account_id": "smb_acct_001",
+    "amount": 55.0,
+    "date": "2026-03-31",
+    "merchant_name": null,
+    "name": "POS TERMINAL 9012",
+    "payment_channel": "in store",
+    "category": [
+      "Other"
+    ]
+  },
+  {
+    "transaction_id": "smb_unm_txn_09",
+    "account_id": "smb_acct_001",
+    "amount": 180.0,
+    "date": "2026-04-01",
+    "merchant_name": null,
+    "name": "ACH DEBIT VENDOR 00X",
+    "payment_channel": "in store",
+    "category": [
+      "Other"
+    ]
+  },
+  {
+    "transaction_id": "smb_unm_txn_10",
+    "account_id": "smb_acct_001",
+    "amount": 500.0,
+    "date": "2026-04-02",
+    "merchant_name": null,
+    "name": "WIRE TRANSFER OUTBOUND",
+    "payment_channel": "in store",
+    "category": [
+      "Other"
+    ]
+  },
+  {
+    "transaction_id": "smb_null_txn_01",
+    "account_id": "smb_acct_001",
+    "amount": 38.5,
+    "date": "2026-03-10",
+    "merchant_name": null,
+    "name": "WHOLEFDS MKT #0523",
+    "payment_channel": "in store",
+    "category": [
+      "Other"
+    ]
+  },
+  {
+    "transaction_id": "smb_null_txn_02",
+    "account_id": "smb_acct_001",
+    "amount": 5.75,
+    "date": "2026-03-11",
+    "merchant_name": null,
+    "name": "STARBUCKS #12345 SAN FRANCISCO CA",
+    "payment_channel": "in store",
+    "category": [
+      "Other"
+    ]
+  },
+  {
+    "transaction_id": "smb_null_txn_03",
+    "account_id": "smb_acct_001",
+    "amount": 189.0,
+    "date": "2026-03-12",
+    "merchant_name": null,
+    "name": "DELTA AIR LINES 006",
+    "payment_channel": "in store",
+    "category": [
+      "Other"
+    ]
+  },
+  {
+    "transaction_id": "smb_null_txn_04",
+    "account_id": "smb_acct_001",
+    "amount": 12.4,
+    "date": "2026-03-13",
+    "merchant_name": null,
+    "name": "UBER * TRIP",
+    "payment_channel": "in store",
+    "category": [
+      "Other"
+    ]
+  },
+  {
+    "transaction_id": "smb_null_txn_05",
+    "account_id": "smb_acct_001",
+    "amount": 342.8,
+    "date": "2026-03-16",
+    "merchant_name": null,
+    "name": "AWS EMEA",
+    "payment_channel": "in store",
+    "category": [
+      "Other"
+    ]
+  },
+  {
+    "transaction_id": "smb_null_txn_06",
+    "account_id": "smb_acct_001",
+    "amount": 500.0,
+    "date": "2026-03-17",
+    "merchant_name": null,
+    "name": "WEWORK 340 PINE ST SF",
+    "payment_channel": "in store",
+    "category": [
+      "Other"
+    ]
+  },
+  {
+    "transaction_id": "smb_null_txn_07",
+    "account_id": "smb_acct_001",
+    "amount": 18.4,
+    "date": "2026-03-18",
+    "merchant_name": null,
+    "name": "DOORDASH*CHIPOTLE",
+    "payment_channel": "in store",
+    "category": [
+      "Other"
+    ]
+  },
+  {
+    "transaction_id": "smb_null_txn_08",
+    "account_id": "smb_acct_001",
+    "amount": 11.2,
+    "date": "2026-03-19",
+    "merchant_name": null,
+    "name": "LYFT *RIDE SUN 9PM",
+    "payment_channel": "in store",
+    "category": [
+      "Other"
+    ]
+  },
+  {
+    "transaction_id": "smb_null_txn_09",
+    "account_id": "smb_acct_001",
+    "amount": 254.0,
+    "date": "2026-03-20",
+    "merchant_name": null,
+    "name": "MARRIOTT SF DOWNTOWN",
+    "payment_channel": "in store",
+    "category": [
+      "Other"
+    ]
+  },
+  {
+    "transaction_id": "smb_ref_txn_01",
+    "account_id": "smb_acct_001",
+    "amount": -38.5,
+    "date": "2026-03-31",
+    "merchant_name": null,
+    "name": "WHOLEFDS MKT #0523",
+    "payment_channel": "in store",
+    "category": [
+      "Food and Drink",
+      "Groceries"
+    ]
+  },
+  {
+    "transaction_id": "smb_ref_txn_02",
+    "account_id": "smb_acct_001",
+    "amount": -189.0,
+    "date": "2026-04-02",
+    "merchant_name": null,
+    "name": "DELTA AIR LINES 006",
+    "payment_channel": "online",
+    "category": [
+      "Travel",
+      "Airlines and Aviation Services"
+    ]
+  },
+  {
+    "transaction_id": "smb_ref_txn_03",
+    "account_id": "smb_acct_001",
+    "amount": -145.0,
+    "date": "2026-03-10",
+    "merchant_name": null,
+    "name": "AIRBNB * HMWM2ABCDE",
+    "payment_channel": "online",
+    "category": [
+      "Travel",
+      "Lodging"
+    ]
+  },
+  {
+    "transaction_id": "smb_ref_txn_04",
+    "account_id": "smb_acct_001",
+    "amount": -18.75,
+    "date": "2026-03-12",
+    "merchant_name": null,
+    "name": "UBER * TRIP",
+    "payment_channel": "online",
+    "category": [
+      "Travel",
+      "Taxi"
+    ]
+  },
+  {
+    "transaction_id": "smb_ref_txn_05",
+    "account_id": "smb_acct_001",
+    "amount": -89.4,
+    "date": "2026-03-16",
+    "merchant_name": null,
+    "name": "AWS EMEA",
+    "payment_channel": "online",
+    "category": [
+      "Service",
+      "Computers and Electronics"
+    ]
+  },
+  {
+    "transaction_id": "smb_pay_txn_01",
+    "account_id": "smb_acct_001",
+    "amount": -8500.0,
+    "date": "2026-03-11",
+    "merchant_name": null,
+    "name": "GUSTO PAYROLL",
+    "payment_channel": "payroll",
+    "category": [
+      "Transfer",
+      "Payroll"
+    ]
+  },
+  {
+    "transaction_id": "smb_pay_txn_02",
+    "account_id": "smb_acct_001",
+    "amount": -2000.0,
+    "date": "2026-03-12",
+    "merchant_name": null,
+    "name": "ACH CREDIT OWNER",
+    "payment_channel": "ach",
+    "category": [
+      "Transfer",
+      "Payroll"
+    ]
+  },
+  {
+    "transaction_id": "smb_pay_txn_03",
+    "account_id": "smb_acct_001",
+    "amount": -500.0,
+    "date": "2026-03-13",
+    "merchant_name": null,
+    "name": "ACH DEBIT EXP REIM",
+    "payment_channel": "ach",
+    "category": [
+      "Transfer",
+      "Payroll"
+    ]
+  },
+  {
+    "transaction_id": "smb_multiday_txn_001",
+    "account_id": "smb_acct_001",
+    "amount": 312.0,
+    "date": "2026-03-18",
+    "merchant_name": "Marriott",
+    "name": "MARRIOTT SF DOWNTOWN",
+    "payment_channel": "in store",
+    "category": [
+      "Travel",
+      "Lodging"
+    ]
+  },
+  {
+    "transaction_id": "smb_multiday_txn_002",
+    "account_id": "smb_acct_001",
+    "amount": 380.0,
+    "date": "2026-03-25",
+    "merchant_name": "Airbnb",
+    "name": "AIRBNB INC",
+    "payment_channel": "online",
+    "category": [
+      "Travel",
+      "Lodging"
+    ]
+  }
+]

@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ergonosis-unification"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "plaid-python>=15.0.0,<17",
+    "pydantic>=2.0,<3",
+    "rapidfuzz>=3.0",
+    "pyyaml>=6.0",
+    "prometheus-client>=0.16",
+    "tenacity>=8.2",
+    "flask>=3.0",
+]
+
+[project.optional-dependencies]
+databricks = ["databricks-sql-connector>=4.0"]
+gcp = ["google-cloud-secret-manager>=2.16"]
+dev = ["pytest-cov>=4.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["src"]
+omit = ["src/api/*"]
+
+[tool.coverage.report]
+fail_under = 80

@@ -1,0 +1,30 @@
+apiVersion: run.googleapis.com/v1
+kind: Job
+metadata:
+  name: ergonosis-unification-pipeline
+spec:
+  template:
+    spec:
+      taskCount: 1
+      template:
+        spec:
+          serviceAccountName: ergonosis-pipeline-sa@ergonosis.iam.gserviceaccount.com
+          timeoutSeconds: 5400
+          containers:
+            - image: us-central1-docker.pkg.dev/ergonosis/ergonosis-unification/pipeline:latest
+              args: ["--type", "incremental"]
+              env:
+                - name: GCP_PROJECT_ID
+                  value: ergonosis
+                - name: DATABRICKS_CATALOG
+                  value: ergonosis
+                - name: DATABRICKS_SCHEMA
+                  value: unification
+                - name: UNIFICATION_SECURE_STORAGE_REQUIRED
+                  value: "true"
+                - name: LOG_LEVEL
+                  value: INFO
+              resources:
+                limits:
+                  cpu: "2"
+                  memory: 2Gi

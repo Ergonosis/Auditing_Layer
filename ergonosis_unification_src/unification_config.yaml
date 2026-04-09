@@ -1,0 +1,56 @@
+rule_version: "1.0"
+
+entity_types:
+  - transaction
+  - email
+  - calendar_event
+
+match_rules:
+  transaction_to_email:
+    tier1_keys: [transaction_id, message_id]
+    tier2_composite: [merchant_name, subject, date]
+    amount_tolerance_pct: 0.001
+    tier3_fuzzy:
+      fields: [merchant_name, name]
+      field_map:
+        merchant_name: subject
+        name: subject
+      date_window_days: 3
+      min_similarity_score: 0.80
+
+  transaction_to_calendar_event:
+    tier1_keys: [transaction_id, event_id]
+    tier2_composite: [merchant_name, subject, date]
+    amount_tolerance_pct: 0.001
+    tier3_fuzzy:
+      fields: [merchant_name, name]
+      field_map:
+        merchant_name: subject
+        name: subject
+      date_window_days: 1
+      min_similarity_score: 0.80
+
+  email_to_calendar_event:
+    tier1_keys: [message_id, event_id]
+    tier2_composite: [subject, start_time]
+    tier3_fuzzy:
+      fields: [subject]
+      date_window_days: 1
+      min_similarity_score: 0.75
+
+confidence_bands:
+  high: 0.90
+  medium: 0.65
+  ambiguous_threshold: 0.50
+
+ingestion:
+  plaid_account_id: ""
+  user_email: ""
+  lookback_days: 90
+
+retention:
+  entity_links_ttl_days: 365
+  unmatched_ttl_days: 90
+  ambiguous_ttl_days: 90
+  run_log_ttl_days: 180
+  link_feedback_ttl_days: 365
